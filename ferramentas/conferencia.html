@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conferência das cartas — SuperPANCs</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; background: #f4f7f2; color: #1d2b1a; }
+  h1 { font-size: 1.4rem; margin: 0 0 4px; }
+  p.ajuda { margin: 0 0 16px; color: #4a5a46; }
+  .grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; }
+  .item { display: flex; gap: 12px; background: #fff; border-radius: 10px; padding: 10px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+  .item img { width: 160px; height: auto; border-radius: 6px; flex-shrink: 0; }
+  .item h2 { font-size: 1.05rem; margin: 0; }
+  .meta { font-size: .85rem; color: #4a5a46; margin-bottom: 8px; }
+  .st { background: #e83e8c; color: #fff; padding: 1px 6px; border-radius: 4px; font-size: .75rem; }
+  table { border-collapse: collapse; font-size: .9rem; width: 100%; }
+  td { padding: 4px 6px; border-bottom: 1px solid #e3e9e0; }
+  td.v { font-weight: 600; text-align: right; white-space: nowrap; }
+  td.e { color: #e0a800; white-space: nowrap; }
+  label { display: block; margin-top: 8px; font-size: .85rem; cursor: pointer; }
+  .item.ok { outline: 3px solid #4caf50; }
+  @media (max-width: 480px) { .grade { grid-template-columns: 1fr; } .item img { width: 120px; } }
+</style>
+</head>
+<body>
+<h1>Conferência das cartas</h1>
+<p class="ajuda">Compare cada imagem com os dados transcritos em <code>js/cartas.js</code>. Marque "Conferida" quando estiver tudo certo. As marcações ficam salvas só neste navegador.</p>
+<div class="grade" id="grade"></div>
+
+<script src="../js/cartas.js"></script>
+<script>
+  const fmt = n => n.toLocaleString('pt-BR');
+  const chaveSalvas = 'superpancs-conferidas';
+  let conferidas = [];
+  try { conferidas = JSON.parse(localStorage.getItem(chaveSalvas)) || []; } catch (e) {}
+
+  const grade = document.getElementById('grade');
+  for (const c of CARTAS) {
+    const div = document.createElement('div');
+    div.className = 'item' + (conferidas.includes(c.id) ? ' ok' : '');
+    const linhas = ATRIBUTOS.map(a =>
+      `<tr><td>${a.nome}</td><td class="v">${fmt(c.valores[a.chave])} ${a.unidade}</td><td class="e">${'★'.repeat(c.estrelas[a.chave])}</td></tr>`
+    ).join('');
+    div.innerHTML = `
+      <img src="../${c.imagemOriginal}" alt="${c.nome}">
+      <div>
+        <h2>${c.nome} ${c.superTrunfo ? '<span class="st">SUPER TRUNFO</span>' : ''}</h2>
+        <div class="meta">#${c.id} · arquivo ${c.imagemOriginal.split("/").pop()} · ${c.esporte} · ${c.tipo === 'panc' ? 'PANC' : 'Hortaliça comum'}</div>
+        <table>${linhas}</table>
+        <label><input type="checkbox" ${conferidas.includes(c.id) ? 'checked' : ''}> Conferida</label>
+      </div>`;
+    div.querySelector('input').addEventListener('change', e => {
+      conferidas = e.target.checked ? [...conferidas, c.id] : conferidas.filter(id => id !== c.id);
+      div.classList.toggle('ok', e.target.checked);
+      try { localStorage.setItem(chaveSalvas, JSON.stringify(conferidas)); } catch (err) {}
+    });
+    grade.appendChild(div);
+  }
+</script>
+</body>
+</html>
