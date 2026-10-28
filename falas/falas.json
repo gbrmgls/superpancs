@@ -1,0 +1,905 @@
+{
+  "versao": 1,
+  "situacoes": {
+    "folga": "rival muito na frente",
+    "parelho": "jogo equilibrado",
+    "aperto": "rival muito atrás / poucas cartas na mão"
+  },
+  "expressoes": {
+    "neutro": "é a vez do jogador; o rival espera",
+    "pensando": "é a vez do rival; ele escolhe o atributo",
+    "comemorando": "o rival venceu a rodada",
+    "frustrado": "o rival perdeu a rodada"
+  },
+  "regra_situacao": {
+    "diferenca": "cartas na mão do rival - cartas na mão do jogador",
+    "folga": "diferenca >= 6",
+    "aperto": "diferenca <= -6, ou rival com 4 cartas ou menos",
+    "parelho": "qualquer outro caso"
+  },
+  "audio": {
+    "pasta": "audio/falas",
+    "padrao": "{rival}/{expressao}-{situacao}-{nn}.mp3",
+    "fonte_atual": "sintetica"
+  },
+  "rivais": {
+    "seu-ze": {
+      "nome": "Seu Zé",
+      "nivel": "facil",
+      "perfil": "Feirante malandro. Confiante demais, joga no improviso, fala solto e com ginga.",
+      "falas": {
+        "neutro": {
+          "folga": [
+            {
+              "id": "seu-ze.neutro.folga.01",
+              "texto": "Pode escolher, freguês. Tô tranquilo.",
+              "audio": "seu-ze/neutro-folga-01.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.folga.02",
+              "texto": "Sem pressa. A sacola tá cheia aqui.",
+              "audio": "seu-ze/neutro-folga-02.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.folga.03",
+              "texto": "Escolhe aí, que eu já tô no lucro.",
+              "audio": "seu-ze/neutro-folga-03.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.folga.04",
+              "texto": "Hoje a banca é minha, parceiro.",
+              "audio": "seu-ze/neutro-folga-04.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.folga.05",
+              "texto": "Vai, capricha. Ainda dá tempo… acho.",
+              "audio": "seu-ze/neutro-folga-05.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.folga.06",
+              "texto": "Relaxa, ninguém vai rir. Muito.",
+              "audio": "seu-ze/neutro-folga-06.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.folga.07",
+              "texto": "Escolhe com carinho, que é das últimas.",
+              "audio": "seu-ze/neutro-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "seu-ze.neutro.parelho.08",
+              "texto": "Tua vez. Mostra o que tem na cesta.",
+              "audio": "seu-ze/neutro-parelho-08.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.parelho.09",
+              "texto": "Tá parelho, hein? Gostei.",
+              "audio": "seu-ze/neutro-parelho-09.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.parelho.10",
+              "texto": "Vai lá. Tô de olho.",
+              "audio": "seu-ze/neutro-parelho-10.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.parelho.11",
+              "texto": "Escolhe bem, que eu tô na cola.",
+              "audio": "seu-ze/neutro-parelho-11.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.parelho.12",
+              "texto": "Jogo bom é jogo apertado.",
+              "audio": "seu-ze/neutro-parelho-12.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.parelho.13",
+              "texto": "Bora, freguês. A feira não para.",
+              "audio": "seu-ze/neutro-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "seu-ze.neutro.aperto.14",
+              "texto": "Vai com calma comigo, parceiro…",
+              "audio": "seu-ze/neutro-aperto-14.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.aperto.15",
+              "texto": "Escolhe aí… mas pega leve.",
+              "audio": "seu-ze/neutro-aperto-15.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.aperto.16",
+              "texto": "Tô só esquentando, viu?",
+              "audio": "seu-ze/neutro-aperto-16.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.aperto.17",
+              "texto": "Isso aqui ainda vira. Confia.",
+              "audio": "seu-ze/neutro-aperto-17.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.aperto.18",
+              "texto": "Já vi freguês perder com mais carta que isso.",
+              "audio": "seu-ze/neutro-aperto-18.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.aperto.19",
+              "texto": "Tô fazendo charme. Faz parte.",
+              "audio": "seu-ze/neutro-aperto-19.mp3"
+            },
+            {
+              "id": "seu-ze.neutro.aperto.20",
+              "texto": "Vai, escolhe. Eu aguento.",
+              "audio": "seu-ze/neutro-aperto-20.mp3"
+            }
+          ]
+        },
+        "pensando": {
+          "folga": [
+            {
+              "id": "seu-ze.pensando.folga.01",
+              "texto": "Deixa eu ver qual é a da vez…",
+              "audio": "seu-ze/pensando-folga-01.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.folga.02",
+              "texto": "Tanto faz, qualquer uma serve.",
+              "audio": "seu-ze/pensando-folga-02.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.folga.03",
+              "texto": "Uni, duni, tê… essa aqui.",
+              "audio": "seu-ze/pensando-folga-03.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.folga.04",
+              "texto": "Vou no faro. Sempre deu certo.",
+              "audio": "seu-ze/pensando-folga-04.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.folga.05",
+              "texto": "Hmm… vou escolher de olho fechado.",
+              "audio": "seu-ze/pensando-folga-05.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.folga.06",
+              "texto": "Com essa vantagem, escolho até dormindo.",
+              "audio": "seu-ze/pensando-folga-06.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.folga.07",
+              "texto": "Calma, tô só fazendo suspense.",
+              "audio": "seu-ze/pensando-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "seu-ze.pensando.parelho.08",
+              "texto": "Pera, pera… deixa eu sentir a carta.",
+              "audio": "seu-ze/pensando-parelho-08.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.parelho.09",
+              "texto": "Essa aqui tem cara de vitória.",
+              "audio": "seu-ze/pensando-parelho-09.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.parelho.10",
+              "texto": "Proteína? Fibra? Sei lá, vai essa.",
+              "audio": "seu-ze/pensando-parelho-10.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.parelho.11",
+              "texto": "Malandro não pensa, malandro sente.",
+              "audio": "seu-ze/pensando-parelho-11.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.parelho.12",
+              "texto": "Vou no improviso, que é minha especialidade.",
+              "audio": "seu-ze/pensando-parelho-12.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.parelho.13",
+              "texto": "Deixa comigo. Ou não.",
+              "audio": "seu-ze/pensando-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "seu-ze.pensando.aperto.14",
+              "texto": "Agora tem que ser na sorte grande…",
+              "audio": "seu-ze/pensando-aperto-14.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.aperto.15",
+              "texto": "Ai, ai… qual que salva o dia?",
+              "audio": "seu-ze/pensando-aperto-15.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.aperto.16",
+              "texto": "Pensa, Zé, pensa!",
+              "audio": "seu-ze/pensando-aperto-16.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.aperto.17",
+              "texto": "Vai essa, e seja o que Deus quiser.",
+              "audio": "seu-ze/pensando-aperto-17.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.aperto.18",
+              "texto": "Hora de tirar coelho do chapéu.",
+              "audio": "seu-ze/pensando-aperto-18.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.aperto.19",
+              "texto": "Hmm… essa aqui tem que dar.",
+              "audio": "seu-ze/pensando-aperto-19.mp3"
+            },
+            {
+              "id": "seu-ze.pensando.aperto.20",
+              "texto": "Olha, vou chutar. Torce pra mim.",
+              "audio": "seu-ze/pensando-aperto-20.mp3"
+            }
+          ]
+        },
+        "comemorando": {
+          "folga": [
+            {
+              "id": "seu-ze.comemorando.folga.01",
+              "texto": "Mais uma pra sacola!",
+              "audio": "seu-ze/comemorando-folga-01.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.folga.02",
+              "texto": "Tá fácil demais, freguês.",
+              "audio": "seu-ze/comemorando-folga-02.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.folga.03",
+              "texto": "Quer um desconto na próxima?",
+              "audio": "seu-ze/comemorando-folga-03.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.folga.04",
+              "texto": "Essa feira tá rendendo!",
+              "audio": "seu-ze/comemorando-folga-04.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.folga.05",
+              "texto": "Freguês, cê tá me ajudando muito.",
+              "audio": "seu-ze/comemorando-folga-05.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.folga.06",
+              "texto": "Malandragem pura. Aprende.",
+              "audio": "seu-ze/comemorando-folga-06.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.folga.07",
+              "texto": "Ó o cheirinho de vitória!",
+              "audio": "seu-ze/comemorando-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "seu-ze.comemorando.parelho.08",
+              "texto": "Essa foi no capricho!",
+              "audio": "seu-ze/comemorando-parelho-08.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.parelho.09",
+              "texto": "Viu só? Faro não falha.",
+              "audio": "seu-ze/comemorando-parelho-09.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.parelho.10",
+              "texto": "Uma pra mim, obrigado.",
+              "audio": "seu-ze/comemorando-parelho-10.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.parelho.11",
+              "texto": "É assim que se faz, parceiro!",
+              "audio": "seu-ze/comemorando-parelho-11.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.parelho.12",
+              "texto": "Opa! Desempatou pro meu lado.",
+              "audio": "seu-ze/comemorando-parelho-12.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.parelho.13",
+              "texto": "Hoje tá dando bom!",
+              "audio": "seu-ze/comemorando-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "seu-ze.comemorando.aperto.14",
+              "texto": "Ó o malandro voltando!",
+              "audio": "seu-ze/comemorando-aperto-14.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.aperto.15",
+              "texto": "Ainda tô vivo, freguês!",
+              "audio": "seu-ze/comemorando-aperto-15.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.aperto.16",
+              "texto": "Falei que ia virar, não falei?",
+              "audio": "seu-ze/comemorando-aperto-16.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.aperto.17",
+              "texto": "Uma de cada vez. Devagar e sempre.",
+              "audio": "seu-ze/comemorando-aperto-17.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.aperto.18",
+              "texto": "Ufa! Tava precisando dessa.",
+              "audio": "seu-ze/comemorando-aperto-18.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.aperto.19",
+              "texto": "Quem ri por último…",
+              "audio": "seu-ze/comemorando-aperto-19.mp3"
+            },
+            {
+              "id": "seu-ze.comemorando.aperto.20",
+              "texto": "Respira, Zé. Dá pra virar.",
+              "audio": "seu-ze/comemorando-aperto-20.mp3"
+            }
+          ]
+        },
+        "frustrado": {
+          "folga": [
+            {
+              "id": "seu-ze.frustrado.folga.01",
+              "texto": "Tá, essa eu deixei passar.",
+              "audio": "seu-ze/frustrado-folga-01.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.folga.02",
+              "texto": "Foi caridade. Feira solidária.",
+              "audio": "seu-ze/frustrado-folga-02.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.folga.03",
+              "texto": "Uma só. Nem doeu.",
+              "audio": "seu-ze/frustrado-folga-03.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.folga.04",
+              "texto": "Deixa ele ganhar uma, coitado.",
+              "audio": "seu-ze/frustrado-folga-04.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.folga.05",
+              "texto": "Distraí. Tava contando as minhas.",
+              "audio": "seu-ze/frustrado-folga-05.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.folga.06",
+              "texto": "Opa, escorregou da mão.",
+              "audio": "seu-ze/frustrado-folga-06.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.folga.07",
+              "texto": "Tudo bem, a sacola ainda tá pesada.",
+              "audio": "seu-ze/frustrado-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "seu-ze.frustrado.parelho.08",
+              "texto": "Ih, essa doeu.",
+              "audio": "seu-ze/frustrado-parelho-08.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.parelho.09",
+              "texto": "Ô, freguês, assim não!",
+              "audio": "seu-ze/frustrado-parelho-09.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.parelho.10",
+              "texto": "Foi o vento. Juro que foi o vento.",
+              "audio": "seu-ze/frustrado-parelho-10.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.parelho.11",
+              "texto": "Hmm… não era essa a ideia.",
+              "audio": "seu-ze/frustrado-parelho-11.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.parelho.12",
+              "texto": "Tá bom, tá bom. Próxima.",
+              "audio": "seu-ze/frustrado-parelho-12.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.parelho.13",
+              "texto": "Peraí, quem embaralhou isso?",
+              "audio": "seu-ze/frustrado-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "seu-ze.frustrado.aperto.14",
+              "texto": "Assim cê me quebra, parceiro…",
+              "audio": "seu-ze/frustrado-aperto-14.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.aperto.15",
+              "texto": "Minha banca tá ficando vazia!",
+              "audio": "seu-ze/frustrado-aperto-15.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.aperto.16",
+              "texto": "Ai… hoje não é meu dia.",
+              "audio": "seu-ze/frustrado-aperto-16.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.aperto.17",
+              "texto": "Isso não tava no roteiro.",
+              "audio": "seu-ze/frustrado-aperto-17.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.aperto.18",
+              "texto": "Vou ter que fechar a barraca mais cedo.",
+              "audio": "seu-ze/frustrado-aperto-18.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.aperto.19",
+              "texto": "Me deixa uma, vai. Só uma.",
+              "audio": "seu-ze/frustrado-aperto-19.mp3"
+            },
+            {
+              "id": "seu-ze.frustrado.aperto.20",
+              "texto": "Nem o chapéu tá me salvando hoje.",
+              "audio": "seu-ze/frustrado-aperto-20.mp3"
+            }
+          ]
+        }
+      }
+    },
+    "dona-cida": {
+      "nome": "Dona Cida",
+      "nivel": "dificil",
+      "perfil": "Feirante veterana, 30 anos de banca. Calculista, segura, ironia seca e carinhosa (\"meu bem\").",
+      "falas": {
+        "neutro": {
+          "folga": [
+            {
+              "id": "dona-cida.neutro.folga.01",
+              "texto": "Sua vez, meu bem. Sem pressa.",
+              "audio": "dona-cida/neutro-folga-01.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.folga.02",
+              "texto": "Escolha com calma. Já vi esse filme.",
+              "audio": "dona-cida/neutro-folga-02.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.folga.03",
+              "texto": "Trinta anos de feira, querido.",
+              "audio": "dona-cida/neutro-folga-03.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.folga.04",
+              "texto": "Pode escolher. Eu já sei o final.",
+              "audio": "dona-cida/neutro-folga-04.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.folga.05",
+              "texto": "O freguês tem sempre razão. Quase sempre.",
+              "audio": "dona-cida/neutro-folga-05.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.folga.06",
+              "texto": "Fique à vontade. A banca é minha.",
+              "audio": "dona-cida/neutro-folga-06.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.folga.07",
+              "texto": "Respira e escolhe. Ajuda.",
+              "audio": "dona-cida/neutro-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "dona-cida.neutro.parelho.08",
+              "texto": "Sua vez. Mostra o que aprendeu.",
+              "audio": "dona-cida/neutro-parelho-08.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.parelho.09",
+              "texto": "Jogo bonito. Continua assim.",
+              "audio": "dona-cida/neutro-parelho-09.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.parelho.10",
+              "texto": "Vamos ver se você sabe escolher.",
+              "audio": "dona-cida/neutro-parelho-10.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.parelho.11",
+              "texto": "Tô de olho em cada número.",
+              "audio": "dona-cida/neutro-parelho-11.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.parelho.12",
+              "texto": "Escolhe bem. Eu não perdoo.",
+              "audio": "dona-cida/neutro-parelho-12.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.parelho.13",
+              "texto": "Feira boa é feira disputada.",
+              "audio": "dona-cida/neutro-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "dona-cida.neutro.aperto.14",
+              "texto": "Hum. Você anda estudando, é?",
+              "audio": "dona-cida/neutro-aperto-14.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.aperto.15",
+              "texto": "Aproveita enquanto dura.",
+              "audio": "dona-cida/neutro-aperto-15.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.aperto.16",
+              "texto": "Já saí de buraco mais fundo.",
+              "audio": "dona-cida/neutro-aperto-16.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.aperto.17",
+              "texto": "Escolhe. Eu tô só observando.",
+              "audio": "dona-cida/neutro-aperto-17.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.aperto.18",
+              "texto": "Paciência é tempero, meu bem.",
+              "audio": "dona-cida/neutro-aperto-18.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.aperto.19",
+              "texto": "Não se anima muito, não.",
+              "audio": "dona-cida/neutro-aperto-19.mp3"
+            },
+            {
+              "id": "dona-cida.neutro.aperto.20",
+              "texto": "Vai. A feira ainda não acabou.",
+              "audio": "dona-cida/neutro-aperto-20.mp3"
+            }
+          ]
+        },
+        "pensando": {
+          "folga": [
+            {
+              "id": "dona-cida.pensando.folga.01",
+              "texto": "Deixa eu fazer a conta…",
+              "audio": "dona-cida/pensando-folga-01.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.folga.02",
+              "texto": "Fibra, proteína… já sei.",
+              "audio": "dona-cida/pensando-folga-02.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.folga.03",
+              "texto": "Essa aqui eu conheço de cor.",
+              "audio": "dona-cida/pensando-folga-03.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.folga.04",
+              "texto": "Hum, o número não mente.",
+              "audio": "dona-cida/pensando-folga-04.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.folga.05",
+              "texto": "Escolha fácil. Próxima.",
+              "audio": "dona-cida/pensando-folga-05.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.folga.06",
+              "texto": "Já fiz essa conta mil vezes.",
+              "audio": "dona-cida/pensando-folga-06.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.folga.07",
+              "texto": "Deixa eu ajeitar os óculos…",
+              "audio": "dona-cida/pensando-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "dona-cida.pensando.parelho.08",
+              "texto": "Hum… vamos pensar direitinho.",
+              "audio": "dona-cida/pensando-parelho-08.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.parelho.09",
+              "texto": "Cada grama conta.",
+              "audio": "dona-cida/pensando-parelho-09.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.parelho.10",
+              "texto": "Calma. Pressa é inimiga da colheita.",
+              "audio": "dona-cida/pensando-parelho-10.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.parelho.11",
+              "texto": "O que essa carta tem de melhor?",
+              "audio": "dona-cida/pensando-parelho-11.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.parelho.12",
+              "texto": "Conta de cabeça, igual no troco.",
+              "audio": "dona-cida/pensando-parelho-12.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.parelho.13",
+              "texto": "Hum… tem um ponto forte aqui.",
+              "audio": "dona-cida/pensando-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "dona-cida.pensando.aperto.14",
+              "texto": "Agora não posso errar.",
+              "audio": "dona-cida/pensando-aperto-14.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.aperto.15",
+              "texto": "Hum… preciso de uma boa.",
+              "audio": "dona-cida/pensando-aperto-15.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.aperto.16",
+              "texto": "Deixa eu pensar com carinho.",
+              "audio": "dona-cida/pensando-aperto-16.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.aperto.17",
+              "texto": "Cada carta vale ouro agora.",
+              "audio": "dona-cida/pensando-aperto-17.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.aperto.18",
+              "texto": "Isso exige concentração.",
+              "audio": "dona-cida/pensando-aperto-18.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.aperto.19",
+              "texto": "Silêncio. Tô calculando.",
+              "audio": "dona-cida/pensando-aperto-19.mp3"
+            },
+            {
+              "id": "dona-cida.pensando.aperto.20",
+              "texto": "Hum. Essa tem que ser certeira.",
+              "audio": "dona-cida/pensando-aperto-20.mp3"
+            }
+          ]
+        },
+        "comemorando": {
+          "folga": [
+            {
+              "id": "dona-cida.comemorando.folga.01",
+              "texto": "Como eu disse: número não mente.",
+              "audio": "dona-cida/comemorando-folga-01.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.folga.02",
+              "texto": "Mais uma pra minha banca.",
+              "audio": "dona-cida/comemorando-folga-02.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.folga.03",
+              "texto": "Experiência, meu bem. Não tem jeito.",
+              "audio": "dona-cida/comemorando-folga-03.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.folga.04",
+              "texto": "Quer que eu embrulhe pra viagem?",
+              "audio": "dona-cida/comemorando-folga-04.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.folga.05",
+              "texto": "Essa eu ganho de olho fechado.",
+              "audio": "dona-cida/comemorando-folga-05.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.folga.06",
+              "texto": "Anota aí: Cida, mais uma.",
+              "audio": "dona-cida/comemorando-folga-06.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.folga.07",
+              "texto": "Tá aprendendo? Que bom.",
+              "audio": "dona-cida/comemorando-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "dona-cida.comemorando.parelho.08",
+              "texto": "Bem escolhido, Cida.",
+              "audio": "dona-cida/comemorando-parelho-08.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.parelho.09",
+              "texto": "Viu? Fiz a conta certinha.",
+              "audio": "dona-cida/comemorando-parelho-09.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.parelho.10",
+              "texto": "Essa era minha desde o começo.",
+              "audio": "dona-cida/comemorando-parelho-10.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.parelho.11",
+              "texto": "Na feira, quem sabe, sabe.",
+              "audio": "dona-cida/comemorando-parelho-11.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.parelho.12",
+              "texto": "Uma pra mim. Obrigada.",
+              "audio": "dona-cida/comemorando-parelho-12.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.parelho.13",
+              "texto": "Escolha certa na hora certa.",
+              "audio": "dona-cida/comemorando-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "dona-cida.comemorando.aperto.14",
+              "texto": "Ainda tô na briga, meu bem.",
+              "audio": "dona-cida/comemorando-aperto-14.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.aperto.15",
+              "texto": "Devagar se vai longe.",
+              "audio": "dona-cida/comemorando-aperto-15.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.aperto.16",
+              "texto": "Não me dê como derrotada.",
+              "audio": "dona-cida/comemorando-aperto-16.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.aperto.17",
+              "texto": "Essa veio na hora certa.",
+              "audio": "dona-cida/comemorando-aperto-17.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.aperto.18",
+              "texto": "Ah, agora sim.",
+              "audio": "dona-cida/comemorando-aperto-18.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.aperto.19",
+              "texto": "A volta por cima começa assim.",
+              "audio": "dona-cida/comemorando-aperto-19.mp3"
+            },
+            {
+              "id": "dona-cida.comemorando.aperto.20",
+              "texto": "Raposa velha ainda morde.",
+              "audio": "dona-cida/comemorando-aperto-20.mp3"
+            }
+          ]
+        },
+        "frustrado": {
+          "folga": [
+            {
+              "id": "dona-cida.frustrado.folga.01",
+              "texto": "Hum. Essa você mereceu.",
+              "audio": "dona-cida/frustrado-folga-01.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.folga.02",
+              "texto": "Uma não faz feira.",
+              "audio": "dona-cida/frustrado-folga-02.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.folga.03",
+              "texto": "Pode ficar. Tenho muitas.",
+              "audio": "dona-cida/frustrado-folga-03.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.folga.04",
+              "texto": "Toda feira tem um prejuízo.",
+              "audio": "dona-cida/frustrado-folga-04.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.folga.05",
+              "texto": "Tá bem. Uma de consolação.",
+              "audio": "dona-cida/frustrado-folga-05.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.folga.06",
+              "texto": "Hum. Não me acostumo a perder.",
+              "audio": "dona-cida/frustrado-folga-06.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.folga.07",
+              "texto": "Aproveita. Vai ser raro.",
+              "audio": "dona-cida/frustrado-folga-07.mp3"
+            }
+          ],
+          "parelho": [
+            {
+              "id": "dona-cida.frustrado.parelho.08",
+              "texto": "Hum. Não esperava essa.",
+              "audio": "dona-cida/frustrado-parelho-08.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.parelho.09",
+              "texto": "Fiz a conta errada? Eu?",
+              "audio": "dona-cida/frustrado-parelho-09.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.parelho.10",
+              "texto": "Tá bom, essa foi sua.",
+              "audio": "dona-cida/frustrado-parelho-10.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.parelho.11",
+              "texto": "Bem jogado. Mas não se acostume.",
+              "audio": "dona-cida/frustrado-parelho-11.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.parelho.12",
+              "texto": "Ora, ora. Olha só você.",
+              "audio": "dona-cida/frustrado-parelho-12.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.parelho.13",
+              "texto": "Hum… vou lembrar disso.",
+              "audio": "dona-cida/frustrado-parelho-13.mp3"
+            }
+          ],
+          "aperto": [
+            {
+              "id": "dona-cida.frustrado.aperto.14",
+              "texto": "Trinta anos de feira pra isso…",
+              "audio": "dona-cida/frustrado-aperto-14.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.aperto.15",
+              "texto": "Minha banca tá ficando vazia.",
+              "audio": "dona-cida/frustrado-aperto-15.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.aperto.16",
+              "texto": "Não acredito. De novo?",
+              "audio": "dona-cida/frustrado-aperto-16.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.aperto.17",
+              "texto": "Você tá me ensinando, é?",
+              "audio": "dona-cida/frustrado-aperto-17.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.aperto.18",
+              "texto": "Isso não tava na minha conta.",
+              "audio": "dona-cida/frustrado-aperto-18.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.aperto.19",
+              "texto": "Meus óculos devem tá sujos.",
+              "audio": "dona-cida/frustrado-aperto-19.mp3"
+            },
+            {
+              "id": "dona-cida.frustrado.aperto.20",
+              "texto": "Tá bom. Mas ainda não acabou.",
+              "audio": "dona-cida/frustrado-aperto-20.mp3"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
