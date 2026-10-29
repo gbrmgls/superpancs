@@ -15,13 +15,13 @@ const TEMPO = {
   recolher: 650,       // cartas indo para a pilha do vencedor ou para o monte de empate
   intervalo: 110,      // atraso entre cartas que se movem juntas
   autoAvancar: 2000,   // depois que o rival reage e termina de falar, espera isso e avança sozinho
-  narrador: 1200,      // a faixa "ao vivo" ainda fica isso na tela depois de a fala terminar
+  narrador: 1200,      // o balão do rádio ainda fica isso na tela depois de narrador e Tião terminarem
   respiro: 700,        // pausa entre uma fala e o que vem depois (outra fala, uma carta)
-  semVoz: 1200,        // sem voz (desligada ou sem gravação), tempo mínimo para ler cada fala da faixa
+  semVoz: 1200,        // tempo mínimo de cada fala do narrador e do Tião (sem voz, é o tempo de ler a faixa)
 };
 
 const $ = id => document.getElementById(id);
-const telas = { cadastro: $('tela-cadastro'), inicio: $('tela-inicio'), jogo: $('tela-jogo'), fim: $('tela-fim'), album: $('tela-album') };
+const telas = { vitrine: $('tela-vitrine'), cadastro: $('tela-cadastro'), inicio: $('tela-inicio'), jogo: $('tela-jogo'), fim: $('tela-fim'), album: $('tela-album') };
 const el = {
   tabuleiro: $('tabuleiro'),
   camada: $('camada-cartas'),
@@ -31,6 +31,8 @@ const el = {
   qtdEmpate: $('qtd-empate'),
   placar: { [JOGADOR]: $('placar-jogador'), [COMPUTADOR]: $('placar-rival') },
   placarRodada: $('placar-rodada'),
+  placarCaixa: $('placar'),
+  placarVezRival: $('placar-vez-rival'),
   dica: $('dica'),
   retrato: $('retrato-rival'),
   balao: $('balao'),
@@ -45,6 +47,9 @@ const el = {
   som: $('botao-som'),
   voz: $('botao-voz'),
   auto: $('botao-auto'),
+  musica: document.querySelectorAll('.botao-musica'), // um nas telas de feira, outro nos controles da partida
+  painelVolume: $('painel-volume'),
+  musicaFlutuante: document.querySelector('.musica-flutuante'),
   sair: $('botao-sair'),
   zoom: $('zoom'),
   zoomCarta: $('zoom-carta'),
@@ -55,7 +60,12 @@ const el = {
   fimTexto: $('fim-texto'),
   narrador: $('narrador'),
   narradorTexto: $('narrador-texto'),
-  narradorQuem: $('narrador-quem'),
+  radio: $('radio'),
+  botaoRadio: $('botao-radio'),
+  radioFala: $('radio-fala'),
+  radioQuem: $('radio-quem'),
+  radioTexto: $('radio-texto'),
+  locutores: document.querySelectorAll('.locutor'),
 };
 
 const CHAVE_PREFERENCIAS = 'superpancs-preferencias';
@@ -72,7 +82,10 @@ const EXPRESSOES = Object.keys(FALAS.expressoes); // neutro, pensando, comemoran
 const CHANCE_FALA_NEUTRA = 0.4; // na sua vez o rival só às vezes provoca (para não falar o tempo todo)
 
 let estado = null;
-let config = { modo: 'rapido', dificuldade: 'facil', som: true, voz: true, auto: true };
+let config = { modo: 'rapido', dificuldade: 'facil', som: true, voz: true, auto: true, radio: true, volMusica: 3, volSons: 1 };
+// Volume de cada nível (0 = desligado). O nível 4 é o padrão; o 5 é mais alto (as vozes param no máximo do navegador).
+const VOLUMES = { musica: [0, 0.4, 0.7, 1, 1.4, 1.9], sons: [0, 0.3, 0.55, 0.8, 1, 1.4] };
+const CHAVE_VOLUME = { musica: 'volMusica', sons: 'volSons' };
 let ultimaRodada = null;
 let estatisticas = null;
 let geracao = 0;        // muda a cada partida nova ou saída; passos assíncronos antigos param sozinhos
@@ -83,14 +96,19 @@ let nomeJogador = ''; // nome do cadastro; vazio = "Você"
 let zoomAberto = null; // { lado, retomarAuto } enquanto a carta ampliada está na tela
 let timerBalao = null;
 let timerNarrador = null;
-let transmissao = 0; // muda a cada fala de narrador + comentarista iniciada ou interrompida
+let plantaoFinal = ''; // texto da faixa sobre o fim da partida, dado na última rodada e repetido na tela final
+let transmissao = 0; // muda a cada transmissão (plantão + narrador + Tião) iniciada ou interrompida
 let cicloAuto = 0; // muda a cada avanço automático iniciado ou parado
 let autoAguardando = false; // avanço automático em andamento (esperando o rival ou contando)
 let reacaoDoRival = Promise.resolve(); // termina quando o rival já reagiu à rodada (e parou de falar)
 let seguidas = { lado: null, n: 0 }; // rodadas seguidas vencidas pelo mesmo lado (para o narrador)
-const falasUsadas = new Set(); // ids das falas já ditas (rivais, narrador e comentarista), para não se repetirem
+const falasUsadas = new Set(); // ids das falas e textos já usados (rivais, narrador, Tião, plantão), para não se repetirem
 const armazenamento = (() => { try { return window.localStorage; } catch (e) { return null; } })();
-const album = carregarAlbum(armazenamento); // ids das cartas com a figurinha colada
+let emailJogador = ''; // e-mail do cadastro (só nesta visita); sem e-mail, não há álbum
+let album = new Set(); // ids das cartas com a figurinha colada no álbum desse e-mail
+// a planilha já respondeu o álbum deste e-mail: só então as figurinhas são enviadas (um script antigo,
+// sem álbum, gravaria cada envio como um cadastro); até lá, ficam na cópia do aparelho
+let albumNaPlanilha = false;
 
 // O que está desenhado na mesa
 const mesa = {
@@ -128,7 +146,11 @@ function preCarregarImagens() {
 }
 
 function mostrarTela(nome) {
-  if (nome === 'inicio') $('album-contagem').textContent = `${album.size}/${CARTAS.length}`;
+  // samba mais alto na vitrine, baixinho (e sem melodia) na partida
+  Musica.mudarNivel(nome === 'vitrine' ? 'vitrine' : nome === 'jogo' ? 'jogo' : 'menu');
+  el.musicaFlutuante.hidden = nome === 'jogo';
+  fecharPainelVolume();
+  if (nome === 'inicio') $('album-contagem').textContent = emailJogador ? `${album.size}/${CARTAS.length}` : 'sem e-mail';
   for (const [chave, tela] of Object.entries(telas)) tela.hidden = chave !== nome;
   window.scrollTo(0, 0);
 }
@@ -140,8 +162,9 @@ function mostrarTela(nome) {
 function montarFrente(face, carta, aoEscolher = null) {
   face.classList.toggle('super', carta.superTrunfo);
   face.innerHTML = `<img alt="" src="${carta.imagemLimpa}">` +
-    (carta.tipo === 'panc' ? '<span class="selo">PANC</span>' : '') +
-    (carta.superTrunfo ? '<span class="selo-st">★ Super Trunfo</span>' : '') +
+    (carta.superTrunfo
+      ? '<span class="moldura-super"></span><span class="selo-st"><b>★ Super PANC ★</b><small>vence qualquer hortaliça comum</small></span>'
+      : carta.tipo === 'panc' ? '<span class="selo">PANC</span>' : '') +
     '<div class="info"><span class="nome"></span><span class="esporte"></span><div class="faixas"></div></div>';
   const nome = face.querySelector('.nome');
   nome.textContent = carta.nome;
@@ -251,6 +274,8 @@ async function voar(elemento, de, para, { virarPara = null, duracao = 650, atras
     const fim = virarPara === 'verso' ? 180 : 0;
     // Leva sempre "pra frente" no giro (0→180 ou 180→360) para parecer uma carta sendo virada.
     const destino = fim === inicio ? inicio : (fim > inicio ? fim : 360);
+    // a frente de uma carta virada só aparece durante o giro (ver .girando no CSS)
+    if (destino !== inicio) elemento.classList.add('girando');
     giro = interna.animate([
       { transform: `rotateY(${inicio}deg)`, offset: 0 },
       { transform: `rotateY(${inicio}deg)`, offset: 0.2 },
@@ -265,7 +290,7 @@ async function voar(elemento, de, para, { virarPara = null, duracao = 650, atras
   if (virarPara) elemento.classList.toggle('virada', virarPara === 'verso');
   movimento.cancel();
   if (giro) giro.cancel();
-  elemento.classList.remove('voando', 'levantada');
+  elemento.classList.remove('voando', 'levantada', 'girando');
   if (g === geracao) mesa.voando--;
 }
 
@@ -337,6 +362,13 @@ function atualizarPlacar(animar = false) {
   el.placarRodada.textContent = estado.limiteRodadas ? `${estado.rodada}/${estado.limiteRodadas}` : estado.rodada;
 }
 
+// Como no vôlei, a bola embaixo do placar mostra quem tem a vez (quem escolhe o atributo).
+function marcarVez(lado) {
+  el.placarVezRival.textContent = rival().de.startsWith('da') ? 'Vez dela' : 'Vez dele';
+  el.placarCaixa.classList.toggle('vez-jogador', lado === JOGADOR);
+  el.placarCaixa.classList.toggle('vez-rival', lado === COMPUTADOR);
+}
+
 function mostrarRival() {
   const r = rival();
   $('placar-nome-rival').textContent = r.nome;
@@ -368,30 +400,73 @@ function falar(expressao, duracao = 0) {
   return audioDaFala(FALAS, fala);
 }
 
-// Narrador ou comentarista ("quem": NARRADOR ou COMENTARISTA): mostra a fala na faixa "ao vivo"
-// e devolve o caminho do áudio dela.
-function narrar(quem, evento, atributo) {
-  const fala = falaDoEvento(quem, evento, atributo, falasUsadas);
-  clearTimeout(timerNarrador);
-  el.narradorTexto.textContent = fala.texto;
-  el.narradorQuem.textContent = quem === COMENTARISTA ? COMENTARISTA.nome : 'Ao vivo';
-  el.narrador.classList.toggle('do-comentarista', quem === COMENTARISTA);
-  el.narrador.hidden = false;
-  reanimar(el.narrador, 'entrando');
-  return audioDaFala(quem, fala);
+// Valores das variáveis dos textos de plantão ({rival}, {atributo}...; ver falas/bastidores.json).
+function valoresDoPlantao(r) {
+  const valores = { rival: rival().nome };
+  if (!r) return valores;
+  const atributo = ATRIBUTOS.find(a => a.chave === r.atributo);
+  return {
+    ...valores,
+    atributo: rotuloCurto(atributo).toLowerCase(),
+    seguidas: seguidas.n,
+    vencedor: r.vencedor === JOGADOR ? 'você' : rival().nome,
+    cesta: r.cartasGanhas.length - 2,
+    // placar final, para as faixas do fim da partida
+    meu: estado.maos[JOGADOR].length,
+    dele: estado.maos[COMPUTADOR].length,
+  };
 }
 
-// O narrador fala do evento e o Tião comenta em seguida, com um respiro entre os dois.
-// Sem voz, cada fala fica o tempo de ler. Termina quando os dois acabam (ou na hora, se interrompida).
-async function transmitir(evento, atributo) {
+// Na última rodada, a transmissão já é sobre o fim da partida (quem foi campeão), não sobre a rodada.
+const eventoDoFim = r => ({ [JOGADOR]: 'fim_vitoria', [COMPUTADOR]: 'fim_derrota', [EMPATE]: 'fim_empate' }[r.campeao]);
+
+// Faixa de plantão: o texto da equipe de bastidores sobre o evento (só texto, sem voz).
+// Fica na tela até o fim da rodada (quando a pessoa segue para a próxima).
+function mostrarPlantao(evento, r) {
+  clearTimeout(timerNarrador);
+  el.narradorTexto.textContent = textoDoBastidor(evento, valoresDoPlantao(r), falasUsadas);
+  if (r && r.fim) plantaoFinal = el.narradorTexto.textContent;
+  el.narrador.hidden = false;
+  reanimar(el.narrador, 'entrando');
+}
+
+
+// Uma fala no rádio: quem fala sobe de trás do rádio, o balão dele mostra o nome e o texto, e os dois se mexem
+// enquanto a voz toca (sem gravação, pelo tempo mínimo de uma fala). Fica até a próxima fala ou o fim da transmissão.
+async function falarNoRadio(quem, evento, atributo) {
+  const minha = transmissao;
+  const fala = falaDoEvento(quem, evento, atributo, falasUsadas);
+  el.radioQuem.textContent = quem.nome; // Agrião Bueno ou Tião da Xepa
+  el.radioTexto.textContent = fala.texto;
+  const comentarista = quem === COMENTARISTA;
+  el.radioFala.classList.toggle('do-comentarista', comentarista);
+  el.radioFala.classList.toggle('do-narrador', !comentarista);
+  el.locutores.forEach(locutor => locutor.classList.toggle('visivel', locutor.classList.contains('locutor-comentarista') === comentarista));
+  el.radioFala.hidden = false;
+  reanimar(el.radioFala, 'surgindo');
+  el.radio.classList.add('falando');
+  await Promise.all([Sons.falar([audioDaFala(quem, fala)]), pausa(TEMPO.semVoz)]);
+  if (minha === transmissao) el.radio.classList.remove('falando'); // (uma transmissão nova já pode estar falando)
+}
+
+function calarRadio() {
+  el.radio.classList.remove('falando');
+  el.radioFala.hidden = true;
+  el.locutores.forEach(locutor => locutor.classList.remove('visivel'));
+}
+
+// Transmissão de um evento: a faixa de plantão aparece e, com o rádio ligado, o narrador fala e o Tião
+// comenta em seguida, com um respiro entre os dois. Termina quando os dois acabam (ou na hora, se
+// interrompida ou se o rádio for desligado); o balão do rádio some um pouco depois, e a faixa fica até o fim da rodada.
+async function transmitir(evento, r) {
   const minha = ++transmissao;
+  mostrarPlantao(evento, r);
   for (const quem of [NARRADOR, COMENTARISTA]) {
     if (quem === COMENTARISTA) await pausa(TEMPO.respiro);
-    if (minha !== transmissao) return;
-    await Promise.all([Sons.falar([narrar(quem, evento, atributo)]), pausa(TEMPO.semVoz)]);
-    // a faixa fica até a fala terminar e mais um pouco (a próxima fala a substitui)
-    if (minha === transmissao) timerNarrador = setTimeout(esconderNarrador, TEMPO.narrador);
+    if (minha !== transmissao || !config.radio) break;
+    await falarNoRadio(quem, evento, r && r.atributo);
   }
+  if (minha === transmissao) timerNarrador = setTimeout(calarRadio, TEMPO.narrador);
 }
 
 function pararTransmissao() {
@@ -402,6 +477,7 @@ function pararTransmissao() {
 function esconderNarrador() {
   clearTimeout(timerNarrador);
   el.narrador.hidden = true;
+  calarRadio();
 }
 
 function esconderBalao() {
@@ -433,6 +509,7 @@ async function iniciarPartida() {
   estado = novaPartida(CARTAS, config.modo);
   estatisticas = { vencidas: 0, perdidas: 0, empatadas: 0, superTrunfo: 0, pancada: null, vitoriasPorCarta: new Map() };
   seguidas = { lado: null, n: 0 };
+  plantaoFinal = '';
   limparMesa();
   mesa.naPilha[JOGADOR] = estado.maos[JOGADOR].length;
   mesa.naPilha[COMPUTADOR] = estado.maos[COMPUTADOR].length;
@@ -450,6 +527,7 @@ async function iniciarPartida() {
   await transmitir('inicio_partida');
   await pausa(TEMPO.respiro);
   if (g !== geracao) return;
+  esconderNarrador(); // a abertura termina quando a primeira rodada começa
   prepararRodada();
 }
 
@@ -519,10 +597,11 @@ function mostrarMascote(r) {
   reanimar(el.mascote, 'entrando');
 }
 
-function preencherLado(painel, quem, carta, chave, maior, classe) {
+// Cada lado do painel: o desenho da carta (no lugar do nome), o valor e a barra.
+function preencherLado(painel, carta, chave, maior, classe) {
   const atributo = ATRIBUTOS.find(a => a.chave === chave);
   painel.className = `lado ${classe}`;
-  painel.querySelector('.quem').textContent = `${quem} · ${carta.nome}`;
+  painel.querySelector('.quem img').src = carta.imagemLimpa;
   const valor = painel.querySelector('.valor');
   valor.innerHTML = '<small></small>';
   valor.prepend(formatar(carta.valores[chave]));
@@ -532,7 +611,7 @@ function preencherLado(painel, quem, carta, chave, maior, classe) {
 
 function mostrarRevelacao(r) {
   const resultado = { [JOGADOR]: 'vitoria', [COMPUTADOR]: 'derrota', [EMPATE]: 'empate' }[r.vencedor];
-  el.revelacao.className = `revelacao ${resultado}`;
+  el.revelacao.className = `revelacao ${resultado}${ladoALado() ? '' : ' empilhado'}`;
   el.mensagem.textContent = {
     [JOGADOR]: 'Você leva!',
     [COMPUTADOR]: `${rival().nome} leva!`,
@@ -545,16 +624,32 @@ function mostrarRevelacao(r) {
   const dele = r.cartaComputador.valores[chave];
   const maior = Math.max(meu, dele);
   const classe = lado => r.vencedor === EMPATE ? 'empata' : r.vencedor === lado ? 'ganha' : 'perde';
-  $('comparacao-titulo').textContent = r.motivo === 'superTrunfo' ? 'Super Trunfo' : rotuloCurto(atributo);
-  preencherLado($('lado-jogador'), nomeJogador || 'Você', r.cartaJogador, chave, maior, classe(JOGADOR));
-  preencherLado($('lado-rival'), rival().nome, r.cartaComputador, chave, maior, classe(COMPUTADOR));
-  const diferenca = Math.round(Math.abs(meu - dele) * 100) / 100;
-  $('diferenca').textContent = r.motivo === 'superTrunfo'
-    ? 'Ora-pro-nóbis vence hortaliça comum'
-    : diferenca === 0 ? 'Valores iguais: tudo para a cesta' : `+${formatar(diferenca)} ${unidadeCurta(atributo)} ${DE_QUE[chave]}`;
+  const superTrunfo = r.motivo === 'superTrunfo';
+  $('comparacao-titulo').textContent = superTrunfo ? 'Super PANC' : rotuloCurto(atributo);
+  $('icone-atributo').setAttribute('href', `#i-${superTrunfo ? 'super' : chave}`);
+  // quando o rival escolheu o atributo, o rosto dele aparece no título
+  const escolheu = $('quem-escolheu');
+  escolheu.hidden = r.escolheu !== COMPUTADOR;
+  escolheu.src = imagemRival(rival().id, 'pensando');
+  preencherLado($('lado-jogador'), r.cartaJogador, chave, maior, classe(JOGADOR));
+  preencherLado($('lado-rival'), r.cartaComputador, chave, maior, classe(COMPUTADOR));
 
-  el.detalhe.textContent = detalheRodada(r);
+  // Embaixo, só desenho e número: a diferença, a cesta (empate) ou as cartas que vieram da cesta
+  const diferenca = Math.round(Math.abs(meu - dele) * 100) / 100;
+  const daCesta = r.cartasGanhas.length - 2;
+  const cesta = '<svg class="icone-cesta" viewBox="0 0 40 32"><use href="#i-cesta"></use></svg>';
+  const dif = $('diferenca');
+  dif.className = `dif${r.vencedor === EMPATE ? ' dif-empate' : ''}`;
+  dif.innerHTML = superTrunfo ? '<svg class="icone-super" viewBox="0 0 24 24"><use href="#i-super"></use></svg>'
+    : r.vencedor === EMPATE ? `<b>=</b><span class="seta">➜</span>${cesta}`
+    : `<b>+${formatar(diferenca)}</b> ${unidadeCurta(atributo)}`;
+  if (daCesta > 0) dif.insertAdjacentHTML('beforeend', `<span class="da-cesta">${cesta}<b>+${daCesta}</b></span>`);
+
+  el.detalhe.textContent = descreverRodada(r);
   el.continuar.textContent = r.fim ? 'Ver resultado' : 'Próxima rodada';
+  // travado até o narrador e o Tião terminarem (liberarContinuar)
+  el.continuar.disabled = true;
+  el.continuar.title = 'Espere a transmissão terminar';
   el.continuar.hidden = false;
   el.revelacao.hidden = false;
   posicionarRevelacao();
@@ -593,6 +688,7 @@ async function prepararRodada() {
     await transmitir('ultima_rodada');
     await pausa(TEMPO.respiro);
     if (g !== geracao) return;
+    esconderNarrador(); // o aviso termina quando a vez começa
   }
 
   const minha = mesa.emJogo[JOGADOR];
@@ -601,6 +697,7 @@ async function prepararRodada() {
 
   const rodada = estado.limiteRodadas ? `Rodada ${estado.rodada} de ${estado.limiteRodadas}` : `Rodada ${estado.rodada}`;
   atualizarPlacar();
+  marcarVez(estado.vez);
   if (estado.vez === JOGADOR) {
     // Na tela, a vez é indicada pela carta (salto + faixas pulsando); o texto é só para leitores de tela.
     el.anuncio.textContent = `${rodada}. Sua vez: ` + (modoToque()
@@ -620,8 +717,9 @@ async function prepararRodada() {
     minha.el.querySelectorAll('.faixa').forEach(f => { f.disabled = false; });
     minha.el.querySelector('.faixa').focus({ preventScroll: true });
   } else {
-    el.anuncio.textContent = `${rodada}. Vez ${rival().de}.`;
-    mostrarDica(`<b>${rival().nome}</b> está escolhendo…`);
+    el.anuncio.textContent = `${rodada}. Vez ${rival().de}: só ${rival().de.startsWith('da') ? 'ela' : 'ele'} escolhe o atributo.`;
+    // fica claro que, na vez do rival, quem escolhe o atributo é ele
+    mostrarDica(`Vez ${rival().de}: <b>só ${rival().de.startsWith('da') ? 'ela' : 'ele'} escolhe o atributo</b>`);
     Sons.falar([falar('pensando')], { interromper: false });
     mesa.emJogo[COMPUTADOR].el.classList.add('pensando');
     // o rival só revela a carta depois de terminar de falar (e nunca antes do tempo mínimo)
@@ -682,7 +780,7 @@ async function resolverRodada(chave) {
   // O narrador fala primeiro e o Tião comenta; o rival só reage depois dos dois (reagirRival).
   // No Super Trunfo, a carta faz a entrada especial antes da comparação.
   esconderBalao();
-  const comentarios = transmitir(eventoDaRodada(r, seguidas.n), r.atributo);
+  const comentarios = transmitir(r.fim ? eventoDoFim(r) : eventoDaRodada(r, seguidas.n), r);
   if (r.motivo === 'superTrunfo') {
     await entradaSuperTrunfo(r.vencedor);
     if (g !== geracao) return;
@@ -699,10 +797,19 @@ async function resolverRodada(chave) {
   if (g !== geracao) return;
   for (const lado of [JOGADOR, COMPUTADOR]) mesa.emJogo[lado].el.classList.add('na-mesa');
   mostrarMascote(r);
-  el.continuar.focus({ preventScroll: true });
   resolvendo = false;
+  liberarContinuar(r, comentarios);
   reacaoDoRival = reagirRival(r, comentarios);
   if (config.auto && !r.fim) iniciarAvancoAutomatico();
+}
+
+// "Próxima rodada" só funciona depois da última fala do Tião (na hora, se o rádio estiver desligado).
+async function liberarContinuar(r, comentarios) {
+  await comentarios;
+  if (ultimaRodada !== r || el.continuar.hidden) return;
+  el.continuar.disabled = false;
+  el.continuar.removeAttribute('title');
+  if (!zoomAberto) el.continuar.focus({ preventScroll: true });
 }
 
 // O rival reage à rodada depois do narrador e do Tião, com um respiro entre as falas.
@@ -754,23 +861,13 @@ async function entradaSuperTrunfo(lado) {
   el.tabuleiro.classList.remove('st-ativo');
 }
 
-// Texto curto embaixo do painel: o que não aparece nos números.
-function detalheRodada(r) {
-  const partes = [];
-  if (r.escolheu === COMPUTADOR) partes.push(`${rival().nome} escolheu ${nomeAtributo(r.atributo)}.`);
-  const daCesta = r.cartasGanhas.length - 2;
-  if (daCesta > 0) partes.push(`${r.vencedor === JOGADOR ? 'Você' : rival().nome} levou também ${plural(daCesta, 'carta')} da cesta!`);
-  if (r.vencedor === EMPATE) partes.push('As cartas vão para a cesta.');
-  return partes.join(' ');
-}
-
 function descreverRodada(r) {
   const partes = [];
   if (r.escolheu === COMPUTADOR) partes.push(`${rival().nome} escolheu ${nomeAtributo(r.atributo)}.`);
 
   if (r.motivo === 'superTrunfo') {
     const st = r.cartaJogador.superTrunfo ? r.cartaJogador : r.cartaComputador;
-    partes.push(`Super Trunfo! A ${st.nome} vence qualquer hortaliça comum.`);
+    partes.push(`Super PANC! A ${st.nome} vence qualquer hortaliça comum.`);
   } else {
     partes.push(`${nomeAtributo(r.atributo)}: ${r.cartaJogador.nome} ${valorComUnidade(r.cartaJogador, r.atributo)} × ` +
       `${valorComUnidade(r.cartaComputador, r.atributo)} ${r.cartaComputador.nome}.`);
@@ -853,8 +950,8 @@ function abrirZoom(lado) {
     f.disabled = !podeEscolher;
     f.classList.toggle('escolhida', item.el.querySelector(`.faixa[data-chave="${f.dataset.chave}"]`).classList.contains('escolhida'));
   });
-  el.zoomDica.textContent = podeEscolher
-    ? 'Toque em um atributo para escolher'
+  el.zoomDica.textContent = podeEscolher ? 'Toque em um atributo para escolher'
+    : estado.vez === COMPUTADOR && !resolvendo && el.revelacao.hidden ? `Vez ${rival().de}: você só olha a carta`
     : `${item.carta.nome} · ${item.carta.esporte}`;
 
   // Enquanto o jogador lê a carta, o avanço automático espera
@@ -973,7 +1070,7 @@ async function recolherCartas(r) {
 }
 
 async function continuar() {
-  if (!estado || el.continuar.hidden || resolvendo) return;
+  if (!estado || el.continuar.hidden || el.continuar.disabled || resolvendo) return;
   const g = geracao;
   fecharZoom(false);
   pararAvancoAutomatico();
@@ -1035,14 +1132,10 @@ function mostrarFim() {
 
   const vozRival = montarPodio(r.campeao);
   colarNoAlbum();
-  // narrador, Tião e rival, um depois do outro
-  const evento = { [JOGADOR]: 'fim_vitoria', [COMPUTADOR]: 'fim_derrota', [EMPATE]: 'fim_empate' }[r.campeao];
-  const fala = falaDoEvento(NARRADOR, evento, null, falasUsadas);
-  const comentario = falaDoEvento(COMENTARISTA, evento, null, falasUsadas);
-  $('fim-narrador-texto').textContent = fala.texto;
-  $('fim-comentarista-texto').textContent = comentario.texto;
-  Sons.falar([audioDaFala(NARRADOR, fala), audioDaFala(COMENTARISTA, comentario), vozRival].filter(Boolean),
-    { respiro: TEMPO.respiro });
+  // narrador e Tião já falaram do fim na última rodada; aqui fica a mesma faixa e só o rival fala
+  $('fim-narrador-texto').textContent = plantaoFinal
+    || textoDoBastidor(eventoDoFim(r), { rival: rival().nome, meu, dele }, falasUsadas);
+  if (vozRival) Sons.falar([vozRival]);
   Sons.tocar({ [JOGADOR]: 'fimVitoria', [COMPUTADOR]: 'fimDerrota', [EMPATE]: 'fimEmpate' }[r.campeao]);
   mostrarTela('fim');
   $('botao-de-novo').focus({ preventScroll: true }); // a tela começa do alto, com o resultado
@@ -1095,12 +1188,42 @@ function montarPodio(campeao) {
 
 // ---------- Álbum de figurinhas ----------
 
+// O álbum é do e-mail do cadastro. Abre a cópia deste aparelho na hora e junta com a da planilha quando
+// ela responder; o que só estava no aparelho (ganho sem internet) vai para a planilha.
+function entrarNoAlbum(email) {
+  emailJogador = normalizarEmail(email);
+  album = emailJogador ? carregarAlbum(armazenamento, chaveDoAlbum(emailJogador)) : new Set();
+  albumNaPlanilha = false;
+  if (!emailJogador) return;
+  const meu = emailJogador;
+  Cadastro.buscarAlbum(meu).then(ids => {
+    if (ids === null || meu !== emailJogador) return;
+    albumNaPlanilha = true;
+    const daPlanilha = idsValidos(ids);
+    const soAqui = [...album].filter(id => !daPlanilha.includes(id));
+    colarFigurinhas(album, daPlanilha);
+    salvarAlbum(armazenamento, album, chaveDoAlbum(meu));
+    if (soAqui.length) Cadastro.enviarAlbum(meu, [...album]);
+    if (!telas.inicio.hidden) $('album-contagem').textContent = `${album.size}/${CARTAS.length}`;
+  });
+}
+
 // No fim da partida, cola as figurinhas das cartas com que o jogador venceu rodadas e avisa das novas.
+// Sem e-mail, nada é colado: o aviso convida a colocar o e-mail.
 function colarNoAlbum() {
   const vencedoras = [...estatisticas.vitoriasPorCarta.values()].filter(x => x.lado === JOGADOR).map(x => x.carta.id);
-  const novas = colarFigurinhas(album, vencedoras).map(id => CARTAS.find(c => c.id === id));
-  salvarAlbum(armazenamento, album);
   const aviso = $('fim-figurinha');
+  if (!emailJogador) {
+    aviso.hidden = vencedoras.length === 0;
+    if (!vencedoras.length) return;
+    $('fim-figurinha-img').src = VERSO;
+    aviso.querySelector('b').textContent = 'Sem e-mail, sem figurinhas';
+    $('fim-figurinha-texto').textContent = 'Coloque seu e-mail no cadastro para colecionar as cartas que vencem rodadas.';
+    return;
+  }
+  const novas = colarFigurinhas(album, vencedoras).map(id => CARTAS.find(c => c.id === id));
+  salvarAlbum(armazenamento, album, chaveDoAlbum(emailJogador));
+  if (novas.length && albumNaPlanilha) Cadastro.enviarAlbum(emailJogador, [...album]);
   aviso.hidden = novas.length === 0;
   if (!novas.length) return;
   $('fim-figurinha-img').src = novas[0].imagem;
@@ -1136,6 +1259,9 @@ function abrirAlbum() {
     lista.appendChild(item);
   }
   $('album-total').textContent = `${album.size}/${CARTAS.length}`;
+  $('album-sub-email').hidden = !emailJogador;
+  $('album-sem-email').hidden = !!emailJogador;
+  $('album-email').textContent = emailJogador;
   mostrarTela('album');
   $('botao-voltar-album').focus({ preventScroll: true });
 }
@@ -1143,10 +1269,10 @@ function abrirAlbum() {
 // ---------- Tela inicial: leque de cartas ----------
 
 const CARTAS_DO_LEQUE = [19, 57, 47, 21]; // número do arquivo da imagem (img/cartas/<n>.webp)
+const CARTAS_DA_VITRINE = [19, 57, 47, 21, 49]; // a Ora-pro-nóbis (Super PANC) no meio
 
-function montarLeque() {
-  const leque = $('leque');
-  for (const arquivo of CARTAS_DO_LEQUE) {
+function montarLeque(leque, arquivos) {
+  for (const arquivo of arquivos) {
     const carta = CARTAS.find(c => c.imagem.endsWith(`/${arquivo}.webp`));
     const item = document.createElement('div');
     item.className = 'carta-leque';
@@ -1154,6 +1280,15 @@ function montarLeque() {
     montarFrente(item.firstChild, carta);
     leque.appendChild(item);
   }
+}
+
+// Sair (no fim da partida ou no X durante ela): a vez de quem jogou acabou. Volta à vitrine, sem o nome e o e-mail dessa pessoa,
+// para a próxima começar do cadastro.
+function voltarParaVitrine() {
+  Sons.pararVoz();
+  aplicarNome('');
+  entrarNoAlbum('');
+  mostrarTela('vitrine');
 }
 
 function trocarRival() {
@@ -1175,7 +1310,7 @@ function sair() {
   cancelarTimers();
   geracao++;
   estado = null;
-  mostrarTela('inicio');
+  voltarParaVitrine(); // como no fim da partida: a próxima pessoa começa da vitrine
 }
 
 function restaurarSair() {
@@ -1191,10 +1326,90 @@ function atualizarControles() {
   el.som.title = config.som ? 'Efeitos ligados' : 'Efeitos desligados';
   el.voz.setAttribute('aria-pressed', String(config.voz));
   el.voz.title = config.voz ? 'Vozes ligadas' : 'Vozes desligadas';
+  el.botaoRadio.setAttribute('aria-pressed', String(config.radio));
+  el.botaoRadio.title = config.radio ? 'Rádio ligado (narrador e Tião)' : 'Rádio desligado';
+  el.radio.classList.toggle('desligado', !config.radio);
   el.auto.setAttribute('aria-pressed', String(config.auto));
   el.auto.title = config.auto ? 'Avançar sozinho: sim' : 'Avançar sozinho: não';
+  // o botão único de som fica riscado quando não sai som nenhum
+  const algumSom = config.volMusica > 0 || (config.volSons > 0 && (config.som || config.voz));
+  el.musica.forEach(botao => botao.setAttribute('aria-pressed', String(algumSom)));
+  for (const grupo of el.painelVolume.querySelectorAll('.volume-niveis')) {
+    const atual = config[CHAVE_VOLUME[grupo.dataset.canal]];
+    grupo.querySelectorAll('.volume-nivel').forEach(botao => {
+      const n = Number(botao.dataset.nivel);
+      botao.setAttribute('aria-checked', String(n === atual));
+      botao.classList.toggle('aceso', n > 0 && n <= atual);
+    });
+  }
   Sons.ligado = config.som;
   Sons.vozLigada = config.voz;
+  Sons.volume = VOLUMES.sons[config.volSons];
+  Musica.volume = VOLUMES.musica[config.volMusica];
+  Musica.ligada = config.volMusica > 0;
+}
+
+// ---------- Som (painel do botão do alto-falante) ----------
+
+// Seis níveis por canal: um "mudo" e cinco barras de altura crescente.
+function montarPainelVolume() {
+  for (const grupo of el.painelVolume.querySelectorAll('.volume-niveis')) {
+    const nome = grupo.dataset.canal === 'musica' ? 'Música' : 'Vozes e efeitos';
+    for (let n = 0; n <= 5; n++) {
+      const botao = document.createElement('button');
+      botao.type = 'button';
+      botao.className = 'volume-nivel' + (n === 0 ? ' volume-mudo' : '');
+      botao.dataset.nivel = n;
+      botao.style.setProperty('--n', n);
+      botao.setAttribute('role', 'radio');
+      botao.setAttribute('aria-label', n === 0 ? `${nome}: desligado` : `${nome}: nível ${n}`);
+      botao.innerHTML = n === 0 ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>' : '<span></span>';
+      botao.addEventListener('click', () => escolherVolume(grupo.dataset.canal, n));
+      grupo.appendChild(botao);
+    }
+  }
+}
+
+function escolherVolume(canal, nivel) {
+  Sons.liberarAudio();
+  config[CHAVE_VOLUME[canal]] = nivel;
+  atualizarControles();
+  salvarPreferencias();
+  if (canal === 'sons') Sons.tocar('clique'); // para ouvir como ficou
+}
+
+let botaoDoPainel = null; // o botão que abriu o painel (para pôr o painel ao lado dele)
+let painelFechadoEm = 0;  // na vitrine, o toque que só fecha o painel não leva ao cadastro
+
+function alternarPainelVolume(evento) {
+  evento.stopPropagation(); // na vitrine, o toque no botão não leva ao cadastro
+  Sons.liberarAudio();
+  if (!el.painelVolume.hidden && botaoDoPainel === evento.currentTarget) fecharPainelVolume();
+  else abrirPainelVolume(evento.currentTarget);
+}
+
+function abrirPainelVolume(botao) {
+  botaoDoPainel = botao;
+  el.musica.forEach(b => b.setAttribute('aria-expanded', String(b === botao)));
+  const painel = el.painelVolume;
+  painel.hidden = false;
+  // embaixo do botão; se não couber (no celular em pé, os controles ficam embaixo), em cima
+  const b = botao.getBoundingClientRect();
+  const p = painel.getBoundingClientRect();
+  const margem = 10;
+  const top = b.bottom + margem + p.height <= innerHeight ? b.bottom + margem : b.top - margem - p.height;
+  const left = Math.min(Math.max(margem, b.right - p.width), innerWidth - p.width - margem);
+  painel.style.top = `${Math.max(margem, top)}px`;
+  painel.style.left = `${b.left < innerWidth / 2 ? Math.max(margem, b.left) : left}px`;
+  const marcado = painel.querySelector('.volume-nivel[aria-checked="true"]');
+  if (marcado) marcado.focus({ preventScroll: true });
+}
+
+function fecharPainelVolume() {
+  if (el.painelVolume.hidden) return;
+  el.painelVolume.hidden = true;
+  el.musica.forEach(b => b.setAttribute('aria-expanded', 'false'));
+  if (botaoDoPainel && botaoDoPainel.offsetParent) botaoDoPainel.focus({ preventScroll: true });
 }
 
 function alternarSom() {
@@ -1209,6 +1424,16 @@ function alternarVoz() {
   atualizarControles();
   salvarPreferencias();
   Sons.tocar('clique');
+}
+
+// O rádio liga e desliga a transmissão (narrador e Tião); desligado no meio de uma fala, ela para na hora.
+function alternarRadio() {
+  config.radio = !config.radio;
+  atualizarControles();
+  salvarPreferencias();
+  Sons.tocar('clique');
+  if (!config.radio && el.radio.classList.contains('falando')) Sons.pararVoz();
+  if (!config.radio) calarRadio();
 }
 
 function alternarAuto() {
@@ -1253,11 +1478,13 @@ function concluirCadastro(evento) {
   Cadastro.salvar(dados.nome);
   Cadastro.enviar(dados); // segue em segundo plano; o jogo não espera a planilha
   aplicarNome(dados.nome);
+  entrarNoAlbum(dados.email);
   mostrarTela('inicio');
 }
 
 function pularCadastro() {
   aplicarNome(nomeJogador); // segue com o nome lembrado neste aparelho (ou "Você")
+  entrarNoAlbum(''); // sem e-mail, sem álbum
   mostrarTela('inicio');
 }
 
@@ -1271,6 +1498,11 @@ function carregarPreferencias() {
     if (typeof salvas.som === 'boolean') config.som = salvas.som;
     if (typeof salvas.voz === 'boolean') config.voz = salvas.voz;
     if (typeof salvas.auto === 'boolean') config.auto = salvas.auto;
+    if (typeof salvas.radio === 'boolean') config.radio = salvas.radio;
+    for (const chave of ['volMusica', 'volSons']) {
+      if (Number.isInteger(salvas[chave]) && salvas[chave] >= 0 && salvas[chave] <= 5) config[chave] = salvas[chave];
+    }
+    if (salvas.musica === false && !('volMusica' in salvas)) config.volMusica = 0; // quem tinha desligado a música
   } catch (e) { /* sem armazenamento: usa o padrão */ }
   document.querySelector(`input[name="modo"][value="${config.modo}"]`).checked = true;
   document.querySelector(`input[name="dificuldade"][value="${config.dificuldade}"]`).checked = true;
@@ -1286,12 +1518,20 @@ function salvarPreferencias() {
 preCarregarImagens();
 carregarPreferencias();
 montarZoom();
-montarLeque();
+montarPainelVolume();
+atualizarControles();
+montarLeque($('leque'), CARTAS_DO_LEQUE);
+montarLeque($('leque-vitrine'), CARTAS_DA_VITRINE);
 
-// O cadastro aparece sempre que o jogo é aberto, já com o nome lembrado neste aparelho.
+// O jogo abre na vitrine; o cadastro vem depois do primeiro toque, já com o nome lembrado neste aparelho.
 const jogadorSalvo = Cadastro.carregar();
 aplicarNome(jogadorSalvo ? jogadorSalvo.nome : '');
-abrirCadastro();
+mostrarTela('vitrine');
+// um toque (ou uma tecla) em qualquer lugar da vitrine leva ao cadastro
+telas.vitrine.addEventListener('click', () => { if (Date.now() - painelFechadoEm > 400) abrirCadastro(); });
+document.addEventListener('keydown', evento => {
+  if (!telas.vitrine.hidden && el.painelVolume.hidden && !evento.repeat && !['Tab', 'Escape'].includes(evento.key)) abrirCadastro();
+});
 $('form-cadastro').addEventListener('submit', concluirCadastro);
 $('botao-pular').addEventListener('click', pularCadastro);
 
@@ -1305,21 +1545,38 @@ $('botao-jogar').addEventListener('click', () => {
 el.continuar.addEventListener('click', continuar);
 // Na revelação, um toque em qualquer ponto livre da mesa também avança
 el.tabuleiro.addEventListener('click', evento => {
-  if (el.revelacao.hidden || el.continuar.hidden || evento.target.closest('.carta, button')) return;
+  if (el.revelacao.hidden || el.continuar.hidden || el.continuar.disabled || evento.target.closest('.carta, button')) return;
   continuar();
 });
 el.som.addEventListener('click', alternarSom);
 el.voz.addEventListener('click', alternarVoz);
 el.auto.addEventListener('click', alternarAuto);
+el.botaoRadio.addEventListener('click', alternarRadio);
+el.musica.forEach(botao => botao.addEventListener('click', alternarPainelVolume));
+// o painel fecha com Esc, com um toque fora dele ou quando a tela muda de tamanho
+el.painelVolume.addEventListener('click', evento => evento.stopPropagation());
+document.addEventListener('pointerdown', evento => {
+  if (el.painelVolume.hidden || evento.target.closest('#painel-volume, .botao-musica')) return;
+  fecharPainelVolume();
+  painelFechadoEm = Date.now();
+});
+document.addEventListener('keydown', evento => { if (evento.key === 'Escape') fecharPainelVolume(); });
+window.addEventListener('resize', fecharPainelVolume);
+// A música começa no primeiro toque (o navegador não deixa tocar antes) e abaixa enquanto alguém fala.
+Sons.aoFalar = Musica.abafar;
+for (const tipo of ['pointerdown', 'keydown']) {
+  document.addEventListener(tipo, () => { Sons.liberarAudio(); if (config.volMusica > 0) Musica.tocar(); }, { capture: true });
+}
 el.sair.addEventListener('click', sair);
 $('botao-de-novo').addEventListener('click', iniciarPartida);
 $('botao-trocar-rival').addEventListener('click', trocarRival);
 $('botao-album').addEventListener('click', abrirAlbum);
+$('botao-album-cadastro').addEventListener('click', abrirCadastro);
 $('botao-voltar-album').addEventListener('click', () => {
   mostrarTela('inicio');
   $('botao-album').focus();
 });
-$('botao-menu').addEventListener('click', () => mostrarTela('inicio'));
+$('botao-menu').addEventListener('click', voltarParaVitrine);
 
 let timerRedimensionar = null;
 window.addEventListener('resize', () => {

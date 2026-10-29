@@ -13,10 +13,12 @@ import os
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PASTA = os.path.join(RAIZ, 'falas')
 NIVEL = {'facil': 'Fácil', 'dificil': 'Difícil'}
+IDS_MVP = set()  # falas do MVP (falas/mvp.json), marcadas com ★ no roteiro
 
 
 def tabela(falas):
-    return ['| Arquivo | Fala |', '|---|---|'] + [f'| `{f["audio"]}` | {f["texto"]} |' for f in falas] + ['']
+    return (['| MVP | Arquivo | Fala |', '|---|---|---|']
+            + [f'| {"★" if f["id"] in IDS_MVP else ""} | `{f["audio"]}` | {f["texto"]} |' for f in falas] + [''])
 
 
 def rivais(d):
@@ -32,7 +34,7 @@ def rivais(d):
 
 
 def narrador(d):
-    l = ['---', '', '## Narrador', '',
+    l = ['---', '', f'## Narrador: {d["nome"]}', '',
          '*Locutor esportivo da feira. Empolgado, rápido, com bordões de transmissão. Fala com o jogador ("você")'
          ' e chama o adversário de "o rival" ou "a banca rival".*', '',
          f'Arquivos em `{d["audio"]["pasta"]}/`.', '']
@@ -61,21 +63,30 @@ def main():
         narr = json.load(f)
     with open(os.path.join(PASTA, 'comentarista.json'), encoding='utf-8') as f:
         coment = json.load(f)
+    with open(os.path.join(PASTA, 'bastidores.json'), encoding='utf-8') as f:
+        bastidores = json.load(f)  # só texto (faixa da TV): não entra no roteiro de gravação
+    with open(os.path.join(PASTA, 'mvp.json'), encoding='utf-8') as f:
+        mvp = json.load(f)
+    if mvp['ativo']:
+        IDS_MVP.update(mvp['ids'])
     l = ['# Roteiro de gravação: rivais, narrador e comentarista', '',
          'Para a pessoa que vai gravar. Cada linha vira um arquivo de áudio **com o nome indicado**.',
          'Grave em ambiente silencioso, uma fala por arquivo, sem silêncio sobrando no começo e no fim.',
-         'Formato: MP3 (ou WAV, que convertemos), mono. Cada fala deve durar até ~1,5 s: fale com energia, sem arrastar.', '']
+         'Formato: MP3 (ou WAV, que convertemos), mono. Cada fala deve durar até ~1,5 s: fale com energia, sem arrastar.', '',
+         f'**MVP:** grave primeiro as falas marcadas com ★ ({len(IDS_MVP)}). O jogo final terá todas.' if IDS_MVP else '', '']
     l += rivais(falas) + narrador(narr) + comentarista(coment)
     with open(os.path.join(PASTA, 'roteiro-gravacao.md'), 'w', encoding='utf-8') as f:
         f.write('\n'.join(l))
     dados = lambda d: json.dumps(d, ensure_ascii=False, separators=(',', ':'))
     with open(os.path.join(RAIZ, 'js', 'falas-dados.js'), 'w', encoding='utf-8') as f:
-        f.write('// Gerado por ferramentas/gerar-roteiro.py a partir de falas/falas.json, narrador.json e comentarista.json.\n'
+        f.write('// Gerado por ferramentas/gerar-roteiro.py a partir dos JSONs de falas/.\n'
                 '// Não edite à mão: mude os JSONs e rode o script de novo.\n'
                 f'const FALAS = {dados(falas)};\n'
                 f'const NARRADOR = {dados(narr)};\n'
                 f'const COMENTARISTA = {dados(coment)};\n'
-                "if (typeof module !== 'undefined') module.exports = { FALAS, NARRADOR, COMENTARISTA };\n")
+                f'const BASTIDORES = {dados(bastidores)};\n'
+                f'const MVP = {dados(mvp)};\n'
+                "if (typeof module !== 'undefined') module.exports = { FALAS, NARRADOR, COMENTARISTA, BASTIDORES, MVP };\n")
     total = (sum(len(x) for r in falas['rivais'].values() for e in r['falas'].values() for x in e.values())
              + sum(len(x) for d in (narr, coment) for e in d['eventos'].values() for x in e['falas'].values()))
     print(f'roteiro-gravacao.md e js/falas-dados.js: {total} falas')

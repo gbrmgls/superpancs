@@ -4,11 +4,23 @@
 //
 // Vozes: o jogo só toca as gravações (audio/falas/, audio/narrador/ e audio/comentarista/). Se um arquivo faltar
 // ou não abrir, a fala aparece só em texto e o silêncio ocupa o lugar dela.
+// Enquanto uma gravação toca, avisa aoFalar(true) (a música de fundo abaixa) e, no fim, aoFalar(false).
 
 const Sons = (() => {
   let contexto = null;
   let ligado = true;     // efeitos
   let vozLigada = true;  // narrador, comentarista e rivais
+  let volume = 1;        // volume de efeitos e vozes (0 a 1,5; as vozes param em 1, o máximo do navegador)
+  let mestre = null;     // ganho por onde passam todos os efeitos
+
+  function saida(ctx) {
+    if (!mestre) {
+      mestre = ctx.createGain();
+      mestre.gain.value = volume;
+      mestre.connect(ctx.destination);
+    }
+    return mestre;
+  }
 
   function liberarAudio() {
     if (!contexto) {
@@ -30,7 +42,7 @@ const Sons = (() => {
     ganho.gain.setValueAtTime(0.0001, t);
     ganho.gain.exponentialRampToValueAtTime(volume, t + 0.015);
     ganho.gain.exponentialRampToValueAtTime(0.0001, t + duracao);
-    osc.connect(ganho).connect(ctx.destination);
+    osc.connect(ganho).connect(saida(ctx));
     osc.start(t);
     osc.stop(t + duracao + 0.05);
   }
@@ -50,7 +62,7 @@ const Sons = (() => {
     filtro.frequency.exponentialRampToValueAtTime(3500, t + duracao);
     const ganho = ctx.createGain();
     ganho.gain.value = volume;
-    fonte.connect(filtro).connect(ganho).connect(ctx.destination);
+    fonte.connect(filtro).connect(ganho).connect(saida(ctx));
     fonte.start(t);
   }
 
@@ -71,7 +83,7 @@ const Sons = (() => {
     ganho.gain.setValueAtTime(0.0001, t);
     ganho.gain.exponentialRampToValueAtTime(volume, t + ataque);
     ganho.gain.exponentialRampToValueAtTime(0.0001, t + duracao);
-    fonte.connect(filtro).connect(ganho).connect(ctx.destination);
+    fonte.connect(filtro).connect(ganho).connect(saida(ctx));
     fonte.start(t);
   }
 
@@ -91,7 +103,7 @@ const Sons = (() => {
     ganho.gain.exponentialRampToValueAtTime(0.07, t + 0.02);
     ganho.gain.setValueAtTime(0.07, t + duracao - 0.04);
     ganho.gain.exponentialRampToValueAtTime(0.0001, t + duracao);
-    osc.connect(ganho).connect(ctx.destination);
+    osc.connect(ganho).connect(saida(ctx));
     osc.start(t); trinado.start(t);
     osc.stop(t + duracao + 0.05); trinado.stop(t + duracao + 0.05);
   }
@@ -116,7 +128,7 @@ const Sons = (() => {
     ganho.gain.setValueAtTime(0.0001, t);
     ganho.gain.exponentialRampToValueAtTime(0.06, t + 0.12);
     ganho.gain.exponentialRampToValueAtTime(0.0001, t + 1);
-    osc.connect(filtro).connect(ganho).connect(ctx.destination);
+    osc.connect(filtro).connect(ganho).connect(saida(ctx));
     osc.start(t);
     osc.stop(t + 1.05);
     ruido(ctx, 0, 0.9, { freq: 500, q: 0.7, volume: 0.05, ataque: 0.15 });
@@ -164,15 +176,24 @@ const Sons = (() => {
   const LIMITE_FALA = 8000; // segurança: um arquivo que não termina não trava a fila
   let atual = null;
   let filaVoz = 0;
+  let aoFalar = () => {};
 
   function tocarArquivo(caminho) {
     return new Promise(pronto => {
       const audio = new Audio(caminho);
+      audio.volume = Math.min(1, volume);
       atual = audio;
-      const fim = () => { clearTimeout(limite); audio.onended = audio.onerror = null; pronto(); };
+      const fim = () => {
+        clearTimeout(limite);
+        audio.onended = audio.onerror = audio.onplaying = null;
+        aoFalar(false);
+        pronto();
+      };
       const limite = setTimeout(() => { audio.pause(); fim(); }, LIMITE_FALA);
+      audio.parar = () => { audio.pause(); fim(); }; // interrompida: a fila segue na hora
       audio.onended = fim;
       audio.onerror = fim; // arquivo faltando: segue sem a voz
+      audio.onplaying = () => aoFalar(true); // só abaixa a música quando a voz sai de verdade
       audio.play().catch(fim);
     });
   }
@@ -195,7 +216,7 @@ const Sons = (() => {
 
   function pararVoz() {
     filaVoz++;
-    if (atual) { atual.pause(); atual = null; }
+    if (atual) { atual.parar(); atual = null; }
   }
 
   // Termina quando a voz que está tocando acabar (na hora, se não houver nenhuma).
@@ -213,5 +234,12 @@ const Sons = (() => {
     set ligado(valor) { ligado = Boolean(valor); },
     get vozLigada() { return vozLigada; },
     set vozLigada(valor) { vozLigada = Boolean(valor); if (!vozLigada) pararVoz(); },
+    set aoFalar(funcao) { aoFalar = funcao; },
+    get volume() { return volume; },
+    set volume(valor) {
+      volume = Math.max(0, Math.min(1.5, Number(valor) || 0));
+      if (mestre) mestre.gain.value = volume;
+      if (atual) atual.volume = Math.min(1, volume);
+    },
   };
 })();

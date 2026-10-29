@@ -13,17 +13,17 @@
         "geral": [
           {
             "id": "comentarista.inicio_partida.geral.01",
-            "texto": "Trouxe sacola extra! Hoje eu levo tudo!",
+            "texto": "Trouxe sacola extra! É hoje que eu levo tudo!",
             "audio": "inicio_partida-01.mp3"
           },
           {
             "id": "comentarista.inicio_partida.geral.02",
-            "texto": "Cheguei! Guardaram meu banquinho?",
+            "texto": "Já comi três pastéis só de nervoso!",
             "audio": "inicio_partida-02.mp3"
           },
           {
             "id": "comentarista.inicio_partida.geral.03",
-            "texto": "Já comi três pastéis só de nervoso!",
+            "texto": "Cheguei! Guardaram meu banquinho?",
             "audio": "inicio_partida-03.mp3"
           },
           {
@@ -70,12 +70,12 @@
         "geral": [
           {
             "id": "comentarista.vitoria.geral.01",
-            "texto": "Isso! Eu sabia! Eu não sabia, mas torci!",
+            "texto": "Isso! Eu sabia! Quer dizer, eu não sabia, mas torci!",
             "audio": "vitoria-01.mp3"
           },
           {
             "id": "comentarista.vitoria.geral.02",
-            "texto": "Ganhou! Vou comemorar com um caldo de cana!",
+            "texto": "Ganhou! Eu comemorava com caldo de cana!",
             "audio": "vitoria-02.mp3"
           },
           {
@@ -127,12 +127,12 @@
         "geral": [
           {
             "id": "comentarista.derrota.geral.01",
-            "texto": "Calma, que feira tem toda semana!",
+            "texto": "Haha, calma, que feira tem toda semana!",
             "audio": "derrota-01.mp3"
           },
           {
             "id": "comentarista.derrota.geral.02",
-            "texto": "Ih, essa escorregou na casca de banana!",
+            "texto": "Hihihi, essa escorregou na casca de banana!",
             "audio": "derrota-02.mp3"
           },
           {
@@ -142,7 +142,7 @@
           },
           {
             "id": "comentarista.derrota.geral.04",
-            "texto": "Eu teria escolhido igualzinho, viu?",
+            "texto": "Eu teria escolhido igualzinho, viu? Alguém traz um cafezinho pro comentarista, por favor?",
             "audio": "derrota-04.mp3"
           },
           {
@@ -184,22 +184,22 @@
         "geral": [
           {
             "id": "comentarista.empate.geral.01",
-            "texto": "Empatou? Então divide o pastel!",
+            "texto": "Olha lá, empatou! Vão ter que dividir o pastel!",
             "audio": "empate-01.mp3"
           },
           {
             "id": "comentarista.empate.geral.02",
-            "texto": "Igualzinho? Parece eu e meu primo!",
+            "texto": "Igualzinho! Parece eu e meu primo Joel, lá de Macaé. Ele também gosta de caldo de cana.",
             "audio": "empate-02.mp3"
           },
           {
             "id": "comentarista.empate.geral.03",
-            "texto": "Ninguém ganhou? Então ganhei eu, que assisti!",
+            "texto": "Ninguém ganhou? Ganhei eu, que tô assistindo!",
             "audio": "empate-03.mp3"
           },
           {
             "id": "comentarista.empate.geral.04",
-            "texto": "Empate é igual chuchu: ninguém sabe o gosto!",
+            "texto": "Hihihi, empate é igual chuchu: ninguém sabe o gosto! Haha!",
             "audio": "empate-04.mp3"
           },
           {
@@ -241,12 +241,12 @@
         "geral": [
           {
             "id": "comentarista.por_pouco.geral.01",
-            "texto": "Por um fio de cabelo de milho!",
+            "texto": "Nu, por um fio de cabelo de milho!",
             "audio": "por_pouco-01.mp3"
           },
           {
             "id": "comentarista.por_pouco.geral.02",
-            "texto": "Foi tão perto que eu nem vi!",
+            "texto": "Foi tão perto que eu nem vi. Acho que preciso de óculos.",
             "audio": "por_pouco-02.mp3"
           },
           {
@@ -256,7 +256,7 @@
           },
           {
             "id": "comentarista.por_pouco.geral.04",
-            "texto": "Mais apertado que ônibus de feira!",
+            "texto": "Isso foi mais apertado que ônibus de feira!",
             "audio": "por_pouco-04.mp3"
           },
           {
@@ -298,7 +298,7 @@
         "geral": [
           {
             "id": "comentarista.sequencia_jogador.geral.01",
-            "texto": "Mais uma? Tá comendo espinafre escondido?",
+            "texto": "Esse aí tá comendo espinafre escondido!",
             "audio": "sequencia_jogador-01.mp3"
           },
           {
@@ -308,7 +308,7 @@
           },
           {
             "id": "comentarista.sequencia_jogador.geral.03",
-            "texto": "Já tô na fila do autógrafo!",
+            "texto": "Separa a caneta, que já tô na fila do autógrafo!",
             "audio": "sequencia_jogador-03.mp3"
           },
           {
@@ -323,12 +323,12 @@
           },
           {
             "id": "comentarista.sequencia_jogador.geral.06",
-            "texto": "Vou começar a cobrar ingresso!",
+            "texto": "Ih, vou começar a cobrar ingresso!",
             "audio": "sequencia_jogador-06.mp3"
           },
           {
             "id": "comentarista.sequencia_jogador.geral.07",
-            "texto": "Chama o bombeiro, que tá pegando fogo!",
+            "texto": "Oh! Alguém chama o bombeiro, que isso aqui tá pegando fogo!",
             "audio": "sequencia_jogador-07.mp3"
           },
           {
@@ -360,12 +360,12 @@
           },
           {
             "id": "comentarista.sequencia_rival.geral.02",
-            "texto": "Calma, que eu vou fazer uma simpatia!",
+            "texto": "Me vê uns legumes, Dona Cida, vou fazer uma simpatia aqui, não é possível!",
             "audio": "sequencia_rival-02.mp3"
           },
           {
             "id": "comentarista.sequencia_rival.geral.03",
-            "texto": "Vou cruzar os dedos... dos pés também!",
+            "texto": "Vou cruzar os dedos... e dos pés também!",
             "audio": "sequencia_rival-03.mp3"
           },
           {
@@ -385,7 +385,7 @@
           },
           {
             "id": "comentarista.sequencia_rival.geral.07",
-            "texto": "Isso é fase! Fase passa, igual banana madura!",
+            "texto": "Calma! Isso é fase! Fase passa, igual banana madura!",
             "audio": "sequencia_rival-07.mp3"
           },
           {
@@ -400,7 +400,7 @@
           },
           {
             "id": "comentarista.sequencia_rival.geral.10",
-            "texto": "Já tirei a camisa da sorte do varal!",
+            "texto": "Vou ter que botar a camisa da sorte. Pena que sujei de molho. Será que é isso?",
             "audio": "sequencia_rival-10.mp3"
           }
         ]
@@ -417,12 +417,12 @@
           },
           {
             "id": "comentarista.levou_cesta.geral.02",
-            "texto": "Que sacolada! Vai precisar de carrinho!",
+            "texto": "Que sacolada! Vai precisar de carrinho, hein? Posso ajudar!",
             "audio": "levou_cesta-02.mp3"
           },
           {
             "id": "comentarista.levou_cesta.geral.03",
-            "texto": "Isso é que é fazer a feira!",
+            "texto": "Isso é que é fazer a feira! Quer ajuda? Posso ser seu chofer!",
             "audio": "levou_cesta-03.mp3"
           },
           {
@@ -432,7 +432,7 @@
           },
           {
             "id": "comentarista.levou_cesta.geral.05",
-            "texto": "Levou o acumulado! Paga o pastel pra todo mundo!",
+            "texto": "Levou o acumulado, hein? Vai pagar o pastel pra todo mundo!",
             "audio": "levou_cesta-05.mp3"
           },
           {
@@ -457,7 +457,7 @@
           },
           {
             "id": "comentarista.levou_cesta.geral.10",
-            "texto": "A cesta tinha dono, e não era eu!",
+            "texto": "Ah, a cesta tinha dono! E não é que tinha? E não é que tinha!",
             "audio": "levou_cesta-10.mp3"
           }
         ]
@@ -479,7 +479,7 @@
           },
           {
             "id": "comentarista.super_trunfo_jogador.geral.03",
-            "texto": "Chegou a rainha! Alguém estende o tapete!",
+            "texto": "Chegou a rainha, hein? Alguém estende o tapete!",
             "audio": "super_trunfo_jogador-03.mp3"
           },
           {
@@ -509,12 +509,12 @@
           },
           {
             "id": "comentarista.super_trunfo_jogador.geral.09",
-            "texto": "Super Trunfo é covardia... e eu adoro!",
+            "texto": "Super PANC é covardia... e eu adoro!",
             "audio": "super_trunfo_jogador-09.mp3"
           },
           {
             "id": "comentarista.super_trunfo_jogador.geral.10",
-            "texto": "Me arrepiei todinho!",
+            "texto": "Ai, me arrepiei todinho!",
             "audio": "super_trunfo_jogador-10.mp3"
           }
         ]
@@ -536,7 +536,7 @@
           },
           {
             "id": "comentarista.super_trunfo_rival.geral.03",
-            "texto": "Doeu, mas pelo menos foi pra uma rainha!",
+            "texto": "Doeu, mas foi pra rainha! Tem que respeitar!",
             "audio": "super_trunfo_rival-03.mp3"
           },
           {
@@ -551,7 +551,7 @@
           },
           {
             "id": "comentarista.super_trunfo_rival.geral.06",
-            "texto": "Calma! Dizem que outra PANC derruba ela!",
+            "texto": "Reza a lenda que outra PANC derruba ela!",
             "audio": "super_trunfo_rival-06.mp3"
           },
           {
@@ -566,7 +566,7 @@
           },
           {
             "id": "comentarista.super_trunfo_rival.geral.09",
-            "texto": "Perder pra Ora-pro-nóbis não é vergonha, é honra!",
+            "texto": "Vamos lá! Perder pra ora-pro-nóbis não é vergonha, é honra!",
             "audio": "super_trunfo_rival-09.mp3"
           },
           {
@@ -583,12 +583,12 @@
         "geral": [
           {
             "id": "comentarista.ultima_rodada.geral.01",
-            "texto": "Última? Mas eu nem terminei meu pastel!",
+            "texto": "Já é a última? Mas eu nem terminei meu pastel!",
             "audio": "ultima_rodada-01.mp3"
           },
           {
             "id": "comentarista.ultima_rodada.geral.02",
-            "texto": "Hora da xepa! Tudo pela metade do preço!",
+            "texto": "Opa! Hora da xepa! Tudo pela metade do preço!",
             "audio": "ultima_rodada-02.mp3"
           },
           {
@@ -603,7 +603,7 @@
           },
           {
             "id": "comentarista.ultima_rodada.geral.05",
-            "texto": "Vou roer a unha... de couve!",
+            "texto": "Tô roendo a unha... quer dizer, a pupunha!",
             "audio": "ultima_rodada-05.mp3"
           },
           {
@@ -628,7 +628,7 @@
           },
           {
             "id": "comentarista.ultima_rodada.geral.10",
-            "texto": "É agora, freguesia! Ou depois. Não, agora!",
+            "texto": "É agora, freguesia? Ou depois? Não! É agora!",
             "audio": "ultima_rodada-10.mp3"
           }
         ]
@@ -640,7 +640,7 @@
         "geral": [
           {
             "id": "comentarista.fim_vitoria.geral.01",
-            "texto": "Campeão! Hoje tem pastel pra todo mundo!",
+            "texto": "Êh, campeão! Hoje tem pastel pra todo mundo!",
             "audio": "fim_vitoria-01.mp3"
           },
           {
@@ -650,7 +650,7 @@
           },
           {
             "id": "comentarista.fim_vitoria.geral.03",
-            "texto": "Vou pendurar sua foto na barraca!",
+            "texto": "Ai, vou pendurar sua foto na barraca!",
             "audio": "fim_vitoria-03.mp3"
           },
           {
@@ -670,7 +670,7 @@
           },
           {
             "id": "comentarista.fim_vitoria.geral.07",
-            "texto": "Tô chorando igual quem corta cebola!",
+            "texto": "Parabéns, tô chorando igual quem corta cebola.",
             "audio": "fim_vitoria-07.mp3"
           },
           {
@@ -685,7 +685,7 @@
           },
           {
             "id": "comentarista.fim_vitoria.geral.10",
-            "texto": "Que craque! O rei da salada!",
+            "texto": "Que craque! É o rei da salada! Salada, salada, salada!",
             "audio": "fim_vitoria-10.mp3"
           }
         ]
@@ -702,12 +702,12 @@
           },
           {
             "id": "comentarista.fim_derrota.geral.02",
-            "texto": "Semana que vem tem feira de novo!",
+            "texto": "Boa semana, Agrião Bueno! Semana que vem tem feira de novo.",
             "audio": "fim_derrota-02.mp3"
           },
           {
             "id": "comentarista.fim_derrota.geral.03",
-            "texto": "Perdeu, mas saiu sabendo mais de PANC!",
+            "texto": "Perdeu, mas pelo menos saiu sabendo mais de PANC! PANC, PANC, PANC, PANC, PANC! Acho que estou ficando doido.",
             "audio": "fim_derrota-03.mp3"
           },
           {
@@ -717,7 +717,7 @@
           },
           {
             "id": "comentarista.fim_derrota.geral.05",
-            "texto": "Bora de revanche, que eu trago o pastel!",
+            "texto": "Bora de revanche, que eu trago o pastel! PAN, PAN, PAN, PANC!",
             "audio": "fim_derrota-05.mp3"
           },
           {
@@ -754,7 +754,7 @@
         "geral": [
           {
             "id": "comentarista.fim_empate.geral.01",
-            "texto": "Empatou! Então todo mundo ganha pastel!",
+            "texto": "Empatou! Então todo mundo ganha pastel e caldo de cana... mas não é por minha conta!",
             "audio": "fim_empate-01.mp3"
           },
           {
@@ -764,7 +764,7 @@
           },
           {
             "id": "comentarista.fim_empate.geral.03",
-            "texto": "Divide o troféu igual divide melancia!",
+            "texto": "Ih, vamos dividir o troféu igual divide melancia! PANC!",
             "audio": "fim_empate-03.mp3"
           },
           {
@@ -774,7 +774,7 @@
           },
           {
             "id": "comentarista.fim_empate.geral.05",
-            "texto": "Iguais até o final! Parecem gêmeos!",
+            "texto": "Iguais até o final! Parecem gêmeos, que fofinho! PANC!",
             "audio": "fim_empate-05.mp3"
           },
           {
@@ -789,7 +789,7 @@
           },
           {
             "id": "comentarista.fim_empate.geral.08",
-            "texto": "Cada um leva metade da feira!",
+            "texto": "Cada um leva metade da feira! PANC, PANC, PANC, PANC! Super PANCs!",
             "audio": "fim_empate-08.mp3"
           },
           {

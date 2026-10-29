@@ -7,8 +7,8 @@ const path = require('node:path');
 const dados = require('../js/falas-dados.js');
 const { JOGADOR, COMPUTADOR, EMPATE } = require('../js/jogo.js');
 // no navegador, estes vêm dos <script> de falas-dados.js e jogo.js
-Object.assign(globalThis, { FALAS: dados.FALAS, NARRADOR: dados.NARRADOR, JOGADOR, COMPUTADOR, EMPATE });
-const { situacaoDoRival, sortearFala, falaDoRival, eventoDaRodada, falaDoEvento, audioDaFala } = require('../js/falas.js');
+Object.assign(globalThis, { ...dados, JOGADOR, COMPUTADOR, EMPATE });
+const { situacaoDoRival, sortearFala, falaDoRival, eventoDaRodada, falaDoEvento, textoDoBastidor, audioDaFala } = require('../js/falas.js');
 
 const lerJson = nome => JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'falas', nome), 'utf8'));
 
@@ -20,6 +20,56 @@ test('js/falas-dados.js está igual aos JSONs (rode ferramentas/gerar-roteiro.py
   assert.deepEqual(dados.FALAS, lerJson('falas.json'));
   assert.deepEqual(dados.NARRADOR, lerJson('narrador.json'));
   assert.deepEqual(dados.COMENTARISTA, lerJson('comentarista.json'));
+  assert.deepEqual(dados.BASTIDORES, lerJson('bastidores.json'));
+  assert.deepEqual(dados.MVP, lerJson('mvp.json'));
+});
+
+// Todas as listas de falas com voz: [nome, lista]
+function listasComVoz() {
+  const listas = [];
+  for (const [rival, r] of Object.entries(dados.FALAS.rivais))
+    for (const [ex, sits] of Object.entries(r.falas))
+      for (const [sit, lista] of Object.entries(sits)) listas.push([`${rival}/${ex}/${sit}`, lista]);
+  for (const [nome, d] of [['narrador', dados.NARRADOR], ['comentarista', dados.COMENTARISTA]])
+    for (const [ev, e] of Object.entries(d.eventos))
+      for (const [g, lista] of Object.entries(e.falas)) listas.push([`${nome}/${ev}/${g}`, lista]);
+  return listas;
+}
+
+test('MVP: os ids existem e nenhuma situação fica sem fala', () => {
+  const listas = listasComVoz();
+  const todos = new Set(listas.flatMap(([, lista]) => lista.map(f => f.id)));
+  const mvp = new Set(dados.MVP.ids);
+  assert.equal(mvp.size, dados.MVP.ids.length, 'id repetido no mvp.json');
+  for (const id of mvp) assert.ok(todos.has(id), `id do MVP que não existe: ${id}`);
+  for (const [nome, lista] of listas) assert.ok(lista.some(f => mvp.has(f.id)), `sem fala no MVP: ${nome}`);
+});
+
+test('MVP ativo: o sorteio só usa falas do MVP', () => {
+  const mvp = new Set(dados.MVP.ids);
+  const usadas = new Set();
+  for (let i = 0; i < 30; i++) {
+    assert.ok(mvp.has(falaDoRival('seu-ze', 'neutro', 'folga', usadas, semente(i)).id));
+    assert.ok(mvp.has(falaDoEvento(dados.NARRADOR, 'levou_cesta', null, usadas, semente(i)).id));
+  }
+});
+
+test('plantão: todos os eventos têm textos, e as variáveis são conhecidas', () => {
+  assert.deepEqual(Object.keys(dados.BASTIDORES.eventos), Object.keys(dados.NARRADOR.eventos));
+  const conhecidas = new Set(Object.keys(dados.BASTIDORES.variaveis));
+  for (const [evento, lista] of Object.entries(dados.BASTIDORES.eventos)) {
+    assert.ok(lista.length >= 4, evento);
+    for (const { texto } of lista) for (const v of texto.match(/\{\w+\}/g) || []) assert.ok(conhecidas.has(v), `${evento}: ${v}`);
+  }
+  const valores = { rival: 'Seu Zé', atributo: 'fibras', seguidas: 3, vencedor: 'você', cesta: 2, meu: 20, dele: 12 };
+  for (const evento of Object.keys(dados.BASTIDORES.eventos)) {
+    for (let i = 0; i < 6; i++) assert.doesNotMatch(textoDoBastidor(evento, valores, new Set(), semente(i)), /[{}]/);
+  }
+});
+
+test('narrador e comentarista têm nome (aparece no balão do rádio)', () => {
+  assert.equal(NARRADOR.nome, 'Agrião Bueno');
+  assert.equal(COMENTARISTA.nome, 'Tião da Xepa');
 });
 
 test('o comentarista tem os mesmos eventos do narrador, 10 falas cada, com id e áudio únicos', () => {

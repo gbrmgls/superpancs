@@ -1,6 +1,7 @@
 // Álbum de figurinhas: uma figurinha por carta, colada quando o jogador vence uma rodada com ela
-// (contadas no fim da partida). Fica guardado neste navegador; sem armazenamento, o álbum só
-// não é lembrado entre uma visita e outra. Sem DOM, para poder ser testado com node.
+// (contadas no fim da partida). Cada e-mail tem o seu álbum: a cópia oficial fica na Planilha Google
+// (js/cadastro.js) e uma cópia fica neste navegador, para quando faltar internet. Sem e-mail, não há
+// álbum. Sem DOM, para poder ser testado com node.
 
 const CHAVE_ALBUM = 'superpancs-album';
 
@@ -40,19 +41,31 @@ const CURIOSIDADES = {
   32: 'Símbolo do Cerrado. Nunca morda o caroço: embaixo da polpa há espinhos finos.',
 };
 
+const normalizarEmail = email => String(email || '').trim().toLowerCase();
+
+// Chave da cópia do álbum de um e-mail neste aparelho. O e-mail vira um código (FNV-1a), para não
+// ficar escrito por extenso no navegador; maiúsculas e espaços nas pontas não mudam o álbum.
+function chaveDoAlbum(email) {
+  let codigo = 0x811c9dc5;
+  for (const letra of normalizarEmail(email)) codigo = Math.imul(codigo ^ letra.codePointAt(0), 0x01000193) >>> 0;
+  return `${CHAVE_ALBUM}:${codigo.toString(16).padStart(8, '0')}`;
+}
+
+// Só ids de cartas que existem (o que vem da planilha ou do navegador pode estar estragado).
+const idsValidos = ids => (Array.isArray(ids) ? ids.filter(id => Number.isInteger(id) && id in CURIOSIDADES) : []);
+
 // O armazenamento (localStorage) pode faltar ou dar erro (modo privado, bloqueado): aí o álbum começa vazio.
-function carregarAlbum(armazenamento) {
+function carregarAlbum(armazenamento, chave = CHAVE_ALBUM) {
   try {
-    const ids = JSON.parse(armazenamento.getItem(CHAVE_ALBUM));
-    return new Set(Array.isArray(ids) ? ids.filter(id => id in CURIOSIDADES) : []);
+    return new Set(idsValidos(JSON.parse(armazenamento.getItem(chave))));
   } catch (e) {
     return new Set();
   }
 }
 
-function salvarAlbum(armazenamento, album) {
+function salvarAlbum(armazenamento, album, chave = CHAVE_ALBUM) {
   try {
-    armazenamento.setItem(CHAVE_ALBUM, JSON.stringify([...album].sort((a, b) => a - b)));
+    armazenamento.setItem(chave, JSON.stringify([...album].sort((a, b) => a - b)));
   } catch (e) { /* sem armazenamento: o álbum vale só nesta visita */ }
 }
 
@@ -64,5 +77,5 @@ function colarFigurinhas(album, ids) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { CHAVE_ALBUM, CURIOSIDADES, carregarAlbum, salvarAlbum, colarFigurinhas };
+  module.exports = { CHAVE_ALBUM, CURIOSIDADES, normalizarEmail, chaveDoAlbum, idsValidos, carregarAlbum, salvarAlbum, colarFigurinhas };
 }

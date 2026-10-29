@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const { CARTAS } = require('../js/cartas.js');
-const { CHAVE_ALBUM, CURIOSIDADES, carregarAlbum, salvarAlbum, colarFigurinhas } = require('../js/album.js');
+const { CHAVE_ALBUM, CURIOSIDADES, chaveDoAlbum, idsValidos, carregarAlbum, salvarAlbum, colarFigurinhas } = require('../js/album.js');
 
 // localStorage de mentira
 function memoria(inicial = {}) {
@@ -35,4 +35,20 @@ test('álbum ignora dados estragados e armazenamento bloqueado', () => {
   assert.equal(carregarAlbum(null).size, 0);
   assert.doesNotThrow(() => salvarAlbum(quebrado, new Set([1])));
   assert.doesNotThrow(() => salvarAlbum(null, new Set([1])));
+});
+
+test('cada e-mail tem a sua cópia do álbum, sem o e-mail por extenso', () => {
+  const chave = chaveDoAlbum('Pessoa@Feira.com ');
+  assert.equal(chave, chaveDoAlbum('pessoa@feira.com')); // maiúsculas e espaços não mudam o álbum
+  assert.notEqual(chave, chaveDoAlbum('outra@feira.com'));
+  assert.ok(chave.startsWith(`${CHAVE_ALBUM}:`) && !chave.includes('feira'));
+  const armazenamento = memoria();
+  salvarAlbum(armazenamento, new Set([2, 9]), chave);
+  assert.deepEqual([...carregarAlbum(armazenamento, chave)], [2, 9]);
+  assert.equal(carregarAlbum(armazenamento, chaveDoAlbum('outra@feira.com')).size, 0);
+});
+
+test('ids que vêm da planilha são filtrados', () => {
+  assert.deepEqual(idsValidos([1, '2', 33, 0, 4.5, 32, null]), [1, 32]);
+  assert.deepEqual(idsValidos('1,2'), []);
 });

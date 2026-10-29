@@ -1,5 +1,5 @@
 // Escolha das falas dos rivais, do narrador e do comentarista. Sem DOM, para poder ser testado com node.
-// Os textos vêm de js/falas-dados.js (FALAS, NARRADOR e COMENTARISTA), gerado a partir dos JSONs em falas/.
+// Os textos vêm de js/falas-dados.js (FALAS, NARRADOR, COMENTARISTA, BASTIDORES e MVP), gerado a partir dos JSONs em falas/.
 // Usa JOGADOR, COMPUTADOR e EMPATE de js/jogo.js.
 
 // Situação do rival no placar (regra_situacao em falas/falas.json).
@@ -12,6 +12,16 @@ function situacaoDoRival(cartasRival, cartasJogador) {
   if (diferenca >= FOLGA) return 'folga';
   if (diferenca <= -FOLGA || cartasRival <= POUCAS_CARTAS) return 'aperto';
   return 'parelho';
+}
+
+// MVP (falas/mvp.json): enquanto "ativo", o jogo usa só as falas da lista, para nenhuma situação ficar
+// sem voz enquanto as gravações não terminam. O jogo final usa todas (ativo: false).
+let idsDoMvp = null;
+function doMvp(lista) {
+  if (!MVP.ativo) return lista;
+  idsDoMvp ||= new Set(MVP.ids);
+  const doMvp = lista.filter(f => idsDoMvp.has(f.id));
+  return doMvp.length ? doMvp : lista;
 }
 
 // Sorteia uma fala da lista sem repetir até usar todas. "usadas" guarda os ids já ditos.
@@ -27,7 +37,7 @@ function sortearFala(lista, usadas, aleatorio = Math.random) {
 }
 
 function falaDoRival(rival, expressao, situacao, usadas, aleatorio) {
-  return sortearFala(FALAS.rivais[rival].falas[expressao][situacao], usadas, aleatorio);
+  return sortearFala(doMvp(FALAS.rivais[rival].falas[expressao][situacao]), usadas, aleatorio);
 }
 
 // ---------- Narrador (regras em falas/narrador.json) ----------
@@ -61,7 +71,14 @@ function eventoDaRodada(r, seguidas) {
 // Em vitória e derrota, as falas do narrador são separadas pelo atributo; as do comentarista, não.
 function falaDoEvento(dados, evento, atributo, usadas, aleatorio) {
   const falas = dados.eventos[evento].falas;
-  return sortearFala(falas[atributo] || falas.geral, usadas, aleatorio);
+  return sortearFala(doMvp(falas[atributo] || falas.geral), usadas, aleatorio);
+}
+
+// Texto da faixa de plantão (bastidores) para um evento, com as variáveis trocadas pelos valores
+// da rodada: { rival, atributo, seguidas, vencedor, cesta, meu, dele }. Só texto, sem voz.
+function textoDoBastidor(evento, valores, usadas, aleatorio) {
+  const fala = sortearFala(BASTIDORES.eventos[evento], usadas, aleatorio);
+  return fala.texto.replace(/\{(\w+)\}/g, (marca, nome) => (nome in valores ? valores[nome] : marca));
 }
 
 // Caminho do arquivo de áudio de uma fala (a voz gravada substitui o arquivo com o mesmo nome).
@@ -70,6 +87,6 @@ const audioDaFala = (dados, fala) => `${dados.audio.pasta}/${fala.audio}`;
 if (typeof module !== 'undefined') {
   module.exports = {
     FOLGA, POUCAS_CARTAS, situacaoDoRival, sortearFala, falaDoRival,
-    POR_POUCO, SEQUENCIA, eventoDaRodada, falaDoEvento, audioDaFala,
+    POR_POUCO, SEQUENCIA, eventoDaRodada, falaDoEvento, textoDoBastidor, audioDaFala,
   };
 }

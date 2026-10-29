@@ -158,10 +158,11 @@ h1 { margin: 0; font-weight: 400; }
   transform: translateY(var(--y, 0)) rotate(var(--r, 0deg));
   transform-origin: 50% 90%;
 }
-.carta-leque:nth-child(1) { --r: -20deg; --y: 18px; }
-.carta-leque:nth-child(2) { --r: -7deg; }
-.carta-leque:nth-child(3) { --r: 5deg; --y: -4px; }
-.carta-leque:nth-child(4) { --r: 17deg; --y: 14px; }
+/* cada carta fica por cima da anterior (a folha do canto de uma não cobre o selo da próxima) */
+.carta-leque:nth-child(1) { --r: -20deg; --y: 18px; z-index: 1; }
+.carta-leque:nth-child(2) { --r: -7deg; z-index: 2; }
+.carta-leque:nth-child(3) { --r: 5deg; --y: -4px; z-index: 3; }
+.carta-leque:nth-child(4) { --r: 17deg; --y: 14px; z-index: 4; }
 .carta-leque .face { box-shadow: 0 8px 0 rgba(0, 0, 0, .25), 0 16px 28px rgba(0, 0, 0, .35); }
 
 /* Mascotes em pé no balcão */
@@ -418,6 +419,41 @@ h1 { margin: 0; font-weight: 400; }
 .placar-rodada { background: var(--lona); color: #fff; padding: 0 14px; text-align: center; }
 .placar-rodada b { display: block; font: 400 22px/1 var(--fonte-display); }
 .placar-rodada small { display: block; font: 700 10px var(--fonte-texto); letter-spacing: .12em; text-transform: uppercase; opacity: .9; }
+
+/* Quem tem a vez, como no vôlei: o time da vez acende e ganha uma aba com a bola embaixo do nome */
+.placar-time { position: relative; transition: background .25s, color .25s; }
+.placar-vez {
+  position: absolute;
+  top: calc(100% + 3px);
+  left: -3px;
+  min-width: calc(100% + 6px);
+  display: grid;
+  place-items: center;
+  padding: 3px 8px 4px;
+  background: var(--milho);
+  color: var(--tinta);
+  border: 3px solid var(--tinta);
+  font: 400 15px/1 var(--fonte-display);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .2s, transform .25s cubic-bezier(.3, 1.6, .5, 1);
+  pointer-events: none;
+}
+.placar > * > .placar-vez { transform: translateY(-8px); max-width: none; overflow: visible; }
+.placar-vez > span { display: flex; align-items: center; gap: 5px; transform: skewX(12deg); white-space: nowrap; }
+.placar-vez .bola { width: 1.1em; height: 1.1em; flex: none; }
+.placar.vez-jogador .placar-voce,
+.placar.vez-rival .placar-rival { background: var(--milho); }
+.placar.vez-jogador .placar-voce > .placar-vez,
+.placar.vez-rival .placar-rival > .placar-vez { opacity: 1; transform: none; }
+.placar.vez-jogador .placar-voce .bola,
+.placar.vez-rival .placar-rival .bola { animation: bola-quica .9s ease-in-out infinite; }
+/* na vez do rival, a aba dele fica vermelha: não é você quem escolhe */
+.placar-rival > .placar-vez { left: auto; right: -3px; background: var(--lona); color: #fff; }
+.placar-rival > .placar-vez .bola { color: var(--tinta); }
+@keyframes bola-quica { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-3px) rotate(180deg); } }
 
 /* Controles com ícones (som, avançar sozinho, sair) */
 .controles {
@@ -779,19 +815,53 @@ h1 { margin: 0; font-weight: 400; }
   padding: 4px 18px;
   border: 3px solid var(--tinta);
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.lado { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 4px 12px; margin-top: 12px; }
+.comparacao-titulo > * { transform: skewX(12deg); }
+.icone-atributo { width: 1em; height: 1em; flex-shrink: 0; color: var(--milho); }
+/* rosto do rival no título: foi ele quem escolheu o atributo */
+.quem-escolheu {
+  width: 34px;
+  height: 34px;
+  margin: -8px 0 -8px -12px;
+  border-radius: 50%;
+  border: 2px solid var(--tinta);
+  background: var(--creme);
+  object-fit: cover;
+  object-position: center 20%;
+}
+/* No painel, cada lado mostra o desenho da carta no lugar do nome. Com as cartas lado a lado, você vem
+   primeiro; no celular em pé (empilhado), o rival fica em cima, como na mesa. */
+.comparacao { display: flex; flex-direction: column; }
+.revelacao:not(.empilhado) #lado-jogador { order: -1; margin-top: 0; }
+.revelacao:not(.empilhado) #lado-rival { margin-top: 10px; }
+.lado {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 4px 12px;
+  margin-top: 10px;
+}
 .lado:first-of-type { margin-top: 0; }
 .quem {
-  font: 800 11px/1.2 var(--fonte-texto);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: #AFC0D8;
+  grid-row: span 2;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid rgba(255, 255, 255, .2);
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  display: grid;
+  place-items: center;
 }
-.valor { grid-row: span 2; font: 400 40px/1 var(--fonte-display); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.quem img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; transform: scale(1.5); transform-origin: 50% 22%; } /* só a ilustração do alto da carta */
+.ganha .quem { border-color: var(--vitoria); }
+.perde .quem { opacity: .7; }
+.empata .quem { border-color: var(--empate); }
+.valor { font: 400 40px/1 var(--fonte-display); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .valor small { font: 700 14px var(--fonte-texto); color: #AFC0D8; margin-left: 3px; }
 .barra { height: 14px; border-radius: 7px; background: rgba(255, 255, 255, .12); overflow: hidden; }
 .barra i { display: block; height: 100%; border-radius: 7px; transform-origin: left; animation: encher .6s ease-out .25s both; }
@@ -802,29 +872,28 @@ h1 { margin: 0; font-weight: 400; }
 .empata .barra i { background: var(--empate); }
 .empata .valor { color: var(--milho); }
 .dif {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: max-content;
   max-width: 100%;
   margin: 14px auto 0;
   background: var(--milho);
   color: var(--tinta);
-  font: 800 14px var(--fonte-texto);
-  padding: 4px 12px;
+  font: 700 14px var(--fonte-texto);
+  padding: 4px 14px;
   border-radius: 999px;
-  text-align: center;
 }
+.dif b { font: 400 20px/1 var(--fonte-display); }
+.dif .seta { font-size: 16px; }
+.icone-cesta { width: 34px; height: 27px; }
+.icone-super { width: 26px; height: 26px; color: var(--lona); }
+.dif-empate b { font-size: 26px; }
+/* cartas que vieram da cesta para o vencedor */
+.da-cesta { display: flex; align-items: center; gap: 2px; margin-left: 6px; padding-left: 10px; border-left: 2px solid rgba(0, 0, 0, .25); }
 @keyframes encher { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes subir { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-.revelacao .detalhe {
-  margin: 0;
-  max-width: 100%;
-  color: var(--creme);
-  font: 700 14px/1.35 var(--fonte-texto);
-  text-align: center;
-  text-shadow: 0 2px 0 rgba(0, 0, 0, .45);
-}
-.revelacao .detalhe:empty { display: none; }
 
 /* Próxima rodada: botão amarelo; a barra embaixo conta o tempo quando avança sozinho */
 .botao-continuar {
@@ -856,25 +925,42 @@ h1 { margin: 0; font-weight: 400; }
   transform-origin: left;
   animation: contagem var(--duracao-auto, 3s) linear forwards;
 }
+/* travado enquanto o narrador e o Tião falam */
+.botao-continuar:disabled { cursor: not-allowed; background: #CBBF9C; color: rgba(26, 26, 26, .55); box-shadow: 0 6px 0 rgba(26, 26, 26, .55); border-color: rgba(26, 26, 26, .55); }
+.botao-continuar:disabled:active { transform: none; box-shadow: 0 6px 0 rgba(26, 26, 26, .55); }
 @keyframes contagem { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-/* ---------- Super Trunfo ---------- */
+/* ---------- Super PANC (a carta especial) ---------- */
 
-/* Selo fixo na carta e um brilho holográfico leve */
+/* Faixa larga "Super PANC" no alto da carta, moldura dourada e um brilho holográfico leve */
 .selo-st {
   position: absolute;
-  top: 4.5%;
-  right: 3%;
-  transform: rotate(6deg);
-  background: var(--milho);
+  z-index: 2;
+  top: 3%;
+  left: -2%;
+  right: -2%;
+  transform: rotate(-3deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: linear-gradient(180deg, #FFE27A, var(--milho) 55%, #E9A912);
   color: var(--tinta);
-  font: 400 4.6cqw var(--fonte-display);
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  padding: 1.2cqw 2.6cqw;
-  border: .8cqw solid var(--tinta);
-  border-radius: 2cqw;
+  padding: 1.4cqw 0 1.6cqw;
+  border-block: 1cqw solid var(--tinta);
+  box-shadow: 0 1.4cqw 0 rgba(0, 0, 0, .3);
+  text-align: center;
   white-space: nowrap;
+}
+.selo-st b { font: 400 11cqw/1 var(--fonte-display); letter-spacing: .03em; text-transform: uppercase; }
+.selo-st small { font: 700 4cqw/1.1 var(--fonte-texto); text-transform: uppercase; letter-spacing: .04em; }
+.moldura-super {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border: 2.4cqw solid var(--milho);
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 .8cqw var(--tinta), inset 0 0 4cqw rgba(255, 201, 60, .6);
+  pointer-events: none;
 }
 .face-frente.super::after, .zoom-carta.super::after {
   content: '';
@@ -886,6 +972,10 @@ h1 { margin: 0; font-weight: 400; }
   background: linear-gradient(115deg, transparent 20%, #ff7ad9 32%, #7af0ff 42%, #fff59a 52%, #8aff9e 62%, transparent 75%) 0 0 / 250% 100%;
 }
 .carta.holo .face-frente::after { opacity: .22; animation: holo 1.6s linear infinite; }
+/* Carta virada: a frente some de vez (o brilho com mix-blend-mode furava o backface-visibility em
+   alguns navegadores e deixava a Ora-pro-nóbis do rival à mostra). Durante o giro a frente aparece. */
+.carta.virada:not(.girando) .face-frente { visibility: hidden; }
+.carta.virada .face-frente::after { display: none; }
 @keyframes holo { from { background-position: 100% 0; } to { background-position: -150% 0; } }
 
 /* Entrada: mesa escura, raios girando atrás da carta, letreiro no alto */
@@ -940,7 +1030,7 @@ h1 { margin: 0; font-weight: 400; }
   to   { opacity: 1; transform: none; }
 }
 
-/* Faixa de TV do narrador ("ao vivo"), na parte de baixo da mesa */
+/* Faixa de plantão da TV (textos dos bastidores), na parte de baixo da mesa */
 .faixa-tv {
   position: absolute;
   z-index: 38;
@@ -996,11 +1086,233 @@ h1 { margin: 0; font-weight: 400; }
 /* (seletor mais forte: no celular, a faixa da mesa muda de lugar) */
 .fim-lado .faixa-fim { position: relative; inset: auto; width: max-content; max-width: 100%; margin: 0; align-self: center; }
 .faixa-fim .faixa-tv-texto { font-size: 22px; }
-/* Tião da Xepa, o comentarista: a mesma faixa, com a etiqueta verde de feirante e o texto em creme */
-.faixa-tv.do-comentarista .faixa-tv-tag { background: var(--mesa); color: var(--milho); }
-.faixa-tv.do-comentarista .faixa-tv-tag > span::before { display: none; }
-.faixa-tv.do-comentarista .faixa-tv-texto { background: var(--creme); }
-.fim-lado .faixa-fim.do-comentarista { margin-top: -12px; } /* junto da faixa do narrador */
+.tela-jogo .faixa-tv { max-width: calc(100% - 2 * (var(--radio-grupo) + 18px) - 16px); } /* não passa por cima do rádio */
+
+/* Radinho da transmissão, no canto de baixo da mesa: balança e solta ondas quando o narrador ou o Tião falam.
+   Os dois ficam escondidos atrás do rádio e sobem quando falam: Agrião Bueno à esquerda, Tião à direita. */
+.tabuleiro {
+  --radio-w: 92px;      /* o rádio */
+  --locutor-w: 92px;    /* cada personagem */
+  --radio-grupo: 200px; /* rádio + os dois personagens */
+}
+.radio {
+  position: absolute;
+  z-index: 39; /* acima da faixa de plantão e das cartas */
+  left: 18px;
+  bottom: 12px;
+  width: var(--radio-grupo);
+  height: calc(var(--radio-w) * .84);
+  pointer-events: none;
+}
+.radio-aparelho {
+  position: absolute;
+  z-index: 2; /* na frente dos personagens */
+  left: 50%;
+  bottom: 0;
+  margin-left: calc(var(--radio-w) / -2);
+  display: block;
+  width: var(--radio-w);
+  pointer-events: auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  filter: drop-shadow(0 5px 0 rgba(0, 0, 0, .3));
+  -webkit-tap-highlight-color: transparent;
+}
+.radio-aparelho:focus-visible { outline: 3px solid var(--milho); outline-offset: 4px; border-radius: 12px; }
+.radio-aparelho svg { display: block; width: 100%; overflow: visible; transform-origin: 50% 100%; }
+.radio-aparelho svg * { stroke: var(--tinta); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; }
+.radio-antena { fill: none; }
+.radio-antena-ponta { fill: var(--milho); }
+.radio-corpo { fill: var(--lona); }
+.radio-faixa { fill: var(--madeira); }
+.radio-luz { fill: var(--vitoria); stroke-width: 2; }
+.radio-alto-falante { fill: var(--creme); }
+.radio-grade { fill: none; stroke-width: 2.5; opacity: .55; }
+.radio-dial { fill: var(--milho); }
+.radio-marcas { fill: none; stroke-width: 1.6; }
+.radio-agulha { stroke: var(--lona-esc) !important; stroke-width: 2.5; transition: transform .4s; }
+.radio-botao { fill: var(--creme-esc); }
+.radio-pes { fill: none; stroke-width: 5; }
+.radio-aparelho:hover svg { transform: rotate(-3deg); }
+
+/* Desligado: apagado e com a antena baixa */
+.radio.desligado .radio-aparelho svg { filter: saturate(.25) brightness(.8); }
+.radio.desligado .radio-luz { fill: #555; }
+.radio.desligado .radio-antena, .radio.desligado .radio-antena-ponta { transform: rotate(-52deg); transform-origin: 68px 26px; }
+
+/* Falando: balança, a agulha anda, ondas e notinhas saem do alto-falante */
+.radio.falando .radio-aparelho svg { animation: radio-balanca .32s ease-in-out infinite alternate; }
+.radio.falando .radio-luz { animation: no-ar .5s steps(2, jump-none) infinite; }
+.radio.falando .radio-agulha { transform: translateX(10px); }
+.radio.falando .radio-alto-falante { animation: radio-pulsa .32s ease-in-out infinite alternate; transform-origin: 31px 55px; }
+@keyframes radio-balanca {
+  from { transform: rotate(-5deg) translateY(0); }
+  to   { transform: rotate(5deg) translateY(-4px); }
+}
+@keyframes radio-pulsa { to { transform: scale(1.12); } }
+.radio-ondas, .radio-notas { position: absolute; inset: 0; pointer-events: none; }
+.radio-ondas i {
+  position: absolute;
+  right: -14px;
+  top: 34%;
+  width: 26px;
+  height: 26px;
+  border: 4px solid var(--milho);
+  border-color: transparent var(--milho) transparent transparent;
+  border-radius: 50%;
+  opacity: 0;
+}
+.radio.falando .radio-ondas i { animation: radio-onda 1s ease-out infinite; }
+.radio.falando .radio-ondas i:nth-child(2) { animation-delay: .33s; }
+.radio.falando .radio-ondas i:nth-child(3) { animation-delay: .66s; }
+@keyframes radio-onda {
+  from { opacity: 1; transform: translateX(0) scale(.5); }
+  to   { opacity: 0; transform: translateX(var(--onda-x, 26px)) scale(1.6); }
+}
+.radio-notas i {
+  position: absolute;
+  left: 20%;
+  top: 30%;
+  font: 400 24px/1 var(--fonte-display);
+  font-style: normal;
+  color: var(--milho);
+  -webkit-text-stroke: 1.5px var(--tinta);
+  opacity: 0;
+}
+.radio-notas i + i { left: 52%; font-size: 20px; }
+.radio.falando .radio-notas i { animation: radio-nota 1.4s ease-out infinite; }
+.radio.falando .radio-notas i + i { animation-delay: .7s; }
+@keyframes radio-nota {
+  0%   { opacity: 0; transform: translate(0, 0) rotate(-10deg); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-14px, -58px) rotate(14deg); }
+}
+
+/* Personagens: sobem de trás do rádio quando falam e se mexem (boca, cabeça e braço) */
+.locutor {
+  position: absolute;
+  z-index: 1;
+  bottom: calc(var(--radio-w) * .4);
+  width: var(--locutor-w);
+  opacity: 0;
+  transform: translateY(45%) scale(.7);
+  transition: transform .35s cubic-bezier(.2, .9, .3, 1.4), opacity .2s;
+}
+.locutor-narrador { left: 0; transform-origin: 30% 100%; }
+.locutor-comentarista { right: 0; transform-origin: 70% 100%; }
+.locutor.visivel { opacity: 1; transform: none; }
+.locutor svg { display: block; width: 100%; overflow: visible; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, .25)); }
+.locutor svg g { transform-box: view-box; }
+.p-cabeca { transform-origin: 60px 96px; }
+.p-boca { transform-origin: 60px 74px; transform: scaleY(.3); }
+.locutor-narrador .p-braco { transform-origin: 90px 108px; }
+.locutor-comentarista .p-braco { transform-origin: 24px 124px; }
+.radio.falando .locutor.visivel svg { animation: locutor-pula .42s ease-in-out infinite alternate; }
+.radio.falando .locutor.visivel .p-cabeca { animation: locutor-cabeca .6s ease-in-out infinite alternate; }
+.radio.falando .locutor.visivel .p-boca { animation: locutor-boca .17s ease-in-out infinite alternate; }
+.radio.falando .locutor-narrador.visivel .p-braco { animation: narrador-gesto .45s ease-in-out infinite alternate; }
+.radio.falando .locutor-comentarista.visivel .p-braco { animation: tiao-pastel .8s ease-in-out infinite alternate; }
+@keyframes locutor-pula { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+@keyframes locutor-cabeca { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
+@keyframes locutor-boca { from { transform: scaleY(.3); } to { transform: scaleY(1.05); } }
+@keyframes narrador-gesto { from { transform: rotate(-16deg); } to { transform: rotate(10deg); } }
+@keyframes tiao-pastel { 0%, 40% { transform: rotate(0); } 100% { transform: rotate(24deg); } } /* leva o pastel à boca */
+
+/* Balões: cada um abre para o lado de quem fala, com o bico apontando para ele.
+   Agrião Bueno: placa de TV (retângulo azul-escuro, texto branco). Tião: papel de feira, torto e escrito à mão. */
+.radio-fala {
+  position: absolute;
+  bottom: calc(var(--radio-w) * .4 + var(--locutor-w) * 1.06 + 6px);
+  margin: 0;
+  pointer-events: none;
+  color: var(--tinta);
+}
+.radio-fala b { position: absolute; top: -14px; white-space: nowrap; }
+.radio-fala::before, .radio-fala::after { content: ''; position: absolute; }
+
+.radio-fala.do-narrador {
+  left: 0;
+  width: 230px;
+  padding: 14px 14px 10px 16px;
+  background: var(--tv);
+  color: #fff;
+  border: 3px solid var(--tinta);
+  border-left: 8px solid var(--lona);
+  border-radius: 3px;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, .35);
+  font: 700 15px/1.3 var(--fonte-texto);
+}
+.radio-fala.do-narrador b {
+  left: 6px;
+  background: var(--lona);
+  color: #fff;
+  border: 2.5px solid var(--tinta);
+  padding: 1px 10px;
+  transform: skewX(-12deg);
+  font: 400 14px/1.2 var(--fonte-display);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+/* bico reto, descendo para a esquerda (para o Agrião) */
+.radio-fala.do-narrador::before, .radio-fala.do-narrador::after {
+  left: calc(var(--locutor-w) * .42 - 14px);
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-color: var(--tinta) transparent transparent var(--tinta);
+  border-width: 9px 11px;
+  bottom: -21px;
+}
+.radio-fala.do-narrador::after { border-color: var(--tv) transparent transparent var(--tv); border-width: 5px 7px; bottom: -11px; margin-left: 4px; }
+.radio-fala.do-narrador.surgindo { animation: balao-tv .25s ease-out both; }
+@keyframes balao-tv {
+  from { opacity: 0; transform: translateX(-16px); clip-path: inset(-20px 100% -30px -20px); }
+  to   { opacity: 1; transform: none; clip-path: inset(-20px -20px -30px -20px); }
+}
+
+.radio-fala.do-comentarista {
+  right: 0;
+  width: 210px;
+  padding: 14px 14px 10px;
+  background: #FFF8E6;
+  border: 3px solid var(--tinta);
+  border-radius: 24px 30px 26px 20px / 28px 22px 30px 24px;
+  box-shadow: 0 5px 0 var(--tinta);
+  transform: rotate(1.5deg);
+  font: 400 16px/1.3 var(--fonte-mao);
+  letter-spacing: .02em;
+}
+.radio-fala.do-comentarista b {
+  right: 14px;
+  background: var(--mesa);
+  color: var(--milho);
+  border: 2.5px solid var(--tinta);
+  border-radius: 999px;
+  padding: 1px 12px;
+  transform: rotate(3deg);
+  font: 400 14px/1.2 var(--fonte-display);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+/* bico redondo, descendo para a direita (para o Tião) */
+.radio-fala.do-comentarista::after {
+  right: calc(var(--locutor-w) * .42 - 8px);
+  bottom: -11px;
+  width: 16px;
+  height: 16px;
+  background: #FFF8E6;
+  border: 3px solid var(--tinta);
+  border-width: 0 3px 3px 0;
+  border-radius: 0 0 8px 0;
+  transform: rotate(45deg);
+}
+.radio-fala.do-comentarista.surgindo { animation: balao-tiao .4s cubic-bezier(.2, .9, .3, 1.5) both; transform-origin: 85% 100%; }
+@keyframes balao-tiao {
+  from { opacity: 0; transform: scale(.6) rotate(-6deg); }
+  to   { opacity: 1; transform: rotate(1.5deg); }
+}
 
 /* Mascote da carta vencedora (WebP animado, fundo transparente) */
 .mascote {
@@ -1105,6 +1417,7 @@ h1 { margin: 0; font-weight: 400; }
 .esporte::before, .esporte::after { content: '—'; margin: 0 1.5cqw; color: #8FB98A; }
 .selo {
   position: absolute;
+  z-index: 1; /* por cima do desenho da carta */
   top: 5%;
   left: 3%;
   transform: rotate(-8deg);
@@ -1417,6 +1730,8 @@ h1 { margin: 0; font-weight: 400; }
 }
 .album-sub { margin: 0; color: var(--creme); font: 500 15px/1.45 var(--fonte-texto); text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
 .album-sub b { font: 400 22px var(--fonte-display); color: var(--milho); margin-right: 4px; }
+.album-email { font-weight: 700; overflow-wrap: anywhere; }
+.album-sub .link-album { color: var(--milho); border-bottom-color: var(--milho); font-size: inherit; }
 .album-lista {
   list-style: none;
   margin: 0;
@@ -1492,6 +1807,10 @@ h1 { margin: 0; font-weight: 400; }
   .faixa-fim .faixa-tv-texto { font-size: 18px; padding: 6px 18px 6px 12px; }
   .tela-jogo { --lona-h: 54px; --gomo: 18px; --listra: 48px; --borda-mesa: 12px; }
   .tabuleiro { --cesta-w: 130px; --cesta-h: 72px; --retrato: 104px; gap: 8px 16px; padding-inline: 12px; }
+  .tabuleiro { --radio-w: 78px; --locutor-w: 78px; --radio-grupo: 172px; }
+  .radio { left: 12px; }
+  .radio-fala.do-narrador { width: 210px; font-size: 14px; }
+  .radio-fala.do-comentarista { width: 168px; font-size: 15px; }
   .tabuleiro { --carta-w: min(280px, calc((100dvh - 180px) * 0.5995), calc((100vw - 440px) / 2)); }
   .placar { top: 10px; }
   .placar-time { min-width: 90px; padding: 0 14px; font-size: 13px; }
@@ -1508,6 +1827,20 @@ h1 { margin: 0; font-weight: 400; }
 @media (max-width: 700px) {
   .tela-feira { --lona-h: 44px; --gomo: 14px; --listra: 36px; padding: calc(var(--lona-h) + var(--gomo) + 14px) 16px 24px; }
   .faixa-tv { left: 64px; right: 10px; bottom: 10px; width: auto; max-width: none; } /* ao lado dos controles */
+  .tela-jogo .faixa-tv { max-width: none; }
+  /* rádio no canto de baixo à direita, em cima da faixa de plantão; o balão abre para a esquerda */
+  .tabuleiro { --radio-w: 56px; --locutor-w: 58px; --radio-grupo: 126px; }
+  .radio { left: auto; right: 8px; bottom: 84px; } /* acima da faixa de plantão, mesmo com 3 linhas */
+  /* na borda direita da tela, os dois balões se alinham à direita; o bico continua apontando para quem fala */
+  .radio-fala { width: min(220px, 62vw) !important; padding: 12px 10px 8px !important; font-size: 13px !important; }
+  .radio-fala.do-narrador { left: auto; right: 0; }
+  .radio-fala.do-narrador::before, .radio-fala.do-narrador::after { left: auto; right: calc(var(--radio-grupo) - var(--locutor-w) * .42 - 8px); }
+  .radio-fala.do-narrador::after { margin-left: 0; margin-right: 4px; }
+  .radio-fala.do-comentarista { font-size: 14px !important; }
+  .radio-fala b { font-size: 12px !important; top: -12px; }
+  .radio-ondas i { width: 18px; height: 18px; border-width: 3px; right: -8px; }
+  .radio-notas i { font-size: 16px; }
+  .radio-notas i + i { font-size: 14px; }
   .album-topo { grid-template-columns: 1fr auto; margin-bottom: 20px; }
   .letreiro-album { font-size: 46px; -webkit-text-stroke-width: 8px; text-shadow: 0 5px 0 var(--lona); }
   .album-sub { grid-column: 1 / -1; grid-row: 2; font-size: 14px; }
@@ -1603,6 +1936,7 @@ h1 { margin: 0; font-weight: 400; }
   .placar-rodada { padding: 0 8px; }
   .placar-rodada b { font-size: 15px; }
   .placar-rodada small { font-size: 7px; }
+  .placar-vez { font-size: 11px; border-width: 2px; padding: 2px 4px 3px; top: calc(100% + 2px); }
   /* no celular, os controles descem para a mesa, ao lado da sua carta */
   .controles { position: fixed; top: auto; right: auto; left: 14px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); flex-direction: column; gap: 10px; }
   .icone { --tam: 36px; border-width: 2px; box-shadow: 0 3px 0 var(--tinta); }
@@ -1614,13 +1948,15 @@ h1 { margin: 0; font-weight: 400; }
   .revelacao.derrota .letreiro-rodada { text-shadow: 0 4px 0 var(--lona-esc); }
   .comparacao { padding: 18px 12px 10px; border-width: 3px; border-radius: 14px; box-shadow: 0 5px 0 rgba(0, 0, 0, .35); }
   .comparacao-titulo { font-size: 16px; padding: 2px 12px; border-width: 2px; }
-  .lado { margin-top: 6px; gap: 2px 10px; }
-  .quem { font-size: 9px; }
+  .lado { margin-top: 6px; gap: 2px 10px; grid-template-columns: 40px minmax(0, 1fr); }
+  .quem { width: 40px; height: 40px; border-width: 2px; }
+  .quem-escolheu { width: 26px; height: 26px; margin: -6px 0 -6px -8px; }
+  .icone-cesta { width: 26px; height: 21px; }
+  .dif b { font-size: 15px; }
   .valor { font-size: 26px; }
   .valor small { font-size: 11px; }
   .barra { height: 9px; }
   .dif { margin-top: 8px; font-size: 11px; padding: 2px 10px; }
-  .revelacao .detalhe { font-size: 12px; }
   .botao-continuar { font-size: 16px; padding: 5px 18px 7px; border-width: 3px; box-shadow: 0 4px 0 var(--tinta); }
   .mascote { width: 104px; }
 }
@@ -1629,6 +1965,15 @@ h1 { margin: 0; font-weight: 400; }
 @media (orientation: landscape) and (max-height: 520px) {
   .tela-feira { --lona-h: 34px; --gomo: 12px; --listra: 30px; padding: calc(var(--lona-h) + var(--gomo) + 10px) 20px 16px; }
   .faixa-tv { bottom: 6px; }
+  .tabuleiro { --radio-w: 54px; --locutor-w: 54px; --radio-grupo: 122px; }
+  .radio { left: 10px; bottom: 6px; }
+  .radio-fala { padding: 11px 10px 7px !important; font-size: 12px !important; }
+  .radio-fala.do-narrador { width: 190px; }
+  .radio-fala.do-comentarista { width: 170px; font-size: 13px !important; right: auto; left: 22px; } /* não sai pela borda */
+  .radio-fala.do-comentarista::after { right: 78px; }
+  .radio-fala b { font-size: 11px !important; top: -11px; }
+  .radio-ondas i { width: 18px; height: 18px; border-width: 3px; right: -8px; }
+  .radio-notas i { font-size: 16px; }
   .faixa-tv-texto { font-size: 16px; padding: 4px 14px 4px 10px; }
   .faixa-tv-tag { font-size: 10px; padding: 0 9px; }
   .faixa-fim .faixa-tv-texto { font-size: 14px; }
@@ -1695,6 +2040,7 @@ h1 { margin: 0; font-weight: 400; }
   .placar-gols { font-size: 22px; min-width: 38px; padding: 2px 8px; }
   .placar-rodada b { font-size: 14px; }
   .placar-rodada small { font-size: 7px; }
+  .placar-vez { font-size: 11px; border-width: 2px; padding: 2px 4px 3px; top: calc(100% + 2px); }
   .controles { top: 4px; right: 12px; gap: 6px; }
   .icone { --tam: 30px; border-width: 2px; box-shadow: 0 2px 0 var(--tinta); }
   .vs { font-size: 28px; -webkit-text-stroke-width: 5px; }
@@ -1712,12 +2058,14 @@ h1 { margin: 0; font-weight: 400; }
   .letreiro-rodada { font-size: 30px; margin-bottom: 6px; -webkit-text-stroke-width: 6px; text-shadow: 0 4px 0 var(--tinta); }
   .comparacao { padding: 16px 10px 8px; border-width: 3px; }
   .comparacao-titulo { font-size: 15px; padding: 2px 10px; }
-  .lado { margin-top: 4px; }
-  .quem { font-size: 8px; }
+  .lado { margin-top: 4px; grid-template-columns: 34px minmax(0, 1fr); gap: 2px 8px; }
+  .quem { width: 34px; height: 34px; border-width: 2px; }
+  .quem-escolheu { width: 24px; height: 24px; margin: -6px 0 -6px -8px; }
+  .icone-cesta { width: 24px; height: 19px; }
+  .dif b { font-size: 14px; }
   .valor { font-size: 24px; }
   .barra { height: 8px; }
   .dif { margin-top: 6px; font-size: 10px; }
-  .revelacao .detalhe { font-size: 11px; }
   .botao-continuar { font-size: 14px; padding: 4px 14px 6px; border-width: 3px; box-shadow: 0 3px 0 var(--tinta); }
   .mascote { width: 110px; }
   .cadastro { min-height: 0; padding-block: 8px; }
@@ -1780,6 +2128,177 @@ h1 { margin: 0; font-weight: 400; }
 .tela-jogo:not([hidden]) { animation-name: aparecer; }
 @keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
 .fim h1 { animation: pop .6s ease-out .2s both; }
+
+/* Botão único de som nas telas de feira (na partida, ele fica junto dos controles) */
+.musica-flutuante { position: fixed; top: 12px; right: 16px; z-index: 55; } /* acima da lona (50) */
+.musica-flutuante[hidden] { display: none; }
+
+/* Painel de som: as chaves de efeitos e vozes e duas escalas de barras que crescem, de 0 (desligado) a 5 */
+.painel-volume {
+  position: fixed;
+  z-index: 60;
+  display: grid;
+  gap: 12px;
+  padding: 14px 16px 16px;
+  background: var(--creme);
+  border: 3px solid var(--tinta);
+  border-radius: 16px;
+  box-shadow: 0 6px 0 var(--tinta), 0 14px 30px rgba(0, 0, 0, .35);
+  animation: surgir .18s ease-out;
+}
+.painel-volume[hidden] { display: none; }
+.volume-chaves { display: flex; gap: 8px; }
+.volume-chave {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 3px solid var(--tinta);
+  border-radius: 999px;
+  background: var(--milho);
+  color: var(--tinta);
+  font: 800 13px var(--fonte-texto);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.volume-chave svg { width: 20px; height: 20px; fill: none; stroke: var(--tinta); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.volume-chave .cheio { fill: var(--tinta); }
+.volume-chave .risco { display: none; stroke: var(--lona); stroke-width: 3; }
+.volume-chave[aria-pressed="false"] { background: var(--creme-esc); }
+.volume-chave[aria-pressed="false"] span { text-decoration: line-through; }
+.volume-chave[aria-pressed="false"] .risco { display: inline; }
+.volume-chave[aria-pressed="false"] .ondas { display: none; }
+.volume-chave[aria-pressed="false"] .cheio { opacity: .45; }
+.volume-chave:focus-visible { outline: 3px solid var(--lona); outline-offset: 2px; }
+.volume-linha { display: grid; gap: 6px; }
+.volume-nome { font: 800 13px var(--fonte-texto); letter-spacing: .08em; text-transform: uppercase; color: var(--tinta); }
+.volume-niveis { display: flex; align-items: flex-end; gap: 6px; height: 48px; }
+.volume-nivel {
+  width: 34px;
+  height: calc(14px + var(--n) * 6.8px);
+  padding: 0;
+  border: 3px solid var(--tinta);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+.volume-nivel.aceso { background: var(--milho); }
+.volume-nivel:hover { filter: brightness(.95); }
+.volume-nivel:focus-visible { outline: 3px solid var(--lona); outline-offset: 2px; }
+.volume-mudo { height: 34px; border-radius: 50%; display: grid; place-items: center; align-self: center; }
+.volume-mudo svg { width: 60%; height: 60%; fill: none; stroke: var(--tinta); stroke-width: 3; stroke-linecap: round; }
+.volume-mudo[aria-checked="true"] { background: var(--lona); }
+.volume-mudo[aria-checked="true"] svg { stroke: #fff; }
+@media (max-width: 700px) {
+  .volume-nivel { width: 30px; }
+}
+
+/* ---------- Vitrine: tela de espera para deixar exposta na feira ---------- */
+
+.tela-vitrine { height: 100dvh; min-height: 0; cursor: pointer; padding-bottom: 0; user-select: none; -webkit-user-select: none; }
+.tela-vitrine .balcao { display: block; height: clamp(70px, 11vh, 130px); }
+.vitrine-grande {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .6vh;
+  min-height: 0;
+  padding-bottom: clamp(60px, 9vh, 120px); /* espaço do balcão */
+}
+.letreiro-vitrine {
+  font-size: clamp(48px, min(11vw, 15vh), 210px);
+  -webkit-text-stroke-width: clamp(8px, min(1.5vw, 2vh), 24px);
+  text-shadow: 0 clamp(6px, 1.3vh, 16px) 0 var(--lona);
+  white-space: nowrap;
+  animation: letreiro-vitrine 3.2s ease-in-out infinite;
+}
+@keyframes letreiro-vitrine { 0%, 100% { transform: rotate(-1.5deg) scale(1); } 50% { transform: rotate(1.5deg) scale(1.03); } }
+.slogan-vitrine { font-size: clamp(18px, min(3vw, 4.4vh), 54px); margin: 0; }
+.leque-vitrine { --w: clamp(80px, min(13vw, 19vh), 290px); padding-top: 2.5vh; }
+/* o leque flutua inteiro, como uma peça só (cada carta no seu ritmo parecia solta) */
+.leque-vitrine { animation: flutuar 3.6s ease-in-out infinite alternate; }
+.leque-vitrine .carta-leque:nth-child(1) { --r: -24deg; --y: 34px; }
+.leque-vitrine .carta-leque:nth-child(2) { --r: -12deg; --y: 8px; }
+.leque-vitrine .carta-leque:nth-child(3) { --r: 0deg; --y: -8px; z-index: 5; }
+.leque-vitrine .carta-leque:nth-child(4) { --r: 12deg; --y: 8px; }
+.leque-vitrine .carta-leque:nth-child(5) { --r: 24deg; --y: 34px; z-index: 4; }
+@keyframes flutuar { from { translate: 0 0; } to { translate: 0 -14px; } }
+.convite-vitrine {
+  margin-top: 3vh;
+  padding: .4em 1.2em .5em;
+  font: 400 clamp(20px, min(2.6vw, 4vh), 44px) var(--fonte-display);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--tinta);
+  background: var(--milho);
+  border: 4px solid var(--tinta);
+  border-radius: 999px;
+  box-shadow: 0 6px 0 var(--tinta);
+  cursor: pointer;
+  animation: convite-vitrine 1.6s ease-in-out infinite;
+}
+.convite-vitrine:focus-visible { outline: 4px solid var(--creme); outline-offset: 4px; }
+@keyframes convite-vitrine { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+
+/* Mascotes em pé no balcão, dois de cada lado (os de dentro um pouco menores, atrás) */
+.tela-vitrine > .mascote-feira {
+  position: absolute;
+  z-index: 3;
+  bottom: calc(clamp(70px, 11vh, 130px) - 30px);
+  width: clamp(130px, min(19vw, 34vh), 380px);
+  pointer-events: none;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .25));
+}
+.tela-vitrine > .mascote-feira-1 { left: 1vw; }
+.tela-vitrine > .mascote-feira-2 { left: 14vw; width: clamp(100px, min(14vw, 25vh), 280px); z-index: 2; }
+.tela-vitrine > .mascote-feira-3 { right: 14vw; width: clamp(100px, min(14vw, 25vh), 280px); z-index: 2; transform: scaleX(-1); }
+.tela-vitrine > .mascote-feira-4 { right: 1vw; transform: scaleX(-1); }
+
+@media (max-width: 700px) {
+  .vitrine-grande { gap: 1.2vh; padding-bottom: calc(clamp(70px, 11vh, 130px) + 16vh); } /* balcão + mascotes */
+  .letreiro-vitrine { font-size: 15vw; -webkit-text-stroke-width: 2.2vw; }
+  .slogan-vitrine { font-size: 5.6vw; }
+  .leque-vitrine { --w: 21vw; padding-top: 4vh; }
+  .leque-vitrine .carta-leque:nth-child(1), .leque-vitrine .carta-leque:nth-child(5) { --y: 20px; }
+  .convite-vitrine { font-size: 5.4vw; margin-top: 6vh; }
+  .tela-vitrine > .mascote-feira { width: 30vw; }
+  .tela-vitrine > .mascote-feira-2, .tela-vitrine > .mascote-feira-3 { width: 23vw; }
+  .tela-vitrine > .mascote-feira-2 { left: 24vw; }
+  .tela-vitrine > .mascote-feira-3 { right: 24vw; }
+}
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .vitrine-grande { gap: 0; padding-bottom: 12vh; }
+  .slogan-vitrine { margin-bottom: 1vh; }
+  .leque-vitrine { --w: min(11vw, 17vh); }
+  .convite-vitrine { margin-top: 5vh; border-width: 3px; box-shadow: 0 4px 0 var(--tinta); }
+  .tela-vitrine > .mascote-feira { width: min(15vw, 38vh); }
+  .tela-vitrine > .mascote-feira-2, .tela-vitrine > .mascote-feira-3 { width: min(11vw, 28vh); }
+}
+
+/* Cadastro: a carta com um mascote de cada lado */
+.cadastro-vitrine { position: relative; display: flex; align-items: flex-end; justify-content: center; }
+.cadastro-vitrine .cadastro-logo { position: relative; z-index: 1; }
+.mascote-cadastro {
+  position: relative;
+  z-index: 2;
+  width: clamp(110px, 14vw, 220px);
+  margin-bottom: -18px;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .25));
+}
+.mascote-cadastro-esq { margin-right: -5vw; }
+.mascote-cadastro-dir { margin-left: -5vw; transform: scaleX(-1); }
+@media (max-width: 700px) {
+  .mascote-cadastro { width: 84px; margin-bottom: -8px; }
+  .mascote-cadastro-esq { margin-right: -14px; }
+  .mascote-cadastro-dir { margin-left: -14px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

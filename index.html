@@ -25,14 +25,74 @@
 </script>
 </head>
 <body>
-<!-- Cadastro (opcional): aparece sempre que o jogo é aberto, já com o nome lembrado neste aparelho -->
+<!-- Ícones do painel de resultado (atributos, Super PANC, cesta) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-proteina" viewBox="0 0 24 24"><path fill="currentColor" d="M1 9.5h2.2v5H1zM4 7h3.4v10H4zM8.2 10.8h7.6v2.4H8.2zM16.6 7H20v10h-3.4zM20.8 9.5H23v5h-2.2z"/></symbol>
+  <symbol id="i-carboidrato" viewBox="0 0 24 24"><path fill="currentColor" d="M14 1 4 14h6.5L9 23l11-14h-6.6z"/></symbol>
+  <symbol id="i-fibras" viewBox="0 0 24 24"><path fill="currentColor" d="M21 3C10 3 4 9 4 17c0 1 .1 2 .4 3l-1.8 1.8 1.4 1.4L5.8 21.4c1 .4 2.1.6 3.2.6 8 0 12-7 12-19ZM8 17.6c2-4.4 5-7.6 9-9.6-3.4 2.6-6 5.8-7.6 10.2z"/></symbol>
+  <symbol id="i-calorias" viewBox="0 0 24 24"><path fill="currentColor" d="M12.5 1c.6 3.6 6.5 6.4 6.5 13a7 7 0 0 1-14 0c0-3.4 2-5.6 3.6-7 .1 2.2 1 3.6 2.4 4.2-.3-3.8-.2-7.2 1.5-10.2Zm-.5 13c-1.4 1.2-2.4 2.4-2.4 4a2.4 2.4 0 0 0 4.8 0c0-1.4-.8-2.6-2.4-4Z"/></symbol>
+  <symbol id="i-super" viewBox="0 0 24 24"><path fill="currentColor" d="m12 1 3.3 7 7.7.8-5.8 5.2 1.7 7.6L12 17.7l-6.9 3.9 1.7-7.6L1 8.8 8.7 8z"/></symbol>
+  <symbol id="i-cesta" viewBox="0 0 40 32">
+    <path d="M9 14C9 5 31 5 31 14" fill="none" stroke="#6E4022" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M3 13h34l-4 17H7z" fill="#C8924F" stroke="#1A1A1A" stroke-width="2.4" stroke-linejoin="round"/>
+    <path d="M6.5 19h27M8 25h24M13 13l1.5 17M20 13v17M27 13l-1.5 17" stroke="#6E4022" stroke-width="1.6"/>
+  </symbol>
+</svg>
+<!-- Botão único de som nas telas de feira; na partida, o mesmo botão fica junto dos outros controles -->
+<button class="icone botao-musica musica-flutuante" type="button" aria-pressed="true" aria-haspopup="dialog" aria-expanded="false" aria-controls="painel-volume" aria-label="Som" title="Som">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9v6h4l5 4V5L8 9z"/><path class="ondas" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="risco" d="M16 9l6 6M22 9l-6 6"/></svg>
+</button>
+
+<!-- Som: o botão do alto-falante abre este painel, com as chaves de efeitos e vozes e os volumes de 0 (desligado) a 5 -->
+<div id="painel-volume" class="painel-volume" role="dialog" aria-label="Som" hidden>
+  <div class="volume-chaves">
+    <button id="botao-som" class="volume-chave" type="button" aria-pressed="true" aria-label="Efeitos sonoros">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9v6h4l5 4V5L8 9z"/><path class="ondas" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="risco" d="M16 9l6 6M22 9l-6 6"/></svg>
+      <span>Efeitos</span>
+    </button>
+    <button id="botao-voz" class="volume-chave" type="button" aria-pressed="true" aria-label="Vozes do narrador, do comentarista e do rival">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 4h16v11H10l-5 4v-4H4z"/><path class="ondas" d="M8 9.5h8M8 12h5" stroke="#fff"/><path class="risco" d="M3 21L21 3"/></svg>
+      <span>Vozes</span>
+    </button>
+  </div>
+  <div class="volume-linha">
+    <span class="volume-nome">Música</span>
+    <div class="volume-niveis" data-canal="musica" role="radiogroup" aria-label="Volume da música"></div>
+  </div>
+  <div class="volume-linha">
+    <span class="volume-nome">Vozes e efeitos</span>
+    <div class="volume-niveis" data-canal="sons" role="radiogroup" aria-label="Volume das vozes e dos efeitos"></div>
+  </div>
+</div>
+
+<!-- Vitrine: a tela de espera, para deixar exposta na feira. Um toque em qualquer lugar leva ao cadastro. -->
+<main id="tela-vitrine" class="tela tela-feira tela-vitrine">
+  <div class="lona" aria-hidden="true"></div>
+  <section class="vitrine-grande" aria-label="SuperPANCs">
+    <h1 class="letreiro-jogo letreiro-vitrine">SuperPANCs</h1>
+    <p class="slogan slogan-vitrine">a feira mais disputada do Rio</p>
+    <!-- Leque de cartas (montado em ui.js) -->
+    <div id="leque-vitrine" class="leque leque-vitrine" aria-hidden="true"></div>
+    <button id="botao-vitrine" class="convite-vitrine" type="button">Toque na tela para jogar</button>
+  </section>
+  <img class="mascote-feira mascote-feira-1" src="img/mascotes/45.webp" alt="">
+  <img class="mascote-feira mascote-feira-2" src="img/mascotes/59.webp" alt="">
+  <img class="mascote-feira mascote-feira-3" src="img/mascotes/43.webp" alt="">
+  <img class="mascote-feira mascote-feira-4" src="img/mascotes/23.webp" alt="">
+  <div class="balcao" aria-hidden="true"></div>
+</main>
+
+<!-- Cadastro (opcional): aparece depois da vitrine, já com o nome lembrado neste aparelho -->
 <main id="tela-cadastro" class="tela tela-feira" hidden>
   <div class="lona" aria-hidden="true"></div>
   <div class="cadastro">
-    <img class="cadastro-logo" src="img/cartas/verso.webp" alt="+Rio em Movimento — PANCs, nutrição e esporte">
+    <div class="cadastro-vitrine">
+      <img class="mascote-cadastro mascote-cadastro-esq" src="img/mascotes/49.webp" alt="">
+      <img class="cadastro-logo" src="img/cartas/verso.webp" alt="+Rio em Movimento — PANCs, nutrição e esporte">
+      <img class="mascote-cadastro mascote-cadastro-dir" src="img/mascotes/55.webp" alt="">
+    </div>
     <form id="form-cadastro" class="placa cadastro-painel" novalidate>
       <h1>Boas-vindas à feira!</h1>
-      <p class="placa-sub">Conte para a gente quem está jogando. É opcional.</p>
 
       <label class="campo">
         <span>Nome</span>
@@ -45,7 +105,7 @@
 
       <label class="consentimento">
         <input id="campo-consentimento" name="consentimento" type="checkbox">
-        <span>Aceito que o projeto +Rio em Movimento guarde meu nome e e-mail para me enviar comunicações sobre o projeto.</span>
+        <span>Aceito que o projeto guarde meu nome e e-mail para me enviar comunicações, segundo a LGPD.</span>
       </label>
 
       <p id="cadastro-erro" class="cadastro-erro" role="alert" hidden></p>
@@ -59,7 +119,7 @@
 </main>
 
 <!-- Tela inicial: letreiro, leque de cartas e mascotes no balcão; à direita, a escolha do rival e do modo -->
-<main id="tela-inicio" class="tela tela-feira tela-inicio">
+<main id="tela-inicio" class="tela tela-feira tela-inicio" hidden>
   <div class="lona" aria-hidden="true"></div>
   <div class="inicio">
     <section class="vitrine" aria-label="SuperPANCs">
@@ -90,7 +150,7 @@
               <span class="rosto"><img src="img/rivais/dona-cida-neutro.svg" alt=""></span>
               <span class="nivel">Difícil</span>
               <strong>Dona Cida</strong>
-              <span>30 anos de feira. Sempre escolhe o ponto forte da carta.</span>
+              <span>30 anos de feira.</span>
             </span>
           </label>
         </div>
@@ -125,7 +185,7 @@
           <ul>
             <li>As 32 cartas são divididas: 16 para você e 16 para o rival.</li>
             <li>Quem tem a vez escolhe um atributo da sua carta. Ganha o maior valor, e o vencedor leva as duas cartas e escolhe na próxima rodada.</li>
-            <li><strong>Super Trunfo:</strong> a Ora-pro-nóbis vence qualquer hortaliça comum. Contra outra PANC, vale o atributo.</li>
+            <li><strong>Super PANC:</strong> a Ora-pro-nóbis é a carta especial e vence qualquer hortaliça comum. Contra outra PANC, vale o atributo.</li>
             <li><strong>Empate:</strong> as cartas vão para a cesta do meio, e quem vencer a próxima rodada leva tudo.</li>
           </ul>
         </details>
@@ -140,19 +200,16 @@
 <main id="tela-jogo" class="tela tela-jogo" hidden>
   <div class="lona" aria-hidden="true"></div>
   <header class="topo">
-    <div class="placar" aria-label="Placar">
-      <span class="placar-time placar-voce"><span id="placar-nome-jogador">Você</span></span>
+    <div class="placar" id="placar" aria-label="Placar">
+      <span class="placar-time placar-voce"><span id="placar-nome-jogador">Você</span><span class="placar-vez" aria-hidden="true"><span><svg class="bola" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="#fff" stroke="currentColor" stroke-width="2"/><path d="M12 1.5c-2 3.5-2 7 0 10.5s7 4.5 10 2M12 12c-3.5 0-7 2-9 5.5M12 12c2-3.4 5.5-5.6 9.5-5.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>Sua vez</span></span></span>
       <b class="placar-gols"><span id="placar-jogador">16</span></b>
       <span class="placar-rodada"><span><b id="placar-rodada">1/20</b><small>Rodada</small></span></span>
       <b class="placar-gols"><span id="placar-rival">16</span></b>
-      <span class="placar-time placar-rival"><span id="placar-nome-rival">Seu Zé</span></span>
+      <span class="placar-time placar-rival"><span id="placar-nome-rival">Seu Zé</span><span class="placar-vez" aria-hidden="true"><span><svg class="bola" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10.5" fill="#fff" stroke="currentColor" stroke-width="2"/><path d="M12 1.5c-2 3.5-2 7 0 10.5s7 4.5 10 2M12 12c-3.5 0-7 2-9 5.5M12 12c2-3.4 5.5-5.6 9.5-5.5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg><span id="placar-vez-rival">Vez dele</span></span></span></span>
     </div>
     <div class="controles">
-      <button id="botao-som" class="icone" type="button" aria-pressed="true" aria-label="Efeitos sonoros" title="Efeitos sonoros">
+      <button class="icone botao-musica" type="button" aria-pressed="true" aria-haspopup="dialog" aria-expanded="false" aria-controls="painel-volume" aria-label="Som" title="Som">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9v6h4l5 4V5L8 9z"/><path class="ondas" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="risco" d="M16 9l6 6M22 9l-6 6"/></svg>
-      </button>
-      <button id="botao-voz" class="icone" type="button" aria-pressed="true" aria-label="Vozes do narrador, do comentarista e do rival" title="Vozes">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 4h16v11H10l-5 4v-4H4z"/><path class="ondas" d="M8 9.5h8M8 12h5" stroke="#fff"/><path class="risco" d="M3 21L21 3"/></svg>
       </button>
       <button id="botao-auto" class="icone" type="button" aria-pressed="true" aria-label="Avançar sozinho" title="Avançar sozinho">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M3 6l8 6-8 6zM12 6l8 6-8 6z"/><path class="risco" d="M3 21L21 3"/></svg>
@@ -198,29 +255,122 @@
     <!-- Camada onde as cartas são desenhadas e se movem por cima do tabuleiro -->
     <div id="camada-cartas" class="camada-cartas"></div>
 
-    <!-- Entrada do Super Trunfo: a mesa escurece, raios atrás da carta e o letreiro no alto -->
+    <!-- Entrada da Super PANC: a mesa escurece, raios atrás da carta e o letreiro no alto -->
     <div id="st-fundo" class="st-fundo" aria-hidden="true" hidden><div class="st-raios"></div></div>
-    <p id="st-letreiro" class="st-letreiro" aria-hidden="true" hidden>Super Trunfo!</p>
+    <p id="st-letreiro" class="st-letreiro" aria-hidden="true" hidden>Super PANC!</p>
 
     <!-- Mascote da carta vencedora, ao lado dela -->
     <img id="mascote" class="mascote" alt="" hidden>
 
     <!-- Revelação: letreiro do resultado e comparação dos valores no centro da mesa -->
+    <!-- Resultado da rodada: o máximo em desenho (mascotes, ícones, cesta); o texto completo vai em #detalhe, para leitores de tela -->
     <section id="revelacao" class="revelacao" aria-labelledby="mensagem" aria-describedby="detalhe" hidden>
       <p id="mensagem" class="letreiro-rodada"></p>
-      <div class="comparacao">
-        <span id="comparacao-titulo" class="comparacao-titulo"></span>
-        <div id="lado-jogador" class="lado"><span class="quem"></span><span class="valor"></span><span class="barra"><i></i></span></div>
-        <div id="lado-rival" class="lado"><span class="quem"></span><span class="valor"></span><span class="barra"><i></i></span></div>
+      <div class="comparacao" aria-hidden="true">
+        <span class="comparacao-titulo">
+          <img id="quem-escolheu" class="quem-escolheu" alt="" hidden>
+          <svg class="icone-atributo" viewBox="0 0 24 24"><use id="icone-atributo" href="#i-proteina"></use></svg>
+          <span id="comparacao-titulo"></span>
+        </span>
+        <div id="lado-rival" class="lado"><span class="quem"><img alt=""></span><span class="valor"></span><span class="barra"><i></i></span></div>
+        <div id="lado-jogador" class="lado"><span class="quem"><img alt=""></span><span class="valor"></span><span class="barra"><i></i></span></div>
         <span id="diferenca" class="dif"></span>
       </div>
-      <p id="detalhe" class="detalhe"></p>
+      <p id="detalhe" class="so-leitor"></p>
       <button id="botao-continuar" class="botao-continuar" type="button" hidden>Próxima rodada</button>
     </section>
+    <!-- Radinho da transmissão: quando o narrador (Agrião Bueno, à esquerda) ou o Tião da Xepa (à direita) falam,
+         ele sobe de trás do rádio e se mexe, o rádio balança e o balão de quem fala abre para o lado dele.
+         Um toque no rádio liga ou desliga os dois (o plantão e o rival continuam). -->
+    <div id="radio" class="radio">
+      <div class="locutor locutor-narrador" aria-hidden="true">
+        <svg viewBox="0 0 120 130"><g stroke="#1A1A1A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <g class="p-corpo">
+            <path d="M12 132 Q16 101 44 94 L76 94 Q104 101 108 132Z" fill="#2B3A55"/>
+            <path d="M47 94 L60 117 L73 94Z" fill="#fff"/>
+            <path d="M57 101 L63 101 L65 119 L60 125 L55 119Z" fill="#D93A2B" stroke-width="2.5"/>
+            <path d="M44 95 L56 122 M76 95 L64 122" fill="none"/>
+          </g>
+          <g class="p-braco">
+            <path d="M90 108 Q104 98 103 80" fill="none" stroke-width="13"/>
+            <path d="M90 108 Q104 98 103 80" fill="none" stroke="#2B3A55" stroke-width="7"/>
+            <path d="M99 78 L99 64 Q103 60 106 64 L106 76" fill="#9BD16A" stroke-width="2.5"/>
+            <circle cx="102" cy="79" r="7" fill="#9BD16A"/>
+          </g>
+          <g class="p-cabeca">
+            <path d="M52 82 L52 97 L68 97 L68 82Z" fill="#7FBF4D"/>
+            <g fill="#3F8E3A">
+              <circle cx="31" cy="50" r="10"/><circle cx="89" cy="50" r="10"/><circle cx="36" cy="35" r="11"/><circle cx="84" cy="35" r="11"/>
+              <circle cx="48" cy="25" r="12"/><circle cx="72" cy="25" r="12"/><circle cx="60" cy="20" r="11"/>
+            </g>
+            <g fill="#6DB34A" stroke="none"><circle cx="45" cy="21" r="4"/><circle cx="69" cy="20" r="4"/><circle cx="33" cy="31" r="3.5"/><circle cx="81" cy="31" r="3.5"/></g>
+            <ellipse cx="60" cy="60" rx="29" ry="29" fill="#9BD16A"/>
+            <path d="M33 44 Q35 22 60 21 Q85 22 87 44" fill="none" stroke-width="4"/>
+            <rect x="25" y="50" width="10" height="17" rx="4" fill="#1A1A1A"/><rect x="85" y="50" width="10" height="17" rx="4" fill="#1A1A1A"/>
+            <path d="M42 46 Q49 40 56 45 M64 45 Q71 40 78 46" fill="none" stroke-width="3.5"/>
+            <ellipse cx="49" cy="55" rx="6" ry="7" fill="#fff"/><circle cx="50" cy="56" r="3" fill="#1A1A1A"/>
+            <ellipse cx="71" cy="55" rx="6" ry="7" fill="#fff"/><circle cx="72" cy="56" r="3" fill="#1A1A1A"/>
+            <path d="M60 59 Q65 66 59 68" fill="none" stroke-width="2.5"/>
+            <g class="p-boca"><path d="M48 73 Q60 89 72 73Z" fill="#7A1E1E"/><path d="M54 81 Q60 85 66 81" fill="#E5484D" stroke="none"/></g>
+            <path d="M30 64 Q31 80 42 80" fill="none" stroke-width="3"/><circle cx="44" cy="80" r="4" fill="#1A1A1A"/>
+          </g>
+        </g></svg>
+      </div>
+      <div class="locutor locutor-comentarista" aria-hidden="true">
+        <svg viewBox="0 0 120 130"><g stroke="#1A1A1A" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+          <g class="p-corpo">
+            <path d="M12 132 Q16 101 44 95 L76 95 Q104 101 108 132Z" fill="#C68A5E"/>
+            <path d="M33 132 L36 103 Q48 112 60 112 Q72 112 84 103 L87 132Z" fill="#F6E7C8"/>
+            <path d="M35 117 H85 M34 126 H86" fill="none" stroke="#D93A2B" stroke-width="4"/>
+          </g>
+          <g class="p-cabeca">
+            <path d="M52 84 L52 98 L68 98 L68 84Z" fill="#C68A5E"/>
+            <ellipse cx="31" cy="64" rx="6" ry="9" fill="#C68A5E"/><ellipse cx="89" cy="64" rx="6" ry="9" fill="#C68A5E"/>
+            <ellipse cx="60" cy="63" rx="28" ry="29" fill="#C68A5E"/>
+            <path d="M37 44 Q36 16 60 16 Q84 16 83 44Z" fill="#E7D2A8"/>
+            <path d="M37 38 Q60 33 83 38" fill="none" stroke="#D93A2B" stroke-width="5"/>
+            <path d="M20 46 Q60 32 100 46 Q98 53 60 48 Q22 53 20 46Z" fill="#E7D2A8"/>
+            <path d="M42 51 Q48 46 55 50 M66 48 Q73 44 79 49" fill="none" stroke-width="3.5"/>
+            <circle cx="49" cy="59" r="6" fill="#fff"/><circle cx="51" cy="60" r="3" fill="#1A1A1A"/>
+            <ellipse cx="71" cy="58" rx="7.5" ry="8.5" fill="#fff"/><circle cx="68" cy="60" r="3.5" fill="#1A1A1A"/>
+            <circle cx="40" cy="72" r="4" fill="#E5484D" stroke="none" opacity=".45"/><circle cx="80" cy="72" r="4" fill="#E5484D" stroke="none" opacity=".45"/>
+            <ellipse cx="60" cy="69" rx="7" ry="6" fill="#B5764B"/>
+            <g class="p-boca"><path d="M49 80 Q60 93 71 80Z" fill="#7A1E1E"/><rect x="55" y="80" width="5" height="4.5" fill="#fff" stroke-width="1.5"/></g>
+            <path d="M45 77 Q53 71 60 76 Q67 71 75 77 Q67 81 60 78 Q53 81 45 77Z" fill="#2B1B12" stroke-width="2.5"/>
+          </g>
+          <g class="p-braco">
+            <path d="M24 124 Q12 104 22 90" fill="none" stroke-width="12"/>
+            <path d="M24 124 Q12 104 22 90" fill="none" stroke="#C68A5E" stroke-width="7"/>
+            <path d="M8 86 Q20 64 38 80Z" fill="#E8B04A"/>
+            <path d="M12 84 L14 81 M18 84 L20 81 M24 84 L26 81 M30 83 L32 80" fill="none" stroke-width="2"/>
+            <circle cx="22" cy="90" r="6.5" fill="#C68A5E"/>
+          </g>
+        </g></svg>
+      </div>
+      <p id="radio-fala" class="radio-fala do-narrador" aria-live="polite" hidden><b id="radio-quem"></b><span id="radio-texto"></span></p>
+      <button id="botao-radio" class="radio-aparelho" type="button" aria-pressed="true" aria-label="Rádio da transmissão (narrador e Tião da Xepa)" title="Rádio ligado">
+        <span class="radio-ondas" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="radio-notas" aria-hidden="true"><i>♪</i><i>♫</i></span>
+        <svg viewBox="0 0 100 84" aria-hidden="true">
+          <path class="radio-antena" d="M68 26L86 5"/><circle class="radio-antena-ponta" cx="86" cy="5" r="4"/>
+          <rect class="radio-corpo" x="4" y="24" width="92" height="52" rx="12"/>
+          <rect class="radio-faixa" x="4" y="24" width="92" height="11" rx="6"/>
+          <circle class="radio-luz" cx="15" cy="29.5" r="3"/>
+          <circle class="radio-alto-falante" cx="31" cy="55" r="15"/>
+          <path class="radio-grade" d="M21 50h20M18.5 55h25M21 60h20"/>
+          <rect class="radio-dial" x="56" y="41" width="32" height="12" rx="3"/>
+          <path class="radio-marcas" d="M61 44v6M67 44v3M73 44v6M79 44v3M85 44v6"/>
+          <path class="radio-agulha" d="M70 39v16"/>
+          <circle class="radio-botao" cx="63" cy="65" r="5"/><circle class="radio-botao" cx="81" cy="65" r="5"/>
+          <path class="radio-pes" d="M16 77v5M84 77v5"/>
+        </svg>
+      </button>
+    </div>
     <!-- Avisos de vez só para leitores de tela (na tela, a vez é indicada pelas próprias cartas) -->
-    <!-- Faixa de TV do narrador e do Tião (comentarista); o resultado para leitores de tela vai em #anuncio -->
+    <!-- Faixa de plantão da TV (textos dos bastidores; narrador e Tião são só voz);
+         o resultado para leitores de tela vai em #anuncio -->
     <div id="narrador" class="faixa-tv" aria-hidden="true" hidden>
-      <span class="faixa-tv-tag"><span id="narrador-quem">Ao vivo</span></span>
+      <span class="faixa-tv-tag"><span>Plantão</span></span>
       <span class="faixa-tv-texto"><span id="narrador-texto"></span></span>
     </div>
     <p id="anuncio" class="so-leitor" aria-live="polite"></p>
@@ -242,7 +392,8 @@
   <div class="album">
     <header class="album-topo">
       <h1 class="letreiro-album">Álbum</h1>
-      <p class="album-sub"><b id="album-total">0/32</b> figurinhas coladas. Vença uma rodada com uma carta para colar a figurinha dela.</p>
+      <p class="album-sub" id="album-sub-email"><b id="album-total">0/32</b> figurinhas coladas no álbum de <span id="album-email" class="album-email"></span>. Vença uma rodada com uma carta para colar a figurinha dela.</p>
+      <p class="album-sub" id="album-sem-email" hidden>O álbum é guardado pelo seu e-mail. <button id="botao-album-cadastro" class="link-album" type="button">Coloque seu e-mail</button> para colecionar as cartas que vencem rodadas, em qualquer aparelho.</p>
       <button id="botao-voltar-album" class="botao botao-sec" type="button">Voltar</button>
     </header>
     <ul id="album-lista" class="album-lista"></ul>
@@ -287,12 +438,8 @@
 
     <aside class="fim-lado">
       <div class="faixa-tv faixa-fim" aria-hidden="true">
-        <span class="faixa-tv-tag"><span>Ao vivo</span></span>
+        <span class="faixa-tv-tag"><span>Plantão</span></span>
         <span class="faixa-tv-texto"><span id="fim-narrador-texto"></span></span>
-      </div>
-      <div class="faixa-tv faixa-fim do-comentarista" aria-hidden="true">
-        <span class="faixa-tv-tag"><span>Tião da Xepa</span></span>
-        <span class="faixa-tv-texto"><span id="fim-comentarista-texto"></span></span>
       </div>
       <div id="fim-figurinha" class="toast" role="status" hidden>
         <img id="fim-figurinha-img" alt="">
@@ -304,14 +451,14 @@
           <li><span>Rodadas vencidas</span><b id="fim-vencidas">0</b></li>
           <li><span>Rodadas perdidas</span><b id="fim-perdidas">0</b></li>
           <li><span>Empates</span><b id="fim-empatadas">0</b></li>
-          <li><span>Super Trunfo</span><b id="fim-super-trunfo">0×</b></li>
+          <li><span>Super PANC</span><b id="fim-super-trunfo">0×</b></li>
           <li><span>Maior pancada</span><b id="fim-pancada">—</b></li>
         </ul>
       </div>
       <div class="fim-botoes">
         <button id="botao-de-novo" class="botao botao-grande">Revanche</button>
         <button id="botao-trocar-rival" class="botao botao-sec">Trocar rival</button>
-        <button id="botao-menu" class="botao botao-sec">Menu</button>
+        <button id="botao-menu" class="botao botao-sec">Sair</button>
       </div>
     </aside>
   </div>
@@ -324,6 +471,7 @@
 <script src="js/falas.js"></script>
 <script src="js/album.js"></script>
 <script src="js/sons.js"></script>
+<script src="js/musica.js"></script>
 <script src="js/cadastro.js"></script>
 <script src="js/ui.js"></script>
 </body>

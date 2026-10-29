@@ -1,5 +1,6 @@
 {
   "versao": 1,
+  "nome": "Agrião Bueno",
   "prioridade_rodada": [
     "super_trunfo_jogador",
     "super_trunfo_rival",
@@ -53,17 +54,17 @@
           },
           {
             "id": "narrador.inicio_partida.geral.06",
-            "texto": "Cartas na mesa, coração na mão!",
+            "texto": "Cartas na mesa e coração na mão!",
             "audio": "inicio_partida-06.mp3"
           },
           {
             "id": "narrador.inicio_partida.geral.07",
-            "texto": "É hoje! Começa a disputa!",
+            "texto": "É hoje, amigos! Começa a disputa!",
             "audio": "inicio_partida-07.mp3"
           },
           {
             "id": "narrador.inicio_partida.geral.08",
-            "texto": "Abriu a barraca, começou o jogo!",
+            "texto": "Abriu a barraca! Começou o jogo!",
             "audio": "inicio_partida-08.mp3"
           },
           {
@@ -73,12 +74,12 @@
           },
           {
             "id": "narrador.inicio_partida.geral.10",
-            "texto": "Clima de final aqui na feira!",
+            "texto": "Hoje temos clima de final aqui na feira das PANCs!",
             "audio": "inicio_partida-10.mp3"
           },
           {
             "id": "narrador.inicio_partida.geral.11",
-            "texto": "Lá vamos nós! Primeira rodada!",
+            "texto": "Segurem suas PANCs! Primeira rodada!",
             "audio": "inicio_partida-11.mp3"
           },
           {
@@ -140,44 +141,44 @@
           },
           {
             "id": "narrador.vitoria.proteina.02",
-            "texto": "Músculo puro! Rodada sua!",
+            "texto": "Músculo puro! Que rodada linda!",
             "audio": "vitoria-proteina-02.mp3"
           },
           {
             "id": "narrador.vitoria.proteina.03",
-            "texto": "Proteína de campeão!",
+            "texto": "Essa foi proteína de campeão!",
             "audio": "vitoria-proteina-03.mp3"
           },
           {
             "id": "narrador.vitoria.proteina.04",
-            "texto": "Encheu o prato de proteína e levou!",
+            "texto": "Encheu o prato de proteína e levou pra casa!",
             "audio": "vitoria-proteina-04.mp3"
           },
           {
             "id": "narrador.vitoria.proteina.05",
-            "texto": "Força total! Essa é sua!",
+            "texto": "É proteína, é força total.",
             "audio": "vitoria-proteina-05.mp3"
           }
         ],
         "carboidrato": [
           {
             "id": "narrador.vitoria.carboidrato.06",
-            "texto": "Energia lá em cima! Rodada sua!",
+            "texto": "Energia lá em cima! Carboidrato é isso!",
             "audio": "vitoria-carboidrato-06.mp3"
           },
           {
             "id": "narrador.vitoria.carboidrato.07",
-            "texto": "Carboidrato de sobra, vitória garantida!",
+            "texto": "Carboidrato de sobra é vitória garantida!",
             "audio": "vitoria-carboidrato-07.mp3"
           },
           {
             "id": "narrador.vitoria.carboidrato.08",
-            "texto": "Tanque cheio! Você leva!",
+            "texto": "Carboidrato deixou um tanque cheio, você leva!",
             "audio": "vitoria-carboidrato-08.mp3"
           },
           {
             "id": "narrador.vitoria.carboidrato.09",
-            "texto": "Combustível de atleta! É sua!",
+            "texto": "Combustível de atleta! Ganhou essa rodada!",
             "audio": "vitoria-carboidrato-09.mp3"
           },
           {
@@ -199,44 +200,44 @@
           },
           {
             "id": "narrador.vitoria.fibras.13",
-            "texto": "Muita fibra! Rodada sua!",
+            "texto": "É muita fibra! Rodada sua!",
             "audio": "vitoria-fibras-13.mp3"
           },
           {
             "id": "narrador.vitoria.fibras.14",
-            "texto": "Fibra pra dar e vender!",
+            "texto": "Essa aí tem fibra pra dar e vender, não é Tião?",
             "audio": "vitoria-fibras-14.mp3"
           },
           {
             "id": "narrador.vitoria.fibras.15",
-            "texto": "Fibrou bonito! Você leva!",
+            "texto": "Fibrou bonito! O que que tu achou, Tião?",
             "audio": "vitoria-fibras-15.mp3"
           }
         ],
         "calorias": [
           {
             "id": "narrador.vitoria.calorias.16",
-            "texto": "Queimou tudo! Rodada sua!",
+            "texto": "Queimou tudo! E você, Tião, tem gastado caloria?",
             "audio": "vitoria-calorias-16.mp3"
           },
           {
             "id": "narrador.vitoria.calorias.17",
-            "texto": "Suor de campeão!",
+            "texto": "Suor de campeão, gostei dessa!",
             "audio": "vitoria-calorias-17.mp3"
           },
           {
             "id": "narrador.vitoria.calorias.18",
-            "texto": "Gastou energia e ganhou a rodada!",
+            "texto": "Gastou a energia do corpo inteiro! Fala comigo, meu comentarista!",
             "audio": "vitoria-calorias-18.mp3"
           },
           {
             "id": "narrador.vitoria.calorias.19",
-            "texto": "Que treino! Você leva!",
+            "texto": "Quanta caloria, vou ver se faço esses esportes também. Tião, você poderia me acompanhar, né?",
             "audio": "vitoria-calorias-19.mp3"
           },
           {
             "id": "narrador.vitoria.calorias.20",
-            "texto": "Pegou fogo! Essa é sua!",
+            "texto": "Pegou fogo! Quanta caloria! Essa é sua!",
             "audio": "vitoria-calorias-20.mp3"
           }
         ]
@@ -248,108 +249,108 @@
         "proteina": [
           {
             "id": "narrador.derrota.proteina.01",
-            "texto": "A banca rival veio com mais proteína!",
+            "texto": "A banca rival veio com mais proteína! Quem tá na feira não tá pra brincadeira!",
             "audio": "derrota-proteina-01.mp3"
           },
           {
             "id": "narrador.derrota.proteina.02",
-            "texto": "Do outro lado do balcão tinha mais músculo.",
+            "texto": "Desta vez, o outro lado do balcão tinha mais músculo!",
             "audio": "derrota-proteina-02.mp3"
           },
           {
             "id": "narrador.derrota.proteina.03",
-            "texto": "Faltou proteína dessa vez!",
+            "texto": "Tá faltando proteína, hein?",
             "audio": "derrota-proteina-03.mp3"
           },
           {
             "id": "narrador.derrota.proteina.04",
-            "texto": "Proteína de sobra do lado de lá!",
+            "texto": "Proteína de sobra do lado de lá. Ô Tião, me explica essa.",
             "audio": "derrota-proteina-04.mp3"
           },
           {
             "id": "narrador.derrota.proteina.05",
-            "texto": "Levou um muque de proteína!",
+            "texto": "Levou um muque de proteína, ô Tião!",
             "audio": "derrota-proteina-05.mp3"
           }
         ],
         "carboidrato": [
           {
             "id": "narrador.derrota.carboidrato.06",
-            "texto": "O rival tava com o tanque mais cheio!",
+            "texto": "Eita, o rival estava com um tanque mais cheio.",
             "audio": "derrota-carboidrato-06.mp3"
           },
           {
             "id": "narrador.derrota.carboidrato.07",
-            "texto": "Faltou energia nessa!",
+            "texto": "Ixi! Faltou energia nessa!",
             "audio": "derrota-carboidrato-07.mp3"
           },
           {
             "id": "narrador.derrota.carboidrato.08",
-            "texto": "O carboidrato do outro lado ganhou!",
+            "texto": "Hihihi, o carboidrato do outro lado ganhou! Sabe que eu acho carboidrato um nome engraçado, Tião?",
             "audio": "derrota-carboidrato-08.mp3"
           },
           {
             "id": "narrador.derrota.carboidrato.09",
-            "texto": "Mais combustível do lado de lá!",
+            "texto": "Carboidrato! O outro lado tinha mais.",
             "audio": "derrota-carboidrato-09.mp3"
           },
           {
             "id": "narrador.derrota.carboidrato.10",
-            "texto": "Essa foi no gás do adversário!",
+            "texto": "Carboidrato! Fala comigo, Tião!",
             "audio": "derrota-carboidrato-10.mp3"
           }
         ],
         "fibras": [
           {
             "id": "narrador.derrota.fibras.11",
-            "texto": "Do outro lado tinha mais fibra!",
+            "texto": "Fibra, fibra, fibra! Aparentemente, eles têm mais!",
             "audio": "derrota-fibras-11.mp3"
           },
           {
             "id": "narrador.derrota.fibras.12",
-            "texto": "Faltou fibra nessa!",
+            "texto": "Faltou fibra nessa, não é, Tião? Fala comigo!",
             "audio": "derrota-fibras-12.mp3"
           },
           {
             "id": "narrador.derrota.fibras.13",
-            "texto": "A fibra do lado de lá falou mais alto!",
+            "texto": "Estou vendo que a fibra do lado de lá falou mais alto, eu não deixava.",
             "audio": "derrota-fibras-13.mp3"
           },
           {
             "id": "narrador.derrota.fibras.14",
-            "texto": "Rodada da banca rival, na fibra!",
+            "texto": "Rodada da banca rival, na fibra, na fibra, na fibra!",
             "audio": "derrota-fibras-14.mp3"
           },
           {
             "id": "narrador.derrota.fibras.15",
-            "texto": "Mais fibra do lado de lá!",
+            "texto": "Mais fibra do lado de lá, hein? Me explica isso, Tião!",
             "audio": "derrota-fibras-15.mp3"
           }
         ],
         "calorias": [
           {
             "id": "narrador.derrota.calorias.16",
-            "texto": "O rival queimou mais!",
+            "texto": "O rival queimou mais calorias, hein?",
             "audio": "derrota-calorias-16.mp3"
           },
           {
             "id": "narrador.derrota.calorias.17",
-            "texto": "Treino puxado do lado de lá!",
+            "texto": "O lado de lá tá fazendo treino pesado!",
             "audio": "derrota-calorias-17.mp3"
           },
           {
             "id": "narrador.derrota.calorias.18",
-            "texto": "Faltou suor nessa!",
+            "texto": "Ih, faltou suor nessa!",
             "audio": "derrota-calorias-18.mp3"
           },
           {
             "id": "narrador.derrota.calorias.19",
-            "texto": "O adversário gastou mais e levou!",
+            "texto": "O adversário gastou mais energia e levou!",
             "audio": "derrota-calorias-19.mp3"
           },
           {
             "id": "narrador.derrota.calorias.20",
-            "texto": "Perdeu no cardio!",
+            "texto": "Ih, perdeu no cardio, vê se pode, Tião!",
             "audio": "derrota-calorias-20.mp3"
           }
         ]
@@ -366,17 +367,17 @@
           },
           {
             "id": "narrador.empate.geral.02",
-            "texto": "Igualzinho! Ninguém leva!",
+            "texto": "Igualzinho! Ninguém leva! Ainda!",
             "audio": "empate-02.mp3"
           },
           {
             "id": "narrador.empate.geral.03",
-            "texto": "Deu empate! A cesta tá esperando!",
+            "texto": "Deu empate, Tião! Olha aqui!",
             "audio": "empate-03.mp3"
           },
           {
             "id": "narrador.empate.geral.04",
-            "texto": "Mesmo número! Que coisa!",
+            "texto": "Mesmo número! Que coisa doida!",
             "audio": "empate-04.mp3"
           },
           {
@@ -386,77 +387,77 @@
           },
           {
             "id": "narrador.empate.geral.06",
-            "texto": "Ninguém leva! Cesta engordando!",
+            "texto": "Ih, ninguém leva! A cesta tá engordando!",
             "audio": "empate-06.mp3"
           },
           {
             "id": "narrador.empate.geral.07",
-            "texto": "Empate técnico na feira!",
+            "texto": "Empate técnico na feira, até os outros feirantes vieram ver!",
             "audio": "empate-07.mp3"
           },
           {
             "id": "narrador.empate.geral.08",
-            "texto": "Ficou no zero a zero!",
+            "texto": "Ficou no zero a zero! Super PANCs é emoção!",
             "audio": "empate-08.mp3"
           },
           {
             "id": "narrador.empate.geral.09",
-            "texto": "Iguais! As cartas vão pra cesta!",
+            "texto": "Iguais! As cartas vão pra cesta, Tião!",
             "audio": "empate-09.mp3"
           },
           {
             "id": "narrador.empate.geral.10",
-            "texto": "Que equilíbrio! Empate!",
+            "texto": "Que equilíbrio, Tião! Acredita que foi empate?",
             "audio": "empate-10.mp3"
           },
           {
             "id": "narrador.empate.geral.11",
-            "texto": "Empate! Segura essa cesta!",
+            "texto": "Empate! Segura essa cesta, Tião!",
             "audio": "empate-11.mp3"
           },
           {
             "id": "narrador.empate.geral.12",
-            "texto": "Nem um grama de diferença!",
+            "texto": "Nem um grama de diferença, que loucura! Super PANCs é emoção!",
             "audio": "empate-12.mp3"
           },
           {
             "id": "narrador.empate.geral.13",
-            "texto": "Ponto a ponto! Empatou!",
+            "texto": "Ponto a ponto! Empatou mesmo, hein? E aí, Tião, o que acontece? Vai pra cesta, né?",
             "audio": "empate-13.mp3"
           },
           {
             "id": "narrador.empate.geral.14",
-            "texto": "Deu empate, e a cesta agradece!",
+            "texto": "Deu empate! E sabe quem ganha? A cesta! A cesta agradece!",
             "audio": "empate-14.mp3"
           },
           {
             "id": "narrador.empate.geral.15",
-            "texto": "Na trave! Ninguém leva!",
+            "texto": "Na trave! Ninguém leva, por enquanto! Tião, a próxima rodada vai ser emocionante!",
             "audio": "empate-15.mp3"
           },
           {
             "id": "narrador.empate.geral.16",
-            "texto": "Empate! Clima de tensão!",
+            "texto": "Empate! Clima de tensão na feira, protejam suas hortaliças!",
             "audio": "empate-16.mp3"
           },
           {
             "id": "narrador.empate.geral.17",
-            "texto": "Mesmo valor! A cesta acumula!",
+            "texto": "Mesmo valor! A cesta tá acumulada!",
             "audio": "empate-17.mp3"
           },
           {
             "id": "narrador.empate.geral.18",
-            "texto": "Ninguém cedeu! Empate!",
+            "texto": "Ninguém tá cedendo, Tião, empate na feira!",
             "audio": "empate-18.mp3"
           },
           {
             "id": "narrador.empate.geral.19",
-            "texto": "Quem vencer a próxima leva tudo!",
+            "texto": "Presta atenção, Tião! Quem vencer a próxima leva tudo!",
             "audio": "empate-19.mp3"
           },
           {
             "id": "narrador.empate.geral.20",
-            "texto": "Tá tudo igual! Pra cesta!",
+            "texto": "Hora de tensão! Tirem as hortaliças da sala: empate técnico!",
             "audio": "empate-20.mp3"
           }
         ]
@@ -468,37 +469,37 @@
         "geral": [
           {
             "id": "narrador.por_pouco.geral.01",
-            "texto": "Por um fio de salsinha!",
+            "texto": "Foi por um fio de salsinha!",
             "audio": "por_pouco-01.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.02",
-            "texto": "Foi no detalhe!",
+            "texto": "Foi no detalhe, Tião! Ô, Tião, olha aqui e larga esse pastel!",
             "audio": "por_pouco-02.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.03",
-            "texto": "Na raspa do tacho!",
+            "texto": "Na raspa do tacho! Nossa, que jogada!",
             "audio": "por_pouco-03.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.04",
-            "texto": "Por um grama!",
+            "texto": "Nossa, que diferença diminuta, Tião! Já tinha visto essa?",
             "audio": "por_pouco-04.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.05",
-            "texto": "Que sufoco! Foi por pouco!",
+            "texto": "Que sufoco, foi por pouco! Chama a dona Maria pra avaliar certinho aqui.",
             "audio": "por_pouco-05.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.06",
-            "texto": "Decidido na balança!",
+            "texto": "Essa foi decidida na balança! Tião, pesa aí pra ver se tá certo isso.",
             "audio": "por_pouco-06.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.07",
-            "texto": "Foi no photochart!",
+            "texto": "Nossa, Tião, com todos os seus anos de feira, já tinha visto isso?",
             "audio": "por_pouco-07.mp3"
           },
           {
@@ -508,22 +509,22 @@
           },
           {
             "id": "narrador.por_pouco.geral.09",
-            "texto": "No limite da balança!",
+            "texto": "Essa foi no limite da balança! A dona Maria está desacreditada aqui do meu lado.",
             "audio": "por_pouco-09.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.10",
-            "texto": "Apertado demais!",
+            "texto": "Apertadinho demais! Chama o VAR! Ué, como assim não tem VAR, Tião?",
             "audio": "por_pouco-10.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.11",
-            "texto": "Na pontinha da folha!",
+            "texto": "Eita, essa foi na pontinha da folha!",
             "audio": "por_pouco-11.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.12",
-            "texto": "Quase empate! Quase!",
+            "texto": "Quase empate! Quase! Nossa! Emoção é com Super PANCs!",
             "audio": "por_pouco-12.mp3"
           },
           {
@@ -533,37 +534,37 @@
           },
           {
             "id": "narrador.por_pouco.geral.14",
-            "texto": "Que disputa! Por muito pouco!",
+            "texto": "Que disputa emocionante! Por muito pouco!",
             "audio": "por_pouco-14.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.15",
-            "texto": "Coração na boca!",
+            "texto": "Nessa, todo mundo ficou com o coração na boca. O Tião tá aqui com o pastel na boca. Ha, ha, ha!",
             "audio": "por_pouco-15.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.16",
-            "texto": "Diferença mínima!",
+            "texto": "Diferença mínima! Que coisa! Alguém vai ficar triste, hein?",
             "audio": "por_pouco-16.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.17",
-            "texto": "Foi no último suspiro!",
+            "texto": "Foi no último suspiro! Falando nisso, alguém vende suspiro aqui na feira?",
             "audio": "por_pouco-17.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.18",
-            "texto": "Na unha!",
+            "texto": "Na unha! O que você achou, Tião?",
             "audio": "por_pouco-18.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.19",
-            "texto": "Raspou!",
+            "texto": "Raspou! Esse jogo está emocionante! Ninguém consegue parar de ver!",
             "audio": "por_pouco-19.mp3"
           },
           {
             "id": "narrador.por_pouco.geral.20",
-            "texto": "Pesou na balança, por pouquinho!",
+            "texto": "Pesou na balança! Por pouquinho! Alguém me segura!",
             "audio": "por_pouco-20.mp3"
           }
         ]
@@ -575,37 +576,37 @@
         "geral": [
           {
             "id": "narrador.sequencia_jogador.geral.01",
-            "texto": "Três seguidas! Tá voando!",
+            "texto": "Já ganhou quantas seguidas? Tá voando!",
             "audio": "sequencia_jogador-01.mp3"
           },
           {
             "id": "narrador.sequencia_jogador.geral.02",
-            "texto": "Ninguém segura!",
+            "texto": "Ninguém segura, tá ganhando todas! Já viu isso, Tião?",
             "audio": "sequencia_jogador-02.mp3"
           },
           {
             "id": "narrador.sequencia_jogador.geral.03",
-            "texto": "Que fase! Mais uma!",
+            "texto": "Que fase! Mais uma! É uma máquina! Isso é Super PANCs!",
             "audio": "sequencia_jogador-03.mp3"
           },
           {
             "id": "narrador.sequencia_jogador.geral.04",
-            "texto": "Tá com a mão quente!",
+            "texto": "Tá com a mão quente! Que loucura!",
             "audio": "sequencia_jogador-04.mp3"
           },
           {
             "id": "narrador.sequencia_jogador.geral.05",
-            "texto": "Embalou de vez!",
+            "texto": "Agora embalou de vez! Tião, vem conhecer o prodígio!",
             "audio": "sequencia_jogador-05.mp3"
           },
           {
             "id": "narrador.sequencia_jogador.geral.06",
-            "texto": "É um passeio na feira!",
+            "texto": "Ih, virou um passeio na feira!",
             "audio": "sequencia_jogador-06.mp3"
           },
           {
             "id": "narrador.sequencia_jogador.geral.07",
-            "texto": "Tá em chamas!",
+            "texto": "Tá em chamas! Mas cuidado com esse fogo, que aqui é uma feira, hein?",
             "audio": "sequencia_jogador-07.mp3"
           },
           {
@@ -630,7 +631,7 @@
           },
           {
             "id": "narrador.sequencia_jogador.geral.12",
-            "texto": "Freguês virou dono da banca!",
+            "texto": "Ih, tô vendo que o freguês virou dono da banca!",
             "audio": "sequencia_jogador-12.mp3"
           },
           {
@@ -682,22 +683,22 @@
         "geral": [
           {
             "id": "narrador.sequencia_rival.geral.01",
-            "texto": "O rival embalou!",
+            "texto": "O rival embalou! Alguém tem que mudar a estratégia.",
             "audio": "sequencia_rival-01.mp3"
           },
           {
             "id": "narrador.sequencia_rival.geral.02",
-            "texto": "Do outro lado, sequência perigosa!",
+            "texto": "Do outro lado, a sequência é perigosa, me segura, Tião!",
             "audio": "sequencia_rival-02.mp3"
           },
           {
             "id": "narrador.sequencia_rival.geral.03",
-            "texto": "Acorda, que o rival não para!",
+            "texto": "Ihhh, melhor acordar, que o rival não para! Olha lá, Tião! Olha lá, Tião!",
             "audio": "sequencia_rival-03.mp3"
           },
           {
             "id": "narrador.sequencia_rival.geral.04",
-            "texto": "A banca rival tá em chamas!",
+            "texto": "A banca rival tá em chamas! Alguém chama os bombeiros!",
             "audio": "sequencia_rival-04.mp3"
           },
           {
@@ -707,7 +708,7 @@
           },
           {
             "id": "narrador.sequencia_rival.geral.06",
-            "texto": "Tá na hora de reagir!",
+            "texto": "Tá na hora de reagir! Alguém chama a ora-pro-nóbis? Alguém? Alguém?",
             "audio": "sequencia_rival-06.mp3"
           },
           {
@@ -732,7 +733,7 @@
           },
           {
             "id": "narrador.sequencia_rival.geral.11",
-            "texto": "Precisa virar esse jogo!",
+            "texto": "Precisa virar esse jogo, ajuda lá, Tião, larga esse pastel!",
             "audio": "sequencia_rival-11.mp3"
           },
           {
@@ -757,12 +758,12 @@
           },
           {
             "id": "narrador.sequencia_rival.geral.16",
-            "texto": "Respira e escolhe com calma!",
+            "texto": "Respira e escolhe com calma: ora-pro-nóbis ou a carta que tá na sua mão. Tião? Ei, cadê o Tião?",
             "audio": "sequencia_rival-16.mp3"
           },
           {
             "id": "narrador.sequencia_rival.geral.17",
-            "texto": "Não deixa o rival embalar!",
+            "texto": "Não deixe o rival embalar! A experiência na feira é impressionante, não é, Tião? Que loucura!",
             "audio": "sequencia_rival-17.mp3"
           },
           {
@@ -789,17 +790,17 @@
         "geral": [
           {
             "id": "narrador.levou_cesta.geral.01",
-            "texto": "E leva a cesta inteira!",
+            "texto": "Ei, leva a cesta inteira!",
             "audio": "levou_cesta-01.mp3"
           },
           {
             "id": "narrador.levou_cesta.geral.02",
-            "texto": "Cesta esvaziada! Que colheita!",
+            "texto": "Cesta esvaziada! Que colheita linda!",
             "audio": "levou_cesta-02.mp3"
           },
           {
             "id": "narrador.levou_cesta.geral.03",
-            "texto": "Levou tudo que tava na cesta!",
+            "texto": "Levou tudo que tava na cesta! Que beleza, que beleza!",
             "audio": "levou_cesta-03.mp3"
           },
           {
@@ -809,7 +810,7 @@
           },
           {
             "id": "narrador.levou_cesta.geral.05",
-            "texto": "Que feira! A cesta tem dono!",
+            "texto": "Que feira! A cesta tem dono! E não é você, Tião!",
             "audio": "levou_cesta-05.mp3"
           },
           {
@@ -824,7 +825,7 @@
           },
           {
             "id": "narrador.levou_cesta.geral.08",
-            "texto": "Pegou o acumulado!",
+            "texto": "Ih, pegou o acumulado, isso é satisfatório, hein?",
             "audio": "levou_cesta-08.mp3"
           },
           {
@@ -834,7 +835,7 @@
           },
           {
             "id": "narrador.levou_cesta.geral.10",
-            "texto": "A cesta mudou de lado!",
+            "texto": "A cesta mudou de lado, virou a casaca! Alguém viu? Tião, presta atenção, filho!",
             "audio": "levou_cesta-10.mp3"
           },
           {
@@ -864,7 +865,7 @@
           },
           {
             "id": "narrador.levou_cesta.geral.16",
-            "texto": "Bingo na feira!",
+            "texto": "Bingo! Bingo na feira!",
             "audio": "levou_cesta-16.mp3"
           },
           {
@@ -879,7 +880,7 @@
           },
           {
             "id": "narrador.levou_cesta.geral.19",
-            "texto": "Levou a feira inteira!",
+            "texto": "Eita! Levou a feira inteira!",
             "audio": "levou_cesta-19.mp3"
           },
           {
@@ -896,37 +897,37 @@
         "geral": [
           {
             "id": "narrador.super_trunfo_jogador.geral.01",
-            "texto": "SUPER TRUNFO! Ninguém segura!",
+            "texto": "Super PANC! Super PANC! Ninguém segura!",
             "audio": "super_trunfo_jogador-01.mp3"
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.02",
-            "texto": "Ora-pro-nóbis entra em campo e ninguém segura!",
+            "texto": "Ora-pro-nóbis entrou em campo, hein? Ninguém segura!",
             "audio": "super_trunfo_jogador-02.mp3"
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.03",
-            "texto": "É o Super Trunfo! Acabou a discussão!",
+            "texto": "É a Super PANC! Acabou a discussão!",
             "audio": "super_trunfo_jogador-03.mp3"
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.04",
-            "texto": "A rainha das PANCs chegou!",
+            "texto": "Ih, a rainha das PANCs chegou!",
             "audio": "super_trunfo_jogador-04.mp3"
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.05",
-            "texto": "Super Trunfo na mesa! Que golaço!",
+            "texto": "Super PANC na mesa! Não tem pra ninguém!",
             "audio": "super_trunfo_jogador-05.mp3"
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.06",
-            "texto": "Ora-pro-nóbis! Imbatível!",
+            "texto": "Ora-pro-nóbis, ora-pro-nóbis, ora-pro-nóbis! Imbatível!",
             "audio": "super_trunfo_jogador-06.mp3"
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.07",
-            "texto": "Jogada de mestre! Super Trunfo!",
+            "texto": "Jogada de mestre! Super PANC!",
             "audio": "super_trunfo_jogador-07.mp3"
           },
           {
@@ -936,7 +937,7 @@
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.09",
-            "texto": "Super Trunfo! A torcida enlouquece!",
+            "texto": "Apareceu a Super PANC, e a torcida enlouquece!",
             "audio": "super_trunfo_jogador-09.mp3"
           },
           {
@@ -951,12 +952,12 @@
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.12",
-            "texto": "Lá vem ela! Super Trunfo!",
+            "texto": "Lá vem ela! Super PANC!",
             "audio": "super_trunfo_jogador-12.mp3"
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.13",
-            "texto": "É covardia! Super Trunfo!",
+            "texto": "É covardia! Super PANC!",
             "audio": "super_trunfo_jogador-13.mp3"
           },
           {
@@ -971,7 +972,7 @@
           },
           {
             "id": "narrador.super_trunfo_jogador.geral.16",
-            "texto": "Super Trunfo! Fim de papo!",
+            "texto": "Super PANC! Fim de papo!",
             "audio": "super_trunfo_jogador-16.mp3"
           },
           {
@@ -1003,7 +1004,7 @@
         "geral": [
           {
             "id": "narrador.super_trunfo_rival.geral.01",
-            "texto": "Ih! O rival tinha o Super Trunfo!",
+            "texto": "Ih, o rival tinha a Super PANC!",
             "audio": "super_trunfo_rival-01.mp3"
           },
           {
@@ -1013,12 +1014,12 @@
           },
           {
             "id": "narrador.super_trunfo_rival.geral.03",
-            "texto": "Super Trunfo do adversário! Não tinha o que fazer!",
+            "texto": "Super PANC do adversário! Não tinha o que fazer!",
             "audio": "super_trunfo_rival-03.mp3"
           },
           {
             "id": "narrador.super_trunfo_rival.geral.04",
-            "texto": "Doeu! Super Trunfo rival!",
+            "texto": "Doeu! Super PANC rival!",
             "audio": "super_trunfo_rival-04.mp3"
           },
           {
@@ -1028,7 +1029,7 @@
           },
           {
             "id": "narrador.super_trunfo_rival.geral.06",
-            "texto": "Contra o Super Trunfo, nem adianta!",
+            "texto": "Contra a Super PANC, nem adianta! Fala aí, Tião!",
             "audio": "super_trunfo_rival-06.mp3"
           },
           {
@@ -1038,12 +1039,12 @@
           },
           {
             "id": "narrador.super_trunfo_rival.geral.08",
-            "texto": "Super Trunfo rival! Respira!",
+            "texto": "Super PANC rival! Respira!",
             "audio": "super_trunfo_rival-08.mp3"
           },
           {
             "id": "narrador.super_trunfo_rival.geral.09",
-            "texto": "Foi a Ora-pro-nóbis! Paciência!",
+            "texto": "Foi a ora-pro-nóbis, a rainha!",
             "audio": "super_trunfo_rival-09.mp3"
           },
           {
@@ -1053,7 +1054,7 @@
           },
           {
             "id": "narrador.super_trunfo_rival.geral.11",
-            "texto": "Não tinha como! Super Trunfo!",
+            "texto": "Não tinha como! Super PANC!",
             "audio": "super_trunfo_rival-11.mp3"
           },
           {
@@ -1073,17 +1074,17 @@
           },
           {
             "id": "narrador.super_trunfo_rival.geral.15",
-            "texto": "Golpe duro! Super Trunfo rival!",
+            "texto": "Golpe duro! Super PANC rival!",
             "audio": "super_trunfo_rival-15.mp3"
           },
           {
             "id": "narrador.super_trunfo_rival.geral.16",
-            "texto": "Dica: contra outra PANC, ela não é imbatível!",
+            "texto": "Dica: contra outra PANC, ela não é imbatível. Respeito à rainha!",
             "audio": "super_trunfo_rival-16.mp3"
           },
           {
             "id": "narrador.super_trunfo_rival.geral.17",
-            "texto": "Bateu de frente com o Super Trunfo!",
+            "texto": "Bateu de frente com a Super PANC!",
             "audio": "super_trunfo_rival-17.mp3"
           },
           {
@@ -1093,12 +1094,12 @@
           },
           {
             "id": "narrador.super_trunfo_rival.geral.19",
-            "texto": "Super Trunfo! Agora é reagir!",
+            "texto": "Super PANC! Agora é reagir!",
             "audio": "super_trunfo_rival-19.mp3"
           },
           {
             "id": "narrador.super_trunfo_rival.geral.20",
-            "texto": "Só uma PANC enfrenta a Ora-pro-nóbis!",
+            "texto": "Só uma PANC enfrenta a ora-pro-nóbis! A rainha permanece invencível!",
             "audio": "super_trunfo_rival-20.mp3"
           }
         ]
@@ -1110,7 +1111,7 @@
         "geral": [
           {
             "id": "narrador.ultima_rodada.geral.01",
-            "texto": "Última rodada! Tudo ou nada!",
+            "texto": "Última rodada! É tudo ou nada!",
             "audio": "ultima_rodada-01.mp3"
           },
           {
@@ -1120,7 +1121,7 @@
           },
           {
             "id": "narrador.ultima_rodada.geral.03",
-            "texto": "Rodada final! Coração na mão!",
+            "texto": "Rodada final, é coração na mão!",
             "audio": "ultima_rodada-03.mp3"
           },
           {
@@ -1140,7 +1141,7 @@
           },
           {
             "id": "narrador.ultima_rodada.geral.07",
-            "texto": "Decisão! Última rodada!",
+            "texto": "Decisão! Última rodada, Tião!",
             "audio": "ultima_rodada-07.mp3"
           },
           {
@@ -1160,7 +1161,7 @@
           },
           {
             "id": "narrador.ultima_rodada.geral.11",
-            "texto": "Hora da xepa! Última rodada!",
+            "texto": "Hora da xepa, hein? Última rodada!",
             "audio": "ultima_rodada-11.mp3"
           },
           {
@@ -1185,7 +1186,7 @@
           },
           {
             "id": "narrador.ultima_rodada.geral.16",
-            "texto": "Não tem prorrogação! Última!",
+            "texto": "Não tem prorrogação, é a última rodada do Super PANCs!",
             "audio": "ultima_rodada-16.mp3"
           },
           {
@@ -1205,7 +1206,7 @@
           },
           {
             "id": "narrador.ultima_rodada.geral.20",
-            "texto": "Sem segunda chance! Última rodada!",
+            "texto": "Sem segunda chance. Última rodada. Tião, segura o pastel!",
             "audio": "ultima_rodada-20.mp3"
           }
         ]
@@ -1222,7 +1223,7 @@
           },
           {
             "id": "narrador.fim_vitoria.geral.02",
-            "texto": "Acabou! Vitória sua!",
+            "texto": "Acabou! Acabou! Acabou! É campeão!",
             "audio": "fim_vitoria-02.mp3"
           },
           {
@@ -1232,7 +1233,7 @@
           },
           {
             "id": "narrador.fim_vitoria.geral.04",
-            "texto": "A feira tem um novo dono!",
+            "texto": "E eu vou te falar: a feira tem um novo dono, campeão!",
             "audio": "fim_vitoria-04.mp3"
           },
           {
@@ -1272,7 +1273,7 @@
           },
           {
             "id": "narrador.fim_vitoria.geral.12",
-            "texto": "E o troféu vai para… você!",
+            "texto": "E o troféu vai para o maioral das PANCs! PANCs, PANCs, PANCs!",
             "audio": "fim_vitoria-12.mp3"
           },
           {
@@ -1292,7 +1293,7 @@
           },
           {
             "id": "narrador.fim_vitoria.geral.16",
-            "texto": "Levou o caneco da feira!",
+            "texto": "Levou o caneco da feira, e vai com caldo de cana.",
             "audio": "fim_vitoria-16.mp3"
           },
           {
@@ -1312,7 +1313,7 @@
           },
           {
             "id": "narrador.fim_vitoria.geral.20",
-            "texto": "É taça na mão!",
+            "texto": "Taça numa mão, pastel na outra e brinde de caldo de cana: campeão!",
             "audio": "fim_vitoria-20.mp3"
           }
         ]
@@ -1324,7 +1325,7 @@
         "geral": [
           {
             "id": "narrador.fim_derrota.geral.01",
-            "texto": "Fim de jogo! Dessa vez não deu.",
+            "texto": "Fim de jogo! Dessa vez não deu, mas fala com o Tião ali que ele divide o pastelzinho.",
             "audio": "fim_derrota-01.mp3"
           },
           {
@@ -1334,12 +1335,12 @@
           },
           {
             "id": "narrador.fim_derrota.geral.03",
-            "texto": "Não foi hoje, mas teve luta!",
+            "texto": "Não foi hoje, mas teve luta! Pelo menos você pode pegar a xepa. E, Tião, me dá um pedaço desse pastel aí.",
             "audio": "fim_derrota-03.mp3"
           },
           {
             "id": "narrador.fim_derrota.geral.04",
-            "texto": "Fim de feira. Bora pra revanche?",
+            "texto": "Fim de feira, fim de transmissão. Abraço, Tião, te vejo na próxima semana. Ainda não acabou o pastel?",
             "audio": "fim_derrota-04.mp3"
           },
           {
@@ -1431,12 +1432,12 @@
         "geral": [
           {
             "id": "narrador.fim_empate.geral.01",
-            "texto": "Empate! Ninguém leva a feira!",
+            "texto": "Empate! Ninguém leva a feira! Tião, me explica as regras aí, não vem me dizer que foi você que ganhou!",
             "audio": "fim_empate-01.mp3"
           },
           {
             "id": "narrador.fim_empate.geral.02",
-            "texto": "Fim de jogo! Tudo igual!",
+            "texto": "Fim de jogo, tudo igual! Até a próxima semana, Tião!",
             "audio": "fim_empate-02.mp3"
           },
           {

@@ -1,0 +1,311 @@
+{
+  "versao": 1,
+  "perfil": "Letreiro de plantão da equipe de bastidores, na faixa \"ao vivo\" da TV. Só texto, sem voz. Tom de boletim oficial, um pouco burocrático: explica o que aconteceu e o que vem agora. Não repete o narrador nem o Tião.",
+  "variaveis": {
+    "{rival}": "nome do rival",
+    "{atributo}": "atributo da rodada (proteína, carboidrato, fibras, calorias)",
+    "{seguidas}": "vitórias seguidas (sequências)",
+    "{vencedor}": "\"você\" ou o nome do rival (levou a cesta)",
+    "{cesta}": "cartas que estavam na cesta",
+    "{meu}": "cartas do jogador (fim)",
+    "{dele}": "cartas do rival (fim)"
+  },
+  "eventos": {
+    "inicio_partida": [
+      {
+        "id": "bastidores.inicio_partida.01",
+        "texto": "Partida iniciada. Cada banca recebe 16 cartas."
+      },
+      {
+        "id": "bastidores.inicio_partida.02",
+        "texto": "Regulamento: vence a rodada o maior valor do atributo escolhido."
+      },
+      {
+        "id": "bastidores.inicio_partida.03",
+        "texto": "Confirmado: {rival} assume a banca rival."
+      },
+      {
+        "id": "bastidores.inicio_partida.04",
+        "texto": "Abertura oficial da feira. Cartas embaralhadas e conferidas."
+      },
+      {
+        "id": "bastidores.inicio_partida.05",
+        "texto": "Aviso: cartas vencidas vão para a sacola de quem venceu."
+      }
+    ],
+    "vitoria": [
+      {
+        "id": "bastidores.vitoria.01",
+        "texto": "Confirmado: sua carta tem mais {atributo}."
+      },
+      {
+        "id": "bastidores.vitoria.02",
+        "texto": "Laudo da balança: rodada sua em {atributo}."
+      },
+      {
+        "id": "bastidores.vitoria.03",
+        "texto": "As duas cartas seguem para a sua sacola."
+      },
+      {
+        "id": "bastidores.vitoria.04",
+        "texto": "Registro: {rival} perde uma carta nesta rodada."
+      },
+      {
+        "id": "bastidores.vitoria.05",
+        "texto": "Ponto para você: maior valor de {atributo} na mesa."
+      }
+    ],
+    "derrota": [
+      {
+        "id": "bastidores.derrota.01",
+        "texto": "Confirmado: a carta de {rival} tem mais {atributo}."
+      },
+      {
+        "id": "bastidores.derrota.02",
+        "texto": "Laudo da balança: rodada de {rival} em {atributo}."
+      },
+      {
+        "id": "bastidores.derrota.03",
+        "texto": "As duas cartas seguem para a banca de {rival}."
+      },
+      {
+        "id": "bastidores.derrota.04",
+        "texto": "Registro: você perde uma carta nesta rodada."
+      },
+      {
+        "id": "bastidores.derrota.05",
+        "texto": "Orientação: compare os quatro atributos antes de escolher."
+      }
+    ],
+    "empate": [
+      {
+        "id": "bastidores.empate.01",
+        "texto": "Empate técnico em {atributo}. Cartas retidas na cesta."
+      },
+      {
+        "id": "bastidores.empate.02",
+        "texto": "Valores idênticos. As cartas aguardam na cesta."
+      },
+      {
+        "id": "bastidores.empate.03",
+        "texto": "Regulamento: quem vencer a próxima rodada leva a cesta."
+      },
+      {
+        "id": "bastidores.empate.04",
+        "texto": "Cesta acumulada. A próxima rodada vale mais."
+      },
+      {
+        "id": "bastidores.empate.05",
+        "texto": "Balança aferida: diferença zero em {atributo}."
+      }
+    ],
+    "por_pouco": [
+      {
+        "id": "bastidores.por_pouco.01",
+        "texto": "Diferença mínima registrada em {atributo}."
+      },
+      {
+        "id": "bastidores.por_pouco.02",
+        "texto": "Resultado apertado. Balança conferida duas vezes."
+      },
+      {
+        "id": "bastidores.por_pouco.03",
+        "texto": "Recontagem dispensada: vitória por margem estreita."
+      },
+      {
+        "id": "bastidores.por_pouco.04",
+        "texto": "Margem inferior a 10%. Resultado mantido."
+      },
+      {
+        "id": "bastidores.por_pouco.05",
+        "texto": "Checagem concluída: resultado confirmado em {atributo}."
+      }
+    ],
+    "sequencia_jogador": [
+      {
+        "id": "bastidores.sequencia_jogador.01",
+        "texto": "Atualização: {seguidas} vitórias seguidas suas."
+      },
+      {
+        "id": "bastidores.sequencia_jogador.02",
+        "texto": "Sequência em curso: {seguidas} rodadas consecutivas."
+      },
+      {
+        "id": "bastidores.sequencia_jogador.03",
+        "texto": "Estatística: você venceu as últimas {seguidas} rodadas."
+      },
+      {
+        "id": "bastidores.sequencia_jogador.04",
+        "texto": "Alerta na banca de {rival}: {seguidas} derrotas seguidas."
+      },
+      {
+        "id": "bastidores.sequencia_jogador.05",
+        "texto": "Recorde da tarde em andamento: {seguidas} seguidas."
+      }
+    ],
+    "sequencia_rival": [
+      {
+        "id": "bastidores.sequencia_rival.01",
+        "texto": "Atenção: {rival} vence {seguidas} rodadas seguidas."
+      },
+      {
+        "id": "bastidores.sequencia_rival.02",
+        "texto": "Sequência adversária: {seguidas} rodadas consecutivas."
+      },
+      {
+        "id": "bastidores.sequencia_rival.03",
+        "texto": "Orientação: procure o atributo mais forte da sua carta."
+      },
+      {
+        "id": "bastidores.sequencia_rival.04",
+        "texto": "Estatística: {rival} levou as últimas {seguidas} rodadas."
+      },
+      {
+        "id": "bastidores.sequencia_rival.05",
+        "texto": "Alerta: a banca de {rival} está em alta."
+      }
+    ],
+    "levou_cesta": [
+      {
+        "id": "bastidores.levou_cesta.01",
+        "texto": "Confirmado: {vencedor} leva {cesta} cartas da cesta."
+      },
+      {
+        "id": "bastidores.levou_cesta.02",
+        "texto": "Cesta esvaziada. {cesta} cartas mudam de dono."
+      },
+      {
+        "id": "bastidores.levou_cesta.03",
+        "texto": "Prêmio acumulado entregue: {cesta} cartas extras."
+      },
+      {
+        "id": "bastidores.levou_cesta.04",
+        "texto": "Regulamento cumprido: quem vence leva o acumulado."
+      },
+      {
+        "id": "bastidores.levou_cesta.05",
+        "texto": "Atualização: a cesta do empate está vazia."
+      }
+    ],
+    "super_trunfo_jogador": [
+      {
+        "id": "bastidores.super_trunfo_jogador.01",
+        "texto": "Super PANC confirmada: Ora-pro-nóbis vence hortaliça comum."
+      },
+      {
+        "id": "bastidores.super_trunfo_jogador.02",
+        "texto": "Regulamento: a Ora-pro-nóbis só perde para outra PANC."
+      },
+      {
+        "id": "bastidores.super_trunfo_jogador.03",
+        "texto": "Carta especial em campo. O atributo não foi necessário."
+      },
+      {
+        "id": "bastidores.super_trunfo_jogador.04",
+        "texto": "Registro oficial: Super PANC a seu favor."
+      },
+      {
+        "id": "bastidores.super_trunfo_jogador.05",
+        "texto": "Plantão: a rainha das PANCs está na sua mão."
+      }
+    ],
+    "super_trunfo_rival": [
+      {
+        "id": "bastidores.super_trunfo_rival.01",
+        "texto": "Super PANC de {rival}: Ora-pro-nóbis vence hortaliça comum."
+      },
+      {
+        "id": "bastidores.super_trunfo_rival.02",
+        "texto": "Lembrete: só uma PANC pode derrotar a Ora-pro-nóbis."
+      },
+      {
+        "id": "bastidores.super_trunfo_rival.03",
+        "texto": "Registro oficial: Super PANC a favor de {rival}."
+      },
+      {
+        "id": "bastidores.super_trunfo_rival.04",
+        "texto": "Carta especial em campo. Nenhum atributo era páreo."
+      },
+      {
+        "id": "bastidores.super_trunfo_rival.05",
+        "texto": "Nota técnica: hortaliça comum não enfrenta a Super PANC."
+      }
+    ],
+    "ultima_rodada": [
+      {
+        "id": "bastidores.ultima_rodada.01",
+        "texto": "Atenção: última rodada. Em seguida, contagem das cartas."
+      },
+      {
+        "id": "bastidores.ultima_rodada.02",
+        "texto": "Aviso da organização: não haverá prorrogação."
+      },
+      {
+        "id": "bastidores.ultima_rodada.03",
+        "texto": "Rodada final. Cartas na cesta não entram na contagem."
+      },
+      {
+        "id": "bastidores.ultima_rodada.04",
+        "texto": "Última chamada: o resultado sai ao fim desta rodada."
+      },
+      {
+        "id": "bastidores.ultima_rodada.05",
+        "texto": "Encerramento próximo. Vence quem tiver mais cartas na mão."
+      }
+    ],
+    "fim_vitoria": [
+      {
+        "id": "bastidores.fim_vitoria.01",
+        "texto": "Resultado oficial: vitória sua, {meu} cartas a {dele}."
+      },
+      {
+        "id": "bastidores.fim_vitoria.02",
+        "texto": "Encerramento: você é campeão da feira."
+      },
+      {
+        "id": "bastidores.fim_vitoria.03",
+        "texto": "Súmula homologada. Vitória confirmada."
+      },
+      {
+        "id": "bastidores.fim_vitoria.04",
+        "texto": "Fim da transmissão: título para a sua banca."
+      }
+    ],
+    "fim_derrota": [
+      {
+        "id": "bastidores.fim_derrota.01",
+        "texto": "Resultado oficial: {rival} vence, {dele} cartas a {meu}."
+      },
+      {
+        "id": "bastidores.fim_derrota.02",
+        "texto": "Encerramento: título para a banca de {rival}."
+      },
+      {
+        "id": "bastidores.fim_derrota.03",
+        "texto": "Súmula homologada. Revanche disponível."
+      },
+      {
+        "id": "bastidores.fim_derrota.04",
+        "texto": "Fim da transmissão. A feira reabre na revanche."
+      }
+    ],
+    "fim_empate": [
+      {
+        "id": "bastidores.fim_empate.01",
+        "texto": "Resultado oficial: empate, {meu} cartas a {dele}."
+      },
+      {
+        "id": "bastidores.fim_empate.02",
+        "texto": "Encerramento: título dividido entre as bancas."
+      },
+      {
+        "id": "bastidores.fim_empate.03",
+        "texto": "Súmula homologada. Nenhum vencedor declarado."
+      },
+      {
+        "id": "bastidores.fim_empate.04",
+        "texto": "Fim da transmissão. Desempate só na revanche."
+      }
+    ]
+  }
+}
