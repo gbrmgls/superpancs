@@ -11,6 +11,7 @@ const ATRIBUTOS = [
 
 // O jogo usa as versões otimizadas (WebP) em img/cartas/, geradas por ferramentas/otimizar-imagens.sh
 // a partir dos JPGs originais. Se o navegador não abrir WebP, o index.html troca para o JPG original.
+// Na mesa, a carta usa a imagem sem texto (img/cartas-limpas/) e o nome e os atributos são escritos por cima.
 const VERSO = 'img/cartas/verso.webp';
 
 function carta(id, arquivo, nome, esporte, tipo, valores, estrelas, superTrunfo = false) {
@@ -23,6 +24,8 @@ function carta(id, arquivo, nome, esporte, tipo, valores, estrelas, superTrunfo 
     tipo, // 'comum' (hortaliça convencional) ou 'panc'
     superTrunfo,
     imagem: `img/cartas/${arquivo}.webp`,
+    imagemLimpa: `img/cartas-limpas/${arquivo}.webp`,
+    mascote: `img/mascotes/${arquivo}.webp`, // personagem animado (fundo transparente), gerado por ferramentas/animar-*.py
     imagemOriginal: `imagens-cartas-superpancs/${arquivo}.jpg`,
     valores: { proteina, carboidrato, fibras, calorias },
     estrelas: { proteina: eProteina, carboidrato: eCarboidrato, fibras: eFibras, calorias: eCalorias },

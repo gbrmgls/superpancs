@@ -1,11 +1,15 @@
-# Falas dos rivais e do narrador
+# Falas dos rivais, do narrador e do comentarista
 
-**Situação atual:** os áudios serão gerados por voz sintética (texto para fala) só para desenvolver.
-**Depois:** uma pessoa vai gravar todas as falas. A troca deve ser só substituir os arquivos em `audio/`, com os **mesmos nomes**, sem mexer em código.
+Uma pessoa grava todas as falas. Cada gravação é um arquivo em `audio/`, com o **mesmo nome** do roteiro; não é preciso mexer em código. O jogo não tem voz sintética: fala sem arquivo aparece só em texto, em silêncio.
 
 - `falas.json`: falas dos rivais (fonte única dos textos).
 - `narrador.json`: falas do narrador (fonte única dos textos).
-- `roteiro-gravacao.md`: tudo formatado para quem vai gravar, com o nome de arquivo de cada fala. Não edite à mão: depois de mudar um JSON, rode `python3 ferramentas/gerar-roteiro.py`.
+- `comentarista.json`: falas do Tião da Xepa, o comentarista (fonte única dos textos).
+- `roteiro-gravacao.md`: tudo formatado para quem vai gravar, com o nome de arquivo de cada fala.
+- `roteiro-gravacao.pdf`: o mesmo roteiro para imprimir (`python3 ferramentas/gerar-pdf-roteiro.py`).
+- `../js/falas-dados.js`: as mesmas falas, para o jogo (o jogo abre direto do arquivo, sem servidor, e o navegador não deixa ler o JSON).
+
+Não edite o roteiro nem o `falas-dados.js` à mão: depois de mudar um JSON, rode `python3 ferramentas/gerar-roteiro.py`. Os testes avisam se o `falas-dados.js` ficou diferente dos JSONs.
 
 Cada fala tem `id`, `texto` e `audio` (o caminho do arquivo dentro da pasta de áudio).
 
@@ -42,12 +46,20 @@ Há 14 eventos com 20 falas cada, 280 no total. Em `vitoria` e `derrota`, as fal
 
 **Uma fala do narrador por rodada:** vale o primeiro evento de `prioridade_rodada` que se aplicar, nesta ordem: Super Trunfo, levou a cesta, por pouco, sequência, e por fim vitória, derrota ou empate.
 
-O narrador fala primeiro, logo depois da revelação, e o rival reage em seguida.
+O narrador fala primeiro, logo depois da revelação; o Tião comenta e o rival reage por último.
 
-## Trocar a voz sintética pela gravada
+## Comentarista: `comentarista.json` → `audio/comentarista/`
+
+**Tião da Xepa** é um frequentador da feira, meio bobo: o alívio cômico da transmissão. O narrador, mais sério, dá a deixa; o Tião comenta o mesmo evento logo depois. Ele confunde as coisas e conta causos da feira, mas nunca debocha de quem está perdendo.
+
+Tem os mesmos 14 eventos do narrador, com 10 falas cada (140 no total), sem separar por atributo. As falas reagem ao evento, não a uma fala específica do narrador, então qualquer combinação funciona.
+
+**Ordem em toda rodada:** narrador → respiro → Tião → respiro → rival. Também falam os dois na abertura, na última rodada e na tela final. Se ficar demorado, a regra está em `transmitir()` e `reagirRival()`, em `js/ui.js`.
+
+## Gravações
 
 1. Grave seguindo `roteiro-gravacao.md`. Cada linha da tabela vira um arquivo com o nome indicado.
-2. Substitua os arquivos em `audio/falas/<rival>/` e `audio/narrador/`.
-3. Nos dois JSONs, troque `"fonte_atual": "sintetica"` por `"gravada"` (só como registro).
+2. Coloque os arquivos em `gravacoes/<personagem>/` (`narrador`, `comentarista`, `seu-ze`, `dona-cida`) e rode `python3 ferramentas/importar-gravacoes.py`. Ele corta o silêncio das pontas, iguala o volume, converte para MP3 mono e põe tudo em `audio/`. Também avisa nomes que não são de nenhuma fala (com uma sugestão), falas com mais de 4 s e quantas ainda faltam. As gravações originais não são alteradas.
+3. Dá para entregar aos poucos: o que ainda não foi gravado fica em silêncio.
 
-Se mudar ou acrescentar uma fala, edite o JSON, rode `python3 ferramentas/gerar-roteiro.py` e grave de novo só aquele arquivo.
+Se mudar ou acrescentar uma fala, edite o JSON, rode `python3 ferramentas/gerar-roteiro.py` (e o `gerar-pdf-roteiro.py`, se for imprimir) e grave de novo só aquele arquivo. O teste "todo arquivo de áudio é de uma fala" avisa se algum arquivo estiver com o nome errado.

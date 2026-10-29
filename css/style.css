@@ -1,349 +1,1025 @@
+/* SuperPANCs: banca de feira (lona vermelha e creme, mesa de feltro, caixotes) com ritmo de transmissão esportiva. */
+
 :root {
-  --verde-escuro: #1f5f2a;
-  --verde: #2e8b3e;
-  --verde-claro: #7ed957;
-  --fundo: #eef7e6;
-  --papel: #ffffff;
-  --texto: #1d2b1a;
-  --texto-suave: #52634d;
-  --amarelo: #ffc93c;
-  --laranja: #f39233;
-  --vitoria: #2fb344;
-  --derrota: #e5484d;
-  --empate: #f0a020;
-  --sombra: 0 6px 20px rgba(20, 60, 20, .18);
-  --raio: 14px;
-  --fonte-titulo: 'Fredoka', 'Trebuchet MS', system-ui, sans-serif;
+  /* feira */
+  --lona: #D93A2B;
+  --lona-esc: #A82618;
+  --creme: #F6E7C8;
+  --creme-esc: #E7D2A8;
+  --madeira: #B07240;
+  --madeira-esc: #6E4022;
+  --mesa: #1F4D2B;
+  --mesa-esc: #13341C;
+  --milho: #FFC93C;
+  --tinta: #1A1A1A;
+  --tv: #12192B;
+  --vitoria: #3FBF4F;
+  --derrota: #E5484D;
+  --empate: #F0A020;
+  --fonte-display: 'Lilita One', 'Trebuchet MS', system-ui, sans-serif;
+  --fonte-texto: 'Rubik', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --fonte-mao: 'Permanent Marker', 'Comic Sans MS', cursive;
 }
 
 * { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
 
 html, body { height: 100%; }
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  color: var(--texto);
-  background: radial-gradient(circle at 20% 0%, #dff3cf 0, var(--fundo) 45%, #e3f0dc 100%);
-  padding: env(safe-area-inset-top, 0) 16px env(safe-area-inset-bottom, 0);
+  font-family: var(--fonte-texto);
+  color: var(--tinta);
+  background: var(--mesa-esc);
 }
 
-.tela {
-  min-height: 100dvh;
-  max-width: 1000px;
-  margin: 0 auto;
-  padding-block: 16px;
-}
+.tela { min-height: 100dvh; }
 
-h1 {
-  font-family: var(--fonte-titulo);
-  color: var(--verde-escuro);
-  margin: 0;
-}
+h1 { margin: 0; font-weight: 400; }
 
+/* Botões de feira: amarelo-milho com contorno e sombra dura */
 .botao {
-  font: 600 1rem var(--fonte-titulo);
-  border: 2px solid var(--verde);
-  background: var(--papel);
-  color: var(--verde-escuro);
-  border-radius: 999px;
-  padding: 10px 24px;
+  font: 400 22px var(--fonte-display);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--tinta);
+  background: var(--milho);
+  border: 4px solid var(--tinta);
+  border-radius: 16px;
+  padding: 10px 30px;
+  box-shadow: 0 6px 0 var(--tinta);
   cursor: pointer;
-  transition: transform .1s, background .15s;
+  transition: transform .1s, box-shadow .1s, background .15s;
 }
-.botao:hover { background: #f1faea; }
-.botao:active { transform: scale(.97); }
-.botao:focus-visible, .faixa:focus-visible, .modo input:focus-visible + .modo-conteudo {
-  outline: 3px solid var(--amarelo);
-  outline-offset: 2px;
+.botao:hover { background: #FFD663; }
+.botao:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--tinta); }
+.botao-sec { background: var(--creme); font-size: 18px; padding: 8px 22px; box-shadow: 0 5px 0 var(--tinta); }
+.botao-sec:hover { background: #FFF3DC; }
+.botao:focus-visible, .faixa:focus-visible, .icone:focus-visible, .opcao input:focus-visible + .opcao-conteudo,
+.regras summary:focus-visible {
+  outline: 3px solid var(--milho);
+  outline-offset: 3px;
 }
-.botao-principal {
-  background: var(--verde);
-  color: #fff;
-  font-size: 1.15rem;
-  padding: 12px 36px;
-  box-shadow: 0 4px 0 var(--verde-escuro);
+.opcao input:focus-visible + .opcao-conteudo { outline-color: var(--lona); }
+
+/* ---------- Telas de feira (cadastro, início e fim): feltro da mesa com a lona no alto ---------- */
+
+.tela-feira {
+  --lona-h: 64px;
+  --gomo: 22px;
+  --listra: 56px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--lona-h) + var(--gomo) + 20px) 24px 28px;
+  padding-bottom: max(28px, env(safe-area-inset-bottom));
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(255, 255, 255, .08), transparent 65%),
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, .035) 0 2px, transparent 2px 6px),
+    var(--mesa);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, .5);
 }
-.botao-principal:hover { background: #33994a; }
+.tela-feira > :not(.lona, .balcao) { position: relative; z-index: 2; }
+
+/* Placa creme: o painel das telas de feira */
+.placa {
+  background: var(--creme);
+  border: 4px solid var(--tinta);
+  border-radius: 22px;
+  box-shadow: 0 8px 0 var(--tinta);
+  padding: 22px 24px;
+}
+.placa legend, .placa-titulo {
+  padding: 0;
+  margin: 0 0 10px;
+  font: 800 14px var(--fonte-texto);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #6A5A3A;
+}
+
+/* Letreiro com contorno grosso (título do jogo e do resultado) */
+.letreiro-jogo, .letreiro-fim {
+  margin: 0;
+  text-align: center;
+  font: 400 clamp(56px, 7.4vw, 104px)/.9 var(--fonte-display);
+  color: var(--milho);
+  text-transform: uppercase;
+  -webkit-text-stroke: clamp(9px, 1.1vw, 15px) var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0 clamp(6px, .8vw, 10px) 0 var(--lona);
+  letter-spacing: .01em;
+}
 
 /* ---------- Tela inicial ---------- */
 
+.tela-inicio { padding-bottom: 104px; } /* espaço do balcão */
 .inicio {
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 560px);
+  gap: 40px;
+  align-items: stretch;
+}
+.vitrine {
+  position: relative;
   display: flex;
-  gap: 32px;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: calc(100dvh - 32px);
+  gap: 8px;
+  padding-bottom: 34px;
 }
-.inicio-logo {
-  width: min(300px, 32vw);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
+.slogan {
+  margin: 6px 0 0;
+  font: 400 clamp(18px, 1.8vw, 24px) var(--fonte-mao);
+  color: var(--creme);
+  transform: rotate(-2deg);
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .4);
 }
-.inicio-painel {
-  max-width: 460px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.inicio-painel h1 { font-size: 3rem; line-height: 1; }
-.inicio-sub { margin: 0; color: var(--texto-suave); line-height: 1.45; }
 
-.modos { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
-.dificuldades { grid-template-columns: 1fr 1fr; }
-.modos legend { font-weight: 700; margin-bottom: 8px; }
-.modo { display: block; cursor: pointer; }
-.modo input { position: absolute; opacity: 0; }
-.modo-conteudo {
+/* Leque com quatro cartas */
+.leque {
+  --w: clamp(100px, 11vw, 164px);
   display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 12px 16px;
-  border-radius: var(--raio);
-  background: var(--papel);
-  border: 2px solid transparent;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+  justify-content: center;
+  padding: 22px 0 0;
 }
-.modo-conteudo strong { font-family: var(--fonte-titulo); font-size: 1.15rem; color: var(--verde-escuro); }
-.modo-conteudo span { font-size: .92rem; color: var(--texto-suave); }
-.modo input:checked + .modo-conteudo { border-color: var(--verde); background: #f4fbef; }
+.carta-leque {
+  position: relative;
+  width: var(--w);
+  aspect-ratio: 708 / 1181;
+  margin-inline: calc(var(--w) * -.2);
+  transform: translateY(var(--y, 0)) rotate(var(--r, 0deg));
+  transform-origin: 50% 90%;
+}
+.carta-leque:nth-child(1) { --r: -20deg; --y: 18px; }
+.carta-leque:nth-child(2) { --r: -7deg; }
+.carta-leque:nth-child(3) { --r: 5deg; --y: -4px; }
+.carta-leque:nth-child(4) { --r: 17deg; --y: 14px; }
+.carta-leque .face { box-shadow: 0 8px 0 rgba(0, 0, 0, .25), 0 16px 28px rgba(0, 0, 0, .35); }
 
-.regras { background: var(--papel); border-radius: var(--raio); padding: 10px 16px; }
-.regras summary { cursor: pointer; font-weight: 600; }
-.regras ul { padding-left: 20px; margin: 8px 0 0; line-height: 1.5; font-size: .93rem; }
+/* Mascotes em pé no balcão */
+.mascote-vitrine {
+  position: absolute;
+  bottom: -40px;
+  width: clamp(130px, 14vw, 210px);
+  pointer-events: none;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .25));
+}
+.mascote-esq { left: 0; }
+.mascote-dir { right: 0; transform: scaleX(-1); }
+.balcao {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 86px;
+  z-index: 1;
+  background: repeating-linear-gradient(0deg, var(--madeira) 0 26px, var(--madeira-esc) 26px 29px);
+  border-top: 4px solid var(--tinta);
+  box-shadow: 0 -6px 0 rgba(0, 0, 0, .2);
+}
+.tela-inicio > .vitrine, .tela-inicio .mascote-vitrine { z-index: 3; }
+
+.inicio-painel { align-self: center; display: flex; flex-direction: column; gap: 18px; }
+.opcoes-grupo { border: 0; margin: 0; padding: 0; min-width: 0; }
+.opcoes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.opcao { position: relative; display: block; cursor: pointer; }
+.opcao input { position: absolute; opacity: 0; pointer-events: none; }
+.opcao-conteudo {
+  display: block;
+  height: 100%;
+  background: #fff;
+  border: 3px solid var(--tinta);
+  border-radius: 16px;
+  padding: 10px 14px 12px;
+  box-shadow: 0 4px 0 var(--tinta);
+  transition: transform .12s, background .15s, box-shadow .12s;
+}
+.opcao:hover .opcao-conteudo { transform: translateY(-1px); }
+.opcao input:checked + .opcao-conteudo { background: var(--milho); box-shadow: 0 6px 0 var(--tinta); transform: translateY(-2px); }
+.opcao input:checked + .opcao-conteudo::after {
+  content: '✓';
+  position: absolute;
+  right: -10px;
+  top: -12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--vitoria);
+  color: #fff;
+  border: 3px solid var(--tinta);
+  display: grid;
+  place-items: center;
+  font: 800 15px var(--fonte-texto);
+}
+.opcao-conteudo strong { display: block; font: 400 24px/1.1 var(--fonte-display); }
+.opcao-conteudo > span:last-child { display: block; font: 500 13px/1.35 var(--fonte-texto); color: #3B3B3B; }
+.opcao .rosto {
+  float: left;
+  width: 66px;
+  height: 66px;
+  margin: 2px 10px 4px 0;
+  border-radius: 12px;
+  border: 3px solid var(--tinta);
+  background: var(--creme);
+  overflow: hidden;
+}
+.opcao .rosto img { display: block; width: 100%; height: 100%; }
+.opcao .nivel {
+  display: inline-block;
+  margin-bottom: 2px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: var(--tinta);
+  color: var(--milho);
+  font: 800 10px var(--fonte-texto);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.botao-jogar { align-self: center; font-size: 36px; padding: 12px 80px; box-shadow: 0 7px 0 var(--tinta); }
+
+.regras { font: 500 14px/1.5 var(--fonte-texto); }
+.regras summary {
+  width: max-content;
+  margin: 0 auto;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  list-style: none;
+  border-bottom: 3px solid var(--lona);
+  padding-bottom: 2px;
+}
+.regras summary::-webkit-details-marker { display: none; }
+.regras ul { margin: 12px 0 0; padding-left: 20px; }
+
+.links { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 8px 28px; }
+.regras[open] { flex-basis: 100%; order: 1; } /* aberto, as regras ocupam a linha de baixo */
+.link-album {
+  padding: 0 0 2px;
+  border: 0;
+  border-bottom: 3px solid var(--lona);
+  background: none;
+  color: var(--tinta);
+  font: 700 15px var(--fonte-texto);
+  cursor: pointer;
+}
+.link-album:focus-visible { outline: 3px solid var(--milho); outline-offset: 3px; }
 
 /* ---------- Cadastro ---------- */
 
 .cadastro {
+  flex: 1;
   display: flex;
-  gap: 32px;
+  gap: 48px;
   align-items: center;
   justify-content: center;
-  min-height: calc(100dvh - 32px);
 }
 .cadastro-logo {
-  width: min(240px, 26vw);
-  border-radius: var(--raio);
-  box-shadow: var(--sombra);
+  width: min(250px, 24vw);
+  border-radius: 4.5% / 2.7%;
+  transform: rotate(-6deg);
+  box-shadow: 0 10px 0 rgba(0, 0, 0, .25), 0 18px 30px rgba(0, 0, 0, .35);
 }
 .cadastro-painel {
-  max-width: 440px;
+  max-width: 460px;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
-.cadastro-painel h1 { font-size: 2.2rem; line-height: 1.1; }
-.campo { display: flex; flex-direction: column; gap: 4px; font-weight: 600; }
+.cadastro-painel h1 { font: 400 34px/1.05 var(--fonte-display); text-transform: uppercase; }
+.placa-sub { margin: -6px 0 0; font-size: 15px; color: #5E5238; }
+.campo { display: flex; flex-direction: column; gap: 4px; font-weight: 700; font-size: 14px; }
 .campo input {
-  font: inherit;
-  font-weight: 400;
-  padding: 12px 14px;
-  border: 2px solid #cfe3c4;
+  font: 500 16px var(--fonte-texto);
+  padding: 11px 14px;
+  border: 3px solid var(--tinta);
   border-radius: 12px;
-  background: var(--papel);
-  color: var(--texto);
+  background: #fff;
+  color: var(--tinta);
 }
-.campo input:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px rgba(46, 139, 62, .18); }
+.campo input:focus { outline: 3px solid var(--milho); outline-offset: 2px; }
 .consentimento {
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  font-size: .92rem;
+  font-size: 14px;
   line-height: 1.4;
   cursor: pointer;
 }
-.consentimento input { width: 20px; height: 20px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--verde); }
+.consentimento input { width: 20px; height: 20px; margin: 1px 0 0; flex-shrink: 0; accent-color: var(--lona); }
 .cadastro-erro {
   margin: 0;
   padding: 8px 12px;
   border-radius: 10px;
+  border: 2px solid var(--derrota);
   background: #fde8e8;
   color: #a12a2e;
-  font-size: .92rem;
+  font-size: 14px;
 }
-.cadastro-botoes { display: flex; gap: 12px; flex-wrap: wrap; }
-.cadastro-botoes .botao-principal { flex: 1; }
+.cadastro-botoes { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+.cadastro-botoes .botao:first-child { flex: 1; }
 
-/* ---------- Mesa (tabuleiro) ---------- */
+/* ---------- Mesa: lona, placar e controles ---------- */
 
-#tela-jogo { max-width: 1100px; padding-block: 8px; overflow: clip; }
+/* A mesa ocupa a tela inteira; a lona e o placar ficam por cima, no topo */
+.tela-jogo {
+  --lona-h: 64px;     /* altura da faixa listrada */
+  --gomo: 22px;       /* altura dos gomos da borda da lona */
+  --listra: 56px;
+  --borda-mesa: 16px;
+  position: fixed;
+  inset: 0;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  background: var(--mesa-esc);
+  color: var(--tinta);
+  overflow: hidden;
+}
 
-/* Moldura de canteiro: tábuas de madeira com ramas e maços de folhas nos cantos */
-.moldura {
-  --moldura: 14px;
-  --canto: 104px;
-  position: relative;
-  padding: var(--moldura);
-  border-radius: 32px;
-  background-color: #a8743f;
-  background-image:
-    repeating-linear-gradient(90deg, rgba(60, 30, 5, .14) 0 2px, transparent 2px 140px),
-    repeating-linear-gradient(0deg, rgba(255, 255, 255, .07) 0 2px, rgba(60, 30, 5, .05) 2px 6px, transparent 6px 9px),
-    linear-gradient(180deg, #bf8b56, #9a6534);
-  box-shadow:
-    0 10px 28px rgba(70, 40, 10, .28),
-    inset 0 2px 0 rgba(255, 255, 255, .28),
-    inset 0 -3px 0 rgba(60, 30, 5, .25);
-}
-.moldura > .tabuleiro { box-shadow: inset 0 0 0 3px rgba(80, 50, 20, .35), inset 0 6px 18px rgba(60, 40, 10, .18); }
-.rama, .canto { position: absolute; pointer-events: none; }
-/* Rama: caule ondulado com folhas e botões amarelos, repetido ao longo da tábua */
-.rama-topo, .rama-base {
-  left: calc(var(--canto) * .6);
-  right: calc(var(--canto) * .6);
-  height: 26px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='26' viewBox='0 0 90 26'%3E%3Cpath d='M0 13 Q22 4 45 13 T90 13' fill='none' stroke='%233f7d32' stroke-width='2.5'/%3E%3Cpath d='M20 10 C23 2 33 0 39 3 C34 9 27 11 20 10Z' fill='%235a9e3e'/%3E%3Cpath d='M66 16 C63 24 53 26 47 23 C52 17 59 15 66 16Z' fill='%234b8f39'/%3E%3Ccircle cx='45' cy='13' r='2.4' fill='%23ffc93c'/%3E%3C/svg%3E") repeat-x center / auto 100%;
-}
-.rama-topo { top: calc(var(--moldura) / 2 - 13px); }
-.rama-base { bottom: calc(var(--moldura) / 2 - 13px); }
-.rama-esquerda, .rama-direita {
-  top: calc(var(--canto) * .6);
-  bottom: calc(var(--canto) * .6);
-  width: 26px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='90' viewBox='0 0 26 90'%3E%3Cg transform='rotate(90 13 13)'%3E%3Cpath d='M0 13 Q22 4 45 13 T90 13' fill='none' stroke='%233f7d32' stroke-width='2.5'/%3E%3Cpath d='M20 10 C23 2 33 0 39 3 C34 9 27 11 20 10Z' fill='%235a9e3e'/%3E%3Cpath d='M66 16 C63 24 53 26 47 23 C52 17 59 15 66 16Z' fill='%234b8f39'/%3E%3Ccircle cx='45' cy='13' r='2.4' fill='%23ffc93c'/%3E%3C/g%3E%3C/svg%3E") repeat-y center / 100% auto;
-}
-.rama-esquerda { left: calc(var(--moldura) / 2 - 13px); }
-.rama-direita { right: calc(var(--moldura) / 2 - 13px); }
-/* Maços de folhas: o desenho nasce no canto inferior esquerdo; os outros cantos são espelhados */
-.canto { width: var(--canto); height: var(--canto); }
-.canto-ie { left: -8px; bottom: -8px; }
-.canto-se { left: -8px; top: -8px; transform: scaleY(-1); }
-.canto-id { right: -8px; bottom: -8px; transform: scaleX(-1); }
-.canto-sd { right: -8px; top: -8px; transform: scale(-1, -1); }
-
-/* Proporção das cartas: 708 × 1181 */
-.tabuleiro {
-  --proporcao: 708 / 1181;
-  --escala-pilha: .55;
-  --escala-empate: .55;
-  /* largura da carta em jogo: duas cartas + faixa do meio (≈ 0,55 carta) precisam caber na altura */
-  --carta-w: min(250px, calc((100dvh - 132px) / 2.55 * 0.5995));
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  grid-template-areas:
-    ".         slot-c  pilha-c"
-    ".         empate  ."
-    "controles slot-j  pilha-j";
-  align-items: center;
-  justify-items: center;
-  gap: 8px 32px;
-  min-height: calc(100dvh - 16px - 28px);
-  padding: 12px 20px;
-  border-radius: 20px;
-  background:
-    radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, .35), transparent 60%),
-    linear-gradient(180deg, #cfe6c0 0%, #e2f1d8 48%, #e2f1d8 52%, #c5e1b3 100%);
-  box-shadow: inset 0 0 0 3px rgba(31, 95, 42, .18), inset 0 0 40px rgba(31, 95, 42, .12);
-}
-.tabuleiro::before {
-  /* linha que divide o lado do computador e o seu */
-  content: '';
+.lona {
   position: absolute;
-  left: 24px;
-  right: 24px;
-  top: 50%;
-  border-top: 2px dashed rgba(31, 95, 42, .15);
+  inset: 0 0 auto;
+  height: var(--lona-h);
+  z-index: 50;
+  background: repeating-linear-gradient(90deg, var(--lona) 0 var(--listra), var(--creme) var(--listra) calc(var(--listra) * 2));
+  box-shadow: 0 6px 0 rgba(0, 0, 0, .18);
   pointer-events: none;
 }
-
-/* Lugares onde as cartas em jogo pousam */
-.slot {
-  width: var(--carta-w);
-  aspect-ratio: var(--proporcao);
-  border: 2px dashed rgba(31, 95, 42, .25);
-  border-radius: 12px;
+/* borda em gomos: meia-lua de cada listra */
+.lona::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: var(--gomo);
+  background:
+    radial-gradient(circle at calc(var(--listra) / 2) 0, var(--lona) calc(var(--listra) / 2 - 1px), transparent calc(var(--listra) / 2)) 0 0 / calc(var(--listra) * 2) var(--gomo) repeat-x,
+    radial-gradient(circle at calc(var(--listra) * 1.5) 0, var(--creme) calc(var(--listra) / 2 - 1px), transparent calc(var(--listra) / 2)) 0 0 / calc(var(--listra) * 2) var(--gomo) repeat-x;
+  filter: drop-shadow(0 5px 0 rgba(0, 0, 0, .18));
 }
-.slot-computador { grid-area: slot-c; }
-.slot-jogador { grid-area: slot-j; }
 
-/* Pilhas de compra (à direita) */
-.pilha-area {
+.topo {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: var(--lona-h);
+  padding-top: env(safe-area-inset-top, 0);
+  pointer-events: none;
+}
+.topo > * { pointer-events: auto; }
+
+/* Placar estilo TV de futebol: caixas inclinadas */
+.placar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 14px;
+  width: max-content;
+  margin-inline: auto;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  justify-self: start;
+  align-items: stretch;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .3));
+  white-space: nowrap;
 }
-.pilha-area-computador { grid-area: pilha-c; }
-.pilha-area-jogador { grid-area: pilha-j; }
+.placar > * { transform: skewX(-12deg); display: grid; place-items: center; border: 3px solid var(--tinta); }
+.placar > * > * { transform: skewX(12deg); }
+.placar-time {
+  background: var(--creme);
+  padding: 0 20px;
+  min-width: 120px;
+  font: 800 15px var(--fonte-texto);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.placar-time > span { max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
+.placar-voce { border-right: 0; }
+.placar-rival { border-left: 0; }
+.placar-gols {
+  background: var(--tv);
+  color: var(--milho);
+  font: 400 38px/1 var(--fonte-display);
+  padding: 4px 16px;
+  min-width: 66px;
+  border-inline: 0;
+  font-variant-numeric: tabular-nums;
+}
+.placar-gols > span { display: block; }
+.placar-gols > span.mudou { animation: pop .45s ease-out; }
+.placar-rodada { background: var(--lona); color: #fff; padding: 0 14px; text-align: center; }
+.placar-rodada b { display: block; font: 400 22px/1 var(--fonte-display); }
+.placar-rodada small { display: block; font: 700 10px var(--fonte-texto); letter-spacing: .12em; text-transform: uppercase; opacity: .9; }
+
+/* Controles com ícones (som, avançar sozinho, sair) */
+.controles {
+  position: absolute;
+  right: 24px;
+  top: 12px;
+  display: flex;
+  gap: 10px;
+}
+.icone {
+  --tam: 42px;
+  position: relative;
+  width: var(--tam);
+  height: var(--tam);
+  padding: 0;
+  border-radius: 50%;
+  background: var(--creme);
+  border: 3px solid var(--tinta);
+  box-shadow: 0 4px 0 var(--tinta);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform .1s, box-shadow .1s;
+}
+.icone:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--tinta); }
+.icone svg { width: 55%; height: 55%; fill: none; stroke: var(--tinta); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.icone .cheio { fill: var(--tinta); stroke-width: 1; }
+.icone .risco { display: none; stroke: var(--lona); stroke-width: 3; }
+.icone[aria-pressed="false"] { background: var(--creme-esc); }
+.icone[aria-pressed="false"] .risco { display: inline; }
+.icone[aria-pressed="false"] .ondas { display: none; }
+.icone[aria-pressed="false"] .cheio { opacity: .45; }
+.botao-sair svg { stroke-width: 3.2; }
+.botao-sair.confirmar { background: var(--lona); }
+.botao-sair.confirmar svg { stroke: #fff; }
+.icone-dica {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: -6px;
+  display: none;
+  white-space: nowrap;
+  background: var(--tinta);
+  color: var(--creme);
+  font: 700 13px var(--fonte-texto);
+  padding: 6px 12px;
+  border-radius: 999px;
+}
+.botao-sair.confirmar .icone-dica { display: block; }
+
+/* ---------- Mesa: feltro, cartas, pilhas, caixote e cesta ---------- */
+
+/* Feltro verde com moldura de caixote */
+.mesa {
+  position: absolute;
+  inset: 0;
+  padding-top: calc(var(--lona-h) + var(--gomo) - var(--borda-mesa) + 4px);
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, .07), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, .035) 0 2px, transparent 2px 6px),
+    var(--mesa);
+  border: var(--borda-mesa) solid var(--madeira);
+  border-image: repeating-linear-gradient(0deg, var(--madeira) 0 30px, #9C6236 30px 32px, var(--madeira) 32px 60px) 16;
+  box-shadow: inset 0 0 0 4px var(--madeira-esc), inset 0 0 60px rgba(0, 0, 0, .45);
+}
+
+/* Computador: você à esquerda, o rival à direita, VS e a cesta no meio.
+   Proporção das cartas: 708 × 1181. */
+.tabuleiro {
+  --proporcao: 708 / 1181;
+  --escala-pilha: .36;
+  --escala-empate: .32;
+  --escala-rival: 1;
+  --carta-w: min(280px, calc((100dvh - 210px) * 0.5995), calc((100vw - 580px) / 2));
+  --cesta-w: 170px;
+  --cesta-h: 92px;
+  --retrato: 140px;
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto minmax(var(--cesta-w), auto) auto 1fr;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  justify-items: center;
+  gap: 10px 24px;
+  padding: 8px 24px 12px;
+}
+
+/* Lugares onde as cartas em jogo pousam (invisíveis: a carta é desenhada por cima) */
+.slot { width: var(--carta-w); aspect-ratio: var(--proporcao); grid-row: 1; }
+.slot-jogador { grid-column: 2; }
+.slot-computador { grid-column: 4; width: calc(var(--carta-w) * var(--escala-rival)); position: relative; }
+/* A carta do rival fica apoiada num caixote de feira */
+.slot-computador::after {
+  content: '';
+  position: absolute;
+  left: -6%;
+  right: -6%;
+  bottom: -8%;
+  height: 14%;
+  background:
+    linear-gradient(90deg, transparent 6%, var(--madeira-esc) 6% 11%, transparent 11% 89%, var(--madeira-esc) 89% 94%, transparent 94%),
+    repeating-linear-gradient(0deg, var(--madeira) 0 18px, var(--madeira-esc) 18px 21px);
+  border: 3px solid var(--tinta);
+  border-radius: 4px;
+  box-shadow: inset 0 4px 0 rgba(255, 255, 255, .15), 0 8px 0 rgba(0, 0, 0, .25);
+}
+
+.vs {
+  grid-row: 1;
+  grid-column: 3;
+  font: 400 46px/1 var(--fonte-display);
+  color: var(--milho);
+  -webkit-text-stroke: 8px var(--tinta);
+  paint-order: stroke fill;
+  transform: rotate(-8deg);
+  user-select: none;
+}
+
+/* Sacola (você) e banca (rival): pilhas de compra */
+.pilha-area { display: flex; flex-direction: column; align-items: center; gap: 14px; grid-row: 1; }
+.pilha-area-jogador { grid-column: 1; justify-self: end; }
+.pilha-area-computador { grid-column: 5; justify-self: start; align-self: end; margin-bottom: 8%; }
 .pilha, .pilha-empate {
   position: relative;
   width: calc(var(--carta-w) * var(--escala-pilha));
   aspect-ratio: var(--proporcao);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 .pilha {
   background-image: url('../imagens-cartas-superpancs/verso.jpg');
   background-image: image-set(url('../img/cartas/verso.webp') type('image/webp'), url('../imagens-cartas-superpancs/verso.jpg') type('image/jpeg'));
   background-size: cover;
   background-position: center;
-  /* espessura da pilha: --espessura vai de 0 a 6 conforme o número de cartas */
-  box-shadow: var(--sombra-pilha, 0 2px 6px rgba(0, 0, 0, .2));
+  /* espessura da pilha: uma camada a cada 3 cartas (calculada em ui.js) */
+  box-shadow: var(--sombra-pilha, 0 3px 0 rgba(0, 0, 0, .3));
   transition: box-shadow .3s;
 }
-.pilha.vazia, .pilha-empate {
-  background: rgba(255, 255, 255, .25);
-  border: 2px dashed rgba(31, 95, 42, .25);
+.pilha.vazia {
+  background: rgba(0, 0, 0, .18);
+  border: 2px dashed rgba(246, 231, 200, .3);
   box-shadow: none;
 }
 .pilha-qtd {
   position: absolute;
-  right: -8px;
+  right: -16px;
   bottom: -8px;
-  min-width: 30px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--verde-escuro);
-  color: #fff;
-  font: 700 1rem var(--fonte-titulo);
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, .25);
   z-index: 1;
+  min-width: 38px;
+  height: 38px;
+  padding: 0 8px;
+  border-radius: 19px;
+  display: grid;
+  place-items: center;
+  background: var(--milho);
+  border: 3px solid var(--tinta);
+  box-shadow: 0 3px 0 var(--tinta);
+  color: var(--tinta);
+  font: 400 21px/1 var(--fonte-display);
+  font-variant-numeric: tabular-nums;
 }
 .pilha-qtd.mudou { animation: pop .45s ease-out; }
-.pilha-rotulo { font-size: .8rem; font-weight: 600; color: var(--texto-suave); text-transform: uppercase; letter-spacing: .04em; }
 
-/* Monte de empate (centro) */
-.empate-area {
-  grid-area: empate;
-  display: flex;
-  flex-direction: column-reverse; /* rótulo acima, para as cartas giradas do monte não o cobrirem */
-  align-items: center;
-  gap: 10px;
+/* Rótulos escritos à mão, como plaquinhas de feira */
+.rotulo {
+  font: 400 15px var(--fonte-mao);
+  color: var(--creme);
+  letter-spacing: .02em;
+  text-align: center;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .4);
+  white-space: nowrap;
 }
-.pilha-empate { width: calc(var(--carta-w) * var(--escala-empate)); }
-.pilha-empate .pilha-qtd { background: #c77d00; }
 
-/* Pop-up com o resultado da rodada, sobre o centro do tabuleiro */
-.popup-rodada {
+/* Rival: retrato com etiqueta, no alto do lado dele */
+.adversario {
+  grid-row: 1;
+  grid-column: 5;
+  justify-self: start;
+  align-self: start;
+  position: relative;
+  z-index: 3; /* o rosto fica por cima da carta quando ela se afasta na revelação */
+  margin-top: 4px;
+}
+.retrato {
+  width: var(--retrato);
+  aspect-ratio: 1;
+  border-radius: 22px;
+  overflow: hidden;
+  background: var(--creme);
+  border: 4px solid var(--tinta);
+  box-shadow: 0 6px 0 var(--tinta);
+}
+.retrato img { display: block; width: 100%; height: 100%; }
+.etiqueta {
   position: absolute;
   left: 50%;
-  top: 50%;
-  z-index: 35; /* acima das cartas paradas e das que voam */
-  width: min(380px, calc(100% - 24px));
-  transform: translate(-50%, -50%);
+  bottom: -16px;
+  transform: translateX(-50%) skewX(-12deg);
+  background: var(--tinta);
+  color: var(--milho);
+  font: 400 18px var(--fonte-display);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  white-space: nowrap;
+}
+.etiqueta small { color: var(--creme); font: 700 11px var(--fonte-texto); letter-spacing: .1em; margin-left: 6px; }
+
+/* Balão de fala do rival: embaixo do retrato, com o bico para cima */
+.balao {
+  position: absolute;
+  top: calc(100% + 30px);
+  left: -24px;
+  width: 210px;
+  margin: 0;
+  background: #fff;
+  border: 3px solid var(--tinta);
+  border-radius: 18px;
+  padding: 10px 14px;
+  box-shadow: 0 5px 0 var(--tinta);
+  font: 700 16px/1.3 var(--fonte-texto);
+  color: var(--tinta);
+}
+.balao::after {
+  content: '';
+  position: absolute;
+  left: calc(24px + var(--retrato) / 2 - 9px);
+  top: -11px;
+  width: 18px;
+  height: 18px;
+  background: #fff;
+  border: 3px solid var(--tinta);
+  border-width: 3px 0 0 3px;
+  transform: rotate(45deg);
+}
+.balao.surgindo { animation: balao .3s cubic-bezier(.2, .9, .3, 1.4) both; }
+@keyframes balao {
+  from { opacity: 0; transform: translateY(-8px) scale(.85); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Cesta do empate: as cartas do monte ficam "dentro" (a frente da cesta passa por cima delas) */
+.empate-area {
+  grid-row: 1;
+  grid-column: 3;
+  align-self: end;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 14px 18px 16px;
-  border-radius: 18px;
-  border-top: 6px solid var(--cor-popup, var(--verde));
-  background: rgba(255, 255, 255, .97);
-  box-shadow: 0 16px 40px rgba(20, 50, 15, .28);
-  text-align: center;
-  animation: popup-entrar .25s cubic-bezier(.2, .8, .3, 1.2);
 }
-.popup-rodada[hidden] { display: none; }
-.popup-rodada.vitoria { --cor-popup: var(--vitoria); }
-.popup-rodada.derrota { --cor-popup: var(--derrota); }
-.popup-rodada.empate  { --cor-popup: var(--empate); }
-.popup-rodada .botao-principal { margin-top: 6px; padding: 10px 30px; font-size: 1.05rem; }
-@keyframes popup-entrar {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(.88); }
-  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+.cesta {
+  position: relative;
+  z-index: 2; /* acima das cartas paradas (1), abaixo das que voam (30) */
+  width: var(--cesta-w);
+  height: var(--cesta-h);
+  border-radius: 12px 12px 70px 70px / 12px 12px 60px 60px;
+  background:
+    repeating-linear-gradient(60deg, rgba(0, 0, 0, .18) 0 4px, transparent 4px 12px),
+    repeating-linear-gradient(-60deg, rgba(0, 0, 0, .18) 0 4px, transparent 4px 12px),
+    #C99A55;
+  border: 3px solid var(--tinta);
+  box-shadow: inset 0 10px 0 #E0B873, 0 8px 0 rgba(0, 0, 0, .25);
+}
+.cesta::before { /* alça */
+  content: '';
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  bottom: 70%;
+  height: 65%;
+  border: 8px solid #A7793A;
+  border-bottom: 0;
+  border-radius: 999px 999px 0 0;
+}
+.cesta .pilha-qtd { right: -18px; top: -14px; bottom: auto; }
+/* Onde as cartas do monte pousam: metade de baixo escondida pela cesta */
+.pilha-empate {
+  width: calc(var(--carta-w) * var(--escala-empate));
+  margin-bottom: calc(var(--cesta-h) * -.62 - 6px);
+}
+
+/* Dica de quem tem a vez */
+.dica {
+  grid-row: 2;
+  grid-column: 2;
+  margin: 0;
+  background: var(--tinta);
+  color: var(--creme);
+  font: 700 15px var(--fonte-texto);
+  letter-spacing: .02em;
+  padding: 8px 16px;
+  border-radius: 999px;
+  white-space: nowrap;
+  animation: surgir .3s ease-out;
+}
+/* sem dica, o espaço continua reservado para a mesa não pular */
+.dica.oculta { visibility: hidden; animation: none; }
+.dica b { color: var(--milho); font-weight: 700; }
+
+/* ---------- Revelação: letreiro, comparação no centro e mascote ---------- */
+
+.revelacao {
+  --painel-w: 270px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 35; /* acima das cartas paradas e das que voam */
+  width: var(--painel-w);
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.revelacao > * { pointer-events: auto; }
+
+/* "VOCÊ LEVA!": letreiro grande, inclinado */
+.letreiro-rodada {
+  margin: 0 0 14px;
+  font: 400 54px/1 var(--fonte-display);
+  color: var(--milho);
+  text-transform: uppercase;
+  white-space: nowrap;
+  -webkit-text-stroke: 9px var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0 6px 0 var(--tinta);
+  transform: rotate(-6deg);
+  animation: carimbo .45s cubic-bezier(.2, .9, .3, 1.4) both;
+}
+.revelacao.derrota .letreiro-rodada { color: var(--creme); text-shadow: 0 6px 0 var(--lona-esc); }
+.revelacao.empate .letreiro-rodada { color: var(--empate); }
+@keyframes carimbo {
+  from { opacity: 0; transform: rotate(-6deg) scale(1.8); }
+  to   { opacity: 1; transform: rotate(-6deg) scale(1); }
+}
+
+/* Painel escuro estilo TV com as duas barras */
+.comparacao {
+  width: 100%;
+  background: var(--tv);
+  color: #fff;
+  border: 4px solid var(--tinta);
+  border-radius: 18px;
+  padding: 26px 18px 18px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, .35);
+  position: relative;
+  animation: subir .3s ease-out .1s both;
+}
+.comparacao-titulo {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -55%) skewX(-12deg);
+  background: var(--lona);
+  font: 400 22px var(--fonte-display);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 4px 18px;
+  border: 3px solid var(--tinta);
+  white-space: nowrap;
+}
+.lado { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 4px 12px; margin-top: 12px; }
+.lado:first-of-type { margin-top: 0; }
+.quem {
+  font: 800 11px/1.2 var(--fonte-texto);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #AFC0D8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.valor { grid-row: span 2; font: 400 40px/1 var(--fonte-display); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.valor small { font: 700 14px var(--fonte-texto); color: #AFC0D8; margin-left: 3px; }
+.barra { height: 14px; border-radius: 7px; background: rgba(255, 255, 255, .12); overflow: hidden; }
+.barra i { display: block; height: 100%; border-radius: 7px; transform-origin: left; animation: encher .6s ease-out .25s both; }
+.ganha .barra i { background: var(--vitoria); }
+.ganha .valor { color: var(--milho); }
+.perde .barra i { background: var(--derrota); }
+.perde .valor { color: #C9D2E0; }
+.empata .barra i { background: var(--empate); }
+.empata .valor { color: var(--milho); }
+.dif {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  margin: 14px auto 0;
+  background: var(--milho);
+  color: var(--tinta);
+  font: 800 14px var(--fonte-texto);
+  padding: 4px 12px;
+  border-radius: 999px;
+  text-align: center;
+}
+@keyframes encher { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes subir { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+.revelacao .detalhe {
+  margin: 0;
+  max-width: 100%;
+  color: var(--creme);
+  font: 700 14px/1.35 var(--fonte-texto);
+  text-align: center;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, .45);
+}
+.revelacao .detalhe:empty { display: none; }
+
+/* Próxima rodada: botão amarelo; a barra embaixo conta o tempo quando avança sozinho */
+.botao-continuar {
+  position: relative;
+  overflow: hidden;
+  font: 400 20px var(--fonte-display);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--tinta);
+  background: var(--milho);
+  border: 4px solid var(--tinta);
+  border-radius: 14px;
+  padding: 8px 26px 10px;
+  box-shadow: 0 6px 0 var(--tinta);
+  cursor: pointer;
+  animation: subir .3s ease-out .25s both;
+}
+.botao-continuar::before { content: '▸ '; }
+.botao-continuar:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--tinta); }
+.botao-continuar:focus-visible { outline: 3px solid var(--creme); outline-offset: 3px; }
+.botao-continuar.contando::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 5px;
+  width: 100%;
+  background: var(--lona);
+  transform-origin: left;
+  animation: contagem var(--duracao-auto, 3s) linear forwards;
+}
+@keyframes contagem { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* ---------- Super Trunfo ---------- */
+
+/* Selo fixo na carta e um brilho holográfico leve */
+.selo-st {
+  position: absolute;
+  top: 4.5%;
+  right: 3%;
+  transform: rotate(6deg);
+  background: var(--milho);
+  color: var(--tinta);
+  font: 400 4.6cqw var(--fonte-display);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: 1.2cqw 2.6cqw;
+  border: .8cqw solid var(--tinta);
+  border-radius: 2cqw;
+  white-space: nowrap;
+}
+.face-frente.super::after, .zoom-carta.super::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  opacity: .16;
+  background: linear-gradient(115deg, transparent 20%, #ff7ad9 32%, #7af0ff 42%, #fff59a 52%, #8aff9e 62%, transparent 75%) 0 0 / 250% 100%;
+}
+.carta.holo .face-frente::after { opacity: .22; animation: holo 1.6s linear infinite; }
+@keyframes holo { from { background-position: 100% 0; } to { background-position: -150% 0; } }
+
+/* Entrada: mesa escura, raios girando atrás da carta, letreiro no alto */
+.st-fundo {
+  position: absolute;
+  inset: 0;
+  z-index: 32;
+  overflow: hidden;
+  background: rgba(8, 12, 10, .8);
+  animation: aparecer .3s ease-out both;
+}
+.st-fundo.saindo { animation: sumir .4s ease-in both; }
+@keyframes sumir { to { opacity: 0; } }
+.st-raios {
+  position: absolute;
+  left: var(--cx, 50%);
+  top: var(--cy, 50%);
+  width: var(--tam, 900px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 201, 60, .55) 0 8deg, transparent 8deg 20deg);
+  -webkit-mask: radial-gradient(circle, #000 20%, transparent 68%);
+  mask: radial-gradient(circle, #000 20%, transparent 68%);
+  animation: girar 14s linear infinite;
+}
+@keyframes girar { to { rotate: 1turn; } }
+/* o rosto do rival continua aparecendo por cima da mesa escura */
+.st-ativo .adversario { z-index: 36; }
+.st-ativo .dica { visibility: hidden; }
+.carta.em-destaque { z-index: 33; }
+.carta.em-destaque .face-frente { box-shadow: 0 0 0 6px var(--milho), 0 0 60px 16px rgba(255, 201, 60, .55); }
+.st-letreiro {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 2%;
+  z-index: 37; /* acima da carta em destaque e do rosto do rival */
+  margin: 0;
+  text-align: center;
+  font: 400 clamp(42px, 7vw, 92px)/.9 var(--fonte-display);
+  color: var(--milho);
+  text-transform: uppercase;
+  -webkit-text-stroke: clamp(8px, 1.1vw, 14px) var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0 clamp(5px, .8vw, 10px) 0 var(--lona);
+  pointer-events: none;
+}
+.st-letreiro.entrando { animation: carimbo-reto .5s cubic-bezier(.2, .9, .3, 1.4) .15s both; }
+@keyframes carimbo-reto {
+  from { opacity: 0; transform: scale(2.2); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Faixa de TV do narrador ("ao vivo"), na parte de baixo da mesa */
+.faixa-tv {
+  position: absolute;
+  z-index: 38;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  width: max-content;
+  max-width: calc(100% - 32px);
+  margin-inline: auto;
+  display: flex;
+  align-items: stretch;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .3));
+  pointer-events: none;
+}
+.faixa-tv > * { transform: skewX(-12deg); border: 3px solid var(--tinta); display: grid; place-items: center; }
+.faixa-tv > * > * { transform: skewX(12deg); }
+.faixa-tv-tag {
+  flex-shrink: 0;
+  background: var(--lona);
+  color: #fff;
+  padding: 0 14px;
+  font: 800 12px var(--fonte-texto);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.faixa-tv-tag > span::before { /* luz de "no ar" piscando */
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: #fff;
+  vertical-align: 1px;
+  animation: no-ar 1.2s steps(2, jump-none) infinite;
+}
+@keyframes no-ar { 50% { opacity: .25; } }
+.faixa-tv-texto {
+  background: var(--milho);
+  border-left: 0;
+  padding: 8px 24px 8px 16px;
+  color: var(--tinta);
+  font: 400 26px/1.1 var(--fonte-display);
+  text-transform: uppercase;
+  letter-spacing: .01em;
+}
+.faixa-tv.entrando { animation: faixa-entra .35s cubic-bezier(.2, .9, .3, 1.2) both; }
+@keyframes faixa-entra {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: none; }
+}
+/* (seletor mais forte: no celular, a faixa da mesa muda de lugar) */
+.fim-lado .faixa-fim { position: relative; inset: auto; width: max-content; max-width: 100%; margin: 0; align-self: center; }
+.faixa-fim .faixa-tv-texto { font-size: 22px; }
+/* Tião da Xepa, o comentarista: a mesma faixa, com a etiqueta verde de feirante e o texto em creme */
+.faixa-tv.do-comentarista .faixa-tv-tag { background: var(--mesa); color: var(--milho); }
+.faixa-tv.do-comentarista .faixa-tv-tag > span::before { display: none; }
+.faixa-tv.do-comentarista .faixa-tv-texto { background: var(--creme); }
+.fim-lado .faixa-fim.do-comentarista { margin-top: -12px; } /* junto da faixa do narrador */
+
+/* Mascote da carta vencedora (WebP animado, fundo transparente) */
+.mascote {
+  position: absolute;
+  z-index: 34;
+  width: 200px;
+  pointer-events: none;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .25));
+}
+.mascote.do-rival { transform: scaleX(-1); } /* olha para o centro da mesa */
+.mascote.entrando { animation: entrar-mascote .5s cubic-bezier(.2, .9, .3, 1.3) both; }
+.mascote.do-rival.entrando { animation-name: entrar-mascote-rival; }
+@keyframes entrar-mascote {
+  from { opacity: 0; transform: translateY(40px) scale(.6); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes entrar-mascote-rival {
+  from { opacity: 0; transform: scaleX(-1) translateY(40px) scale(.6); }
+  to   { opacity: 1; transform: scaleX(-1); }
 }
 
 /* Só para leitores de tela */
@@ -355,49 +1031,6 @@ h1 {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
-
-.rodada { font: 600 .9rem var(--fonte-titulo); color: var(--texto-suave); }
-.mensagem { margin: 0; font: 600 1.25rem var(--fonte-titulo); }
-.mensagem.vitoria { color: var(--vitoria); }
-.mensagem.derrota { color: var(--derrota); }
-.mensagem.empate  { color: #b87400; }
-.detalhe { margin: 0; color: var(--texto-suave); font-size: .92rem; line-height: 1.35; }
-.detalhe:empty { display: none; }
-
-.controles {
-  grid-area: controles;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-self: end;
-  gap: 0 12px;
-}
-.controle {
-  border: 0;
-  background: none;
-  color: var(--texto-suave);
-  font-size: .85rem;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 6px;
-}
-.controle[aria-pressed="false"] { opacity: .75; }
-.botao-sair.confirmar { color: var(--derrota); font-weight: 600; }
-
-/* Botão "Próxima rodada" com barra de contagem quando avança sozinho */
-#botao-continuar { position: relative; overflow: hidden; }
-#botao-continuar.contando::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 4px;
-  width: 100%;
-  background: var(--amarelo);
-  transform-origin: left;
-  animation: contagem var(--duracao-auto, 3s) linear forwards;
-}
-@keyframes contagem { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 /* ---------- Cartas (desenhadas na camada por cima do tabuleiro) ---------- */
 
@@ -421,47 +1054,89 @@ h1 {
 .face {
   position: absolute;
   inset: 0;
-  border-radius: 12px;
+  border-radius: 4.5% / 2.7%;
   overflow: hidden;
-  background: var(--papel);
-  box-shadow: 0 4px 12px rgba(20, 60, 20, .22);
+  background: #fff;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, .25), 0 14px 26px rgba(0, 0, 0, .3);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transition: box-shadow .25s;
+  transition: box-shadow .25s, filter .25s;
 }
 .face-verso { transform: rotateY(180deg); }
 .face img { display: block; width: 100%; height: 100%; }
 /* Carta levantada: sombra mais longa, como se estivesse no ar */
-.carta.levantada .face { box-shadow: 0 22px 40px rgba(20, 60, 20, .35); }
-.carta.vitoria .face-frente { box-shadow: 0 0 0 4px var(--vitoria), 0 0 28px rgba(47, 179, 68, .55), var(--sombra); }
-.carta.derrota .face-frente { box-shadow: 0 0 0 4px var(--derrota), var(--sombra); }
-.carta.empate  .face-frente { box-shadow: 0 0 0 4px var(--empate), var(--sombra); }
+.carta.levantada .face { box-shadow: 0 22px 40px rgba(0, 0, 0, .45); }
+.carta.vitoria .face-frente { box-shadow: 0 0 0 5px var(--vitoria), 0 0 36px 6px rgba(63, 191, 79, .55), 0 14px 26px rgba(0, 0, 0, .3); }
+.carta.derrota .face-frente { box-shadow: 0 0 0 5px var(--derrota), 0 14px 26px rgba(0, 0, 0, .3); filter: saturate(.6) brightness(.88); }
+.carta.empate  .face-frente { box-shadow: 0 0 0 5px var(--empate), 0 14px 26px rgba(0, 0, 0, .3); }
 
-/* No computador, passar o mouse sobre uma carta aberta na mesa amplia a carta */
-@media (hover: hover) and (min-width: 701px) {
-  .carta.na-mesa:not(.virada):hover { z-index: 40; }
-  .carta.na-mesa:not(.virada):hover .carta-escala { transform: scale(1.6); }
-  .carta.do-jogador .carta-escala { transform-origin: 50% 100%; }
-  .carta.do-computador .carta-escala { transform-origin: 50% 0%; }
-}
-
-/* Áreas clicáveis sobre as 4 faixas de atributos da imagem */
-.faixa {
+/* Frente: imagem sem texto + nome, esporte e atributos escritos por cima.
+   As medidas usam cqw (% da largura da carta), então tudo acompanha o tamanho da carta. */
+.face-frente, .zoom-carta { container-type: inline-size; }
+.face-frente > img, .zoom-carta > img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.info {
   position: absolute;
-  left: 11%;
-  width: 78%;
-  height: 7.2%;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  padding: 0;
-  cursor: default;
+  left: 9.5%;
+  right: 9.5%;
+  top: 48.6%;
+  bottom: 4.2%;
+  display: flex;
+  flex-direction: column;
+  color: var(--tinta);
 }
-.faixa:nth-child(1) { top: 62.66%; }
-.faixa:nth-child(2) { top: 71.3%; }
-.faixa:nth-child(3) { top: 79.85%; }
-.faixa:nth-child(4) { top: 88.4%; }
-.faixa::before { content: ''; position: absolute; inset: -2px -4px; } /* área de toque um pouco maior */
+.nome {
+  font: 400 var(--tam-nome, 10.5cqw)/1 var(--fonte-display);
+  color: var(--milho);
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  -webkit-text-stroke: 1.6cqw var(--tinta);
+  paint-order: stroke fill;
+  letter-spacing: .01em;
+}
+.esporte {
+  font: 800 4.6cqw var(--fonte-texto);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  margin: 1.2cqw 0 3cqw;
+  white-space: nowrap;
+}
+.esporte::before, .esporte::after { content: '—'; margin: 0 1.5cqw; color: #8FB98A; }
+.selo {
+  position: absolute;
+  top: 5%;
+  left: 3%;
+  transform: rotate(-8deg);
+  background: var(--lona);
+  color: #fff;
+  font: 400 5.2cqw var(--fonte-display);
+  letter-spacing: .06em;
+  padding: 1.2cqw 3cqw;
+  border: .8cqw solid var(--tinta);
+}
+.faixas { flex: 1; display: grid; grid-auto-rows: 1fr; gap: 2cqw; }
+
+/* Atributo: rótulo à esquerda, número grande à direita */
+.faixa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2cqw;
+  padding: 0 3.5cqw;
+  border-radius: 3cqw;
+  background: #EAF5DF;
+  border: .8cqw solid #CFE6BF;
+  color: var(--tinta);
+  font: inherit;
+  text-align: left;
+  cursor: default;
+  transition: transform .12s, background .12s, opacity .2s;
+}
+.faixa > span { font: 700 4.4cqw var(--fonte-texto); text-transform: uppercase; letter-spacing: .04em; color: #35553A; }
+.faixa > b { font: 400 8.4cqw/1 var(--fonte-display); white-space: nowrap; }
+.faixa small { font: 700 3.6cqw var(--fonte-texto); margin-left: .8cqw; color: #5B6F57; }
+
 /* Fora da vez de escolher, as faixas deixam o toque passar para a carta (que abre o zoom no celular) */
 .carta:not(.escolhendo) .faixa { pointer-events: none; }
 .zoom-carta:not(.escolhendo) .faixa { pointer-events: none; }
@@ -469,16 +1144,33 @@ h1 {
 .escolhendo .faixa:nth-child(2) { animation-delay: .15s; }
 .escolhendo .faixa:nth-child(3) { animation-delay: .3s; }
 .escolhendo .faixa:nth-child(4) { animation-delay: .45s; }
-.escolhendo .faixa:hover,
-.escolhendo .faixa:focus-visible { animation: none; box-shadow: 0 0 0 3px var(--amarelo); background: rgba(255, 255, 255, .22); }
 @keyframes convidar {
-  0%, 100% { box-shadow: 0 0 0 2px rgba(255, 201, 60, .35); }
-  50%      { box-shadow: 0 0 0 3px rgba(255, 201, 60, .95); }
+  0%, 100% { border-color: #CFE6BF; }
+  50%      { border-color: var(--milho); }
 }
-.faixa.escolhida { box-shadow: 0 0 0 3px var(--verde-escuro); }
-.carta.vitoria .faixa.escolhida { box-shadow: 0 0 0 4px var(--vitoria); }
-.carta.derrota .faixa.escolhida { box-shadow: 0 0 0 4px var(--derrota); }
-.carta.empate  .faixa.escolhida { box-shadow: 0 0 0 4px var(--empate); }
+/* Na mira: amarelo, levantado */
+.escolhendo .faixa:hover,
+.escolhendo .faixa:focus-visible,
+.faixa.escolhida {
+  animation: none;
+  background: var(--milho);
+  border-color: var(--tinta);
+  transform: scale(1.04);
+  box-shadow: 0 1.2cqw 0 var(--tinta);
+}
+.escolhendo .faixa:focus-visible { outline: none; }
+.faixa.escolhida > span, .escolhendo .faixa:hover > span { color: var(--tinta); }
+/* Depois da revelação: o atributo da rodada em verde (venceu) ou vermelho (perdeu); os outros apagam */
+:is(.carta, .zoom-carta).vitoria .faixa.escolhida { background: var(--vitoria); }
+:is(.carta, .zoom-carta).vitoria .faixa.escolhida > span, :is(.carta, .zoom-carta).vitoria .faixa.escolhida > b, :is(.carta, .zoom-carta).vitoria .faixa.escolhida small { color: #fff; }
+:is(.carta, .zoom-carta).derrota .faixa.escolhida { background: #F6D3D3; border-color: var(--derrota); box-shadow: 0 1.2cqw 0 var(--derrota); }
+:is(.carta, .zoom-carta):is(.vitoria, .derrota, .empate) .faixa:not(.escolhida) { opacity: .38; }
+
+/* No computador, passar o mouse sobre uma carta aberta na mesa amplia a carta */
+@media (hover: hover) and (min-width: 701px) {
+  .carta.na-mesa:not(.virada):hover { z-index: 40; }
+  .carta.na-mesa:not(.virada):hover .carta-escala { transform: scale(1.3); }
+}
 
 /* ---------- Carta ampliada (celular) ---------- */
 
@@ -493,196 +1185,549 @@ h1 {
   gap: 12px;
   padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(16px + env(safe-area-inset-bottom, 0px));
 }
-.zoom[hidden] { display: none; }
 .zoom-fundo {
   position: absolute;
   inset: 0;
-  background: rgba(20, 40, 15, .72);
+  background: rgba(8, 20, 12, .78);
   backdrop-filter: blur(3px);
 }
 .zoom-carta {
   position: relative;
   width: min(88vw, 420px, calc((100dvh - 150px) * 0.5995));
   aspect-ratio: 708 / 1181;
-  border-radius: 16px;
+  border-radius: 4.5% / 2.7%;
   overflow: hidden;
-  background: var(--papel);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .5);
 }
-.zoom-carta img { display: block; width: 100%; height: 100%; }
-.zoom-carta .faixa:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 2px; }
+.zoom-carta.vitoria { box-shadow: 0 0 0 5px var(--vitoria), 0 24px 60px rgba(0, 0, 0, .5); }
+.zoom-carta.derrota { box-shadow: 0 0 0 5px var(--derrota), 0 24px 60px rgba(0, 0, 0, .5); }
+.zoom-carta.empate  { box-shadow: 0 0 0 5px var(--empate), 0 24px 60px rgba(0, 0, 0, .5); }
 .zoom-dica {
   position: relative;
   margin: 0;
-  color: #fff;
-  font: 600 1rem var(--fonte-titulo);
+  color: var(--creme);
+  font: 700 1rem var(--fonte-texto);
   text-align: center;
   text-shadow: 0 1px 3px rgba(0, 0, 0, .5);
 }
-.zoom-fechar { position: relative; background: rgba(255, 255, 255, .92); }
+.zoom-fechar { position: relative; background: var(--creme); border: 3px solid var(--tinta); color: var(--tinta); box-shadow: 0 4px 0 var(--tinta); }
 
-/* ---------- Fim ---------- */
+/* ---------- Fim: pódio ---------- */
 
 .fim {
-  min-height: calc(100dvh - 32px);
-  display: flex;
-  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 430px);
+  gap: 24px 48px;
   align-items: center;
-  justify-content: center;
-  gap: 14px;
+}
+.fim-podio { display: flex; flex-direction: column; align-items: center; gap: 12px; min-width: 0; }
+.letreiro-fim { font-size: clamp(56px, 6.6vw, 88px); }
+.fim.derrota .letreiro-fim { text-shadow: 0 clamp(6px, .8vw, 10px) 0 var(--tv); }
+.placar-fim { position: relative; inset: auto; top: auto; margin: 6px 0 0; transform: scale(1.1); }
+.placar-fim .placar-rodada small { white-space: nowrap; }
+.fim-texto {
+  margin: 8px 0 0;
+  max-width: 52ch;
   text-align: center;
-  --cor-resultado: var(--verde-escuro);
+  color: var(--creme);
+  font: 500 15px/1.45 var(--fonte-texto);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .4);
 }
-.fim.vitoria { --cor-resultado: var(--vitoria); }
-.fim.derrota { --cor-resultado: var(--derrota); }
-.fim.empate  { --cor-resultado: #c77d00; }
-.fim h1 { font-size: clamp(2.2rem, 8vw, 3.6rem); color: var(--cor-resultado); line-height: 1.05; }
-.fim-config {
-  margin: 0;
-  font-size: .8rem;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  color: var(--texto-suave);
-}
-.fim-texto { margin: 0; font-size: 1.05rem; color: var(--texto-suave); max-width: 42ch; line-height: 1.5; }
 
-.fim-placar {
+/* Palco: os dois postos lado a lado; o vencedor fica no degrau mais alto, à direita */
+.palco {
+  --degrau-1: 118px;
+  --degrau-2: 72px;
+  position: relative;
+  width: min(100%, 620px);
+  margin-top: 4px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.raios-fim {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 680px;
+  aspect-ratio: 1;
+  transform: translate(-50%, 30%);
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 201, 60, .5) 0 8deg, transparent 8deg 20deg);
+  -webkit-mask: radial-gradient(circle, #000 18%, transparent 66%);
+  mask: radial-gradient(circle, #000 18%, transparent 66%);
+  opacity: 0;
+  pointer-events: none;
+}
+.fim.vitoria .raios-fim { opacity: .55; animation: girar 40s linear infinite; }
+@keyframes girar { to { transform: translate(-50%, 30%) rotate(360deg); } }
+
+.posto { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.posto.primeiro { order: 2; width: 52%; }
+.posto.segundo { order: 1; width: 40%; }
+.palco.empatados .posto { order: 0; width: 46%; }
+.degrau {
+  width: 100%;
+  height: var(--degrau-2);
+  margin-top: 10px;
+  background: var(--creme);
+  border: 4px solid var(--tinta);
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  box-shadow: inset 0 -20px 0 var(--creme-esc);
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  padding-top: 8px;
+}
+.posto.primeiro .degrau, .palco.empatados .degrau { height: var(--degrau-1); }
+.degrau-num { font: 400 46px/1 var(--fonte-display); }
+.posto.primeiro .degrau-num { font-size: 58px; }
+.degrau-nome {
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 800 13px var(--fonte-texto);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #6A5A3A;
+}
+
+.craque { position: relative; margin: 0; }
+.craque-tag {
+  position: absolute;
+  z-index: 3;
+  left: -18%;
+  top: -14px;
+  white-space: nowrap;
+  transform: rotate(-8deg);
+  background: var(--lona);
+  color: #fff;
+  border: 3px solid var(--tinta);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font: 800 12px var(--fonte-texto);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.carta-podio {
+  position: relative;
+  width: clamp(130px, 12vw, 168px);
+  aspect-ratio: 708 / 1181;
+  transform: rotate(-3deg);
+}
+.carta-podio .face { box-shadow: 0 0 0 5px var(--vitoria), 0 0 36px 6px rgba(63, 191, 79, .5), 0 14px 26px rgba(0, 0, 0, .35); }
+.fim.derrota .carta-podio .face { box-shadow: 0 0 0 5px var(--creme), 0 14px 26px rgba(0, 0, 0, .35); }
+.mascote-podio {
+  position: absolute;
+  z-index: 2;
+  right: -62%;
+  bottom: -18px;
+  width: clamp(110px, 11vw, 170px);
+  pointer-events: none;
+  filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .25));
+}
+
+.rival-podio { position: relative; display: flex; flex-direction: column; align-items: center; }
+.rival-podio .retrato { --retrato: clamp(96px, 9vw, 130px); }
+/* (seletores mais fortes: as regras de .balao da mesa mudam por tamanho de tela) */
+.rival-podio .balao-podio {
+  position: relative;
+  inset: auto;
+  width: auto;
+  max-width: 230px;
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  font-size: 15px;
+}
+.rival-podio .balao-podio::after {
+  left: calc(50% - 9px);
+  right: auto;
+  top: auto;
+  bottom: -11px;
+  width: 18px;
+  height: 18px;
+  border-width: 3px 0 0 3px;
+  transform: rotate(225deg);
+}
+
+/* Lousa com a súmula da partida */
+.fim-lado { display: flex; flex-direction: column; gap: 26px; }
+.lousa {
+  background: #24302A;
+  color: #F2F2EA;
+  border: 10px solid var(--madeira);
+  border-radius: 10px;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, .35), inset 0 0 30px rgba(0, 0, 0, .4);
+  padding: 16px 24px 18px;
+  font-family: var(--fonte-mao);
+}
+.lousa h2 { margin: 0 0 6px; font: 400 28px var(--fonte-mao); color: var(--milho); letter-spacing: .03em; }
+.lousa ul { list-style: none; margin: 0; padding: 0; font-size: 18px; line-height: 1.8; }
+.lousa li { display: flex; justify-content: space-between; gap: 20px; border-bottom: 2px dashed rgba(255, 255, 255, .18); }
+.lousa li:last-child { border-bottom: 0; }
+.lousa li b { font-weight: 400; color: var(--milho); text-align: right; }
+.fim-botoes { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.botao-grande { font-size: 28px; padding: 12px 40px; box-shadow: 0 7px 0 var(--tinta); }
+
+/* Aviso de figurinha nova, no pódio */
+.toast {
   display: flex;
   align-items: center;
-  gap: 20px;
-  background: var(--papel);
-  border-radius: var(--raio);
-  padding: 12px 28px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+  gap: 12px;
+  background: #fff;
+  border: 3px solid var(--tinta);
+  border-radius: 16px;
+  padding: 8px 14px 8px 8px;
+  box-shadow: 0 5px 0 var(--tinta);
+  font: 700 14px/1.3 var(--fonte-texto);
+  animation: toast .5s cubic-bezier(.2, .9, .3, 1.3) .6s both;
 }
-.fim-placar div { display: flex; flex-direction: column; align-items: center; }
-.fim-placar-nome { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-suave); }
-.fim-placar b { font: 700 2.6rem var(--fonte-titulo); line-height: 1.1; color: var(--verde-escuro); font-variant-numeric: tabular-nums; }
-.fim-placar-x { font: 600 1.4rem var(--fonte-titulo); color: var(--texto-suave); }
+.toast img { width: 46px; flex-shrink: 0; border-radius: 6px; border: 2px solid var(--tinta); transform: rotate(-4deg); }
+.toast b { display: block; font: 400 18px var(--fonte-display); color: var(--lona); text-transform: uppercase; }
+@keyframes toast {
+  from { opacity: 0; transform: translateY(14px) scale(.9); }
+  to   { opacity: 1; transform: none; }
+}
 
-.fim-estatisticas {
+/* ---------- Álbum de figurinhas ---------- */
+
+.tela-album { overflow: visible; }
+.album { width: 100%; max-width: 1280px; margin: 0 auto; }
+.album-topo {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px 28px;
+  margin-bottom: 26px;
+}
+.letreiro-album {
+  font: 400 64px/.9 var(--fonte-display);
+  color: var(--milho);
+  text-transform: uppercase;
+  -webkit-text-stroke: 10px var(--tinta);
+  paint-order: stroke fill;
+  text-shadow: 0 7px 0 var(--lona);
+}
+.album-sub { margin: 0; color: var(--creme); font: 500 15px/1.45 var(--fonte-texto); text-shadow: 0 1px 2px rgba(0, 0, 0, .4); }
+.album-sub b { font: 400 22px var(--fonte-display); color: var(--milho); margin-right: 4px; }
+.album-lista {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 20px;
-  color: var(--texto-suave);
-  font-size: .95rem;
-}
-.fim-estatisticas b { color: var(--texto); font-variant-numeric: tabular-nums; }
-
-.fim-destaque {
-  margin: 4px 0 0;
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
   gap: 16px;
-  text-align: left;
-  background: var(--papel);
-  border-radius: var(--raio);
-  padding: 12px 20px 12px 12px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
-  max-width: 100%;
 }
-.fim-destaque img { width: 84px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, .15); }
-.fim-destaque figcaption { display: flex; flex-direction: column; gap: 2px; }
-.fim-destaque-rotulo { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--texto-suave); }
-.fim-destaque strong { font: 600 1.3rem var(--fonte-titulo); color: var(--verde-escuro); }
-.fim-destaque figcaption span:last-child { font-size: .92rem; color: var(--texto-suave); }
+.figurinha {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--creme);
+  border: 3px solid var(--tinta);
+  border-radius: 14px;
+  padding: 10px 12px 10px 10px;
+  box-shadow: 0 5px 0 var(--tinta);
+}
+.figurinha img {
+  width: 70px;
+  flex-shrink: 0;
+  aspect-ratio: 708 / 1181;
+  border-radius: 6px;
+  border: 2px solid var(--tinta);
+  transform: rotate(-3deg);
+}
+.figurinha-num {
+  position: absolute;
+  top: -10px;
+  left: -8px;
+  z-index: 1;
+  min-width: 30px;
+  padding: 2px 6px;
+  border: 2px solid var(--tinta);
+  border-radius: 999px;
+  background: var(--milho);
+  font: 400 14px var(--fonte-display);
+  text-align: center;
+}
+.figurinha-texto { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.figurinha-texto b { font: 400 20px/1.1 var(--fonte-display); text-transform: uppercase; }
+.figurinha-texto small { font: 800 10px var(--fonte-texto); letter-spacing: .12em; text-transform: uppercase; color: #6A5A3A; }
+.figurinha-texto span { margin-top: 4px; font: 500 13px/1.4 var(--fonte-texto); color: #3B3B3B; }
+.figurinha.panc .figurinha-texto small { color: var(--lona-esc); }
+/* ainda não colada: espaço tracejado, como no álbum de papel */
+.figurinha:not(.colada) { background: rgba(246, 231, 200, .14); border-style: dashed; border-color: var(--creme); box-shadow: none; }
+.figurinha:not(.colada) img { filter: grayscale(1) brightness(.75); opacity: .5; border-color: transparent; }
+.figurinha:not(.colada) .figurinha-texto b, .figurinha:not(.colada) .figurinha-texto small { color: var(--creme); }
+.figurinha:not(.colada) .figurinha-texto span { color: rgba(246, 231, 200, .75); }
+.figurinha:not(.colada) .figurinha-num { background: var(--creme-esc); }
 
-.fim-botoes { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 6px; }
+/* ---------- Telas menores ---------- */
 
-/* ---------- Telas estreitas ---------- */
+/* Computador com tela baixa ou estreita: tudo um pouco menor */
+@media (max-width: 1100px), (max-height: 680px) {
+  .tela-feira { --lona-h: 54px; --gomo: 18px; --listra: 48px; padding-top: calc(var(--lona-h) + var(--gomo) + 14px); padding-bottom: 20px; }
+  .tela-inicio { padding-bottom: 92px; }
+  .balcao { height: 74px; }
+  .inicio { gap: 28px; }
+  .letreiro-jogo { font-size: clamp(52px, 6.6vw, 88px); }
+  .leque { --w: clamp(96px, 10vw, 140px); padding-top: 14px; }
+  .placa { padding: 18px 20px; }
+  .inicio-painel { gap: 14px; }
+  .botao-jogar { font-size: 32px; padding: 8px 64px; }
+  .palco { --degrau-1: 100px; --degrau-2: 62px; }
+  .carta-podio { width: clamp(120px, 12vw, 150px); }
+  .fim { gap: 20px 32px; }
+  .fim-lado { gap: 20px; }
+  .lousa { padding: 12px 20px 14px; }
+  .lousa h2 { font-size: 24px; }
+  .lousa ul { font-size: 16px; line-height: 1.6; }
+  .faixa-fim .faixa-tv-texto { font-size: 18px; padding: 6px 18px 6px 12px; }
+  .tela-jogo { --lona-h: 54px; --gomo: 18px; --listra: 48px; --borda-mesa: 12px; }
+  .tabuleiro { --cesta-w: 130px; --cesta-h: 72px; --retrato: 104px; gap: 8px 16px; padding-inline: 12px; }
+  .tabuleiro { --carta-w: min(280px, calc((100dvh - 180px) * 0.5995), calc((100vw - 440px) / 2)); }
+  .placar { top: 10px; }
+  .placar-time { min-width: 90px; padding: 0 14px; font-size: 13px; }
+  .placar-time > span { max-width: 110px; }
+  .placar-gols { font-size: 32px; min-width: 54px; padding: 3px 12px; }
+  .placar-rodada b { font-size: 19px; }
+  .controles { right: 16px; top: 9px; gap: 8px; }
+  .icone { --tam: 36px; }
+  .vs { font-size: 38px; -webkit-text-stroke-width: 7px; }
+  .etiqueta { font-size: 15px; }
+  .balao { width: 180px; font-size: 14px; top: calc(100% + 26px); }
+}
 
 @media (max-width: 700px) {
-  .inicio { flex-direction: column; gap: 12px; min-height: 0; padding-top: 0; }
-  .inicio-logo { width: 84px; border-radius: 8px; }
-  .inicio-painel { gap: 12px; }
-  .inicio-painel h1 { font-size: 2.2rem; text-align: center; }
-  .inicio-sub { font-size: .92rem; text-align: center; }
-  .modo-conteudo { padding: 10px 14px; }
-  .inicio-painel .botao-principal { align-self: stretch; }
-  .cadastro { flex-direction: column; gap: 12px; min-height: 0; }
-  .cadastro-logo { width: 84px; border-radius: 8px; }
-  .cadastro-painel h1 { font-size: 1.8rem; text-align: center; }
-  .cadastro-painel .inicio-sub { text-align: center; }
-  .fim { min-height: 0; padding-top: 24px; }
+  .tela-feira { --lona-h: 44px; --gomo: 14px; --listra: 36px; padding: calc(var(--lona-h) + var(--gomo) + 14px) 16px 24px; }
+  .faixa-tv { left: 64px; right: 10px; bottom: 10px; width: auto; max-width: none; } /* ao lado dos controles */
+  .album-topo { grid-template-columns: 1fr auto; margin-bottom: 20px; }
+  .letreiro-album { font-size: 46px; -webkit-text-stroke-width: 8px; text-shadow: 0 5px 0 var(--lona); }
+  .album-sub { grid-column: 1 / -1; grid-row: 2; font-size: 14px; }
+  .album-lista { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .figurinha img { width: 54px; }
+  .faixa-tv-texto { font-size: 16px; padding: 6px 14px 6px 10px; }
+  .faixa-tv-tag { font-size: 10px; padding: 0 9px; letter-spacing: .1em; }
+  .faixa-fim .faixa-tv-texto { font-size: 16px; }
+  .tela-inicio { padding-bottom: 24px; }
+  .inicio { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .vitrine { padding-bottom: 0; gap: 2px; }
+  .letreiro-jogo { font-size: 52px; -webkit-text-stroke-width: 9px; }
+  .letreiro-jogo br { display: none; }
+  .slogan { font-size: 17px; margin-top: 2px; }
+  .leque { --w: 76px; padding-top: 16px; }
+  .carta-leque:nth-child(1) { --y: 10px; }
+  .carta-leque:nth-child(4) { --y: 8px; }
+  .mascote-vitrine { bottom: -10px; width: 78px; }
+  .balcao { display: none; }
+  .placa { padding: 16px; border-radius: 18px; }
+  .inicio-painel { gap: 14px; }
+  .opcoes { gap: 10px; }
+  .opcao-conteudo { padding: 8px 10px 10px; }
+  .opcao-conteudo strong { font-size: 20px; }
+  .opcao-conteudo > span:last-child { font-size: 12px; }
+  .opcao .rosto { width: 46px; height: 46px; border-radius: 10px; margin-right: 8px; }
+  .botao-jogar { align-self: stretch; font-size: 30px; padding: 10px 20px; }
 
-  /* Celular em pé: monte de empate no centro, entre as duas cartas */
-  body { padding-inline: 8px; }
+  .cadastro { flex-direction: column; gap: 18px; }
+  .cadastro-logo { width: 96px; }
+  .cadastro-painel h1 { font-size: 26px; }
+
+  .fim { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .letreiro-fim { font-size: 52px; -webkit-text-stroke-width: 9px; }
+  .placar-fim { transform: none; }
+  .palco { --degrau-1: 96px; --degrau-2: 60px; }
+  .degrau-num { font-size: 34px; }
+  .posto.primeiro .degrau-num { font-size: 42px; }
+  .carta-podio { width: 116px; }
+  .mascote-podio { width: 90px; right: -48%; bottom: -10px; }
+  .craque-tag { font-size: 10px; padding: 4px 9px; left: -14%; }
+  .rival-podio .retrato { --retrato: 84px; }
+  .rival-podio .balao-podio { font-size: 13px; max-width: 150px; padding: 8px 10px; margin-bottom: 14px; }
+  .raios-fim { width: 440px; }
+  .lousa { padding: 12px 18px 14px; border-width: 8px; }
+  .lousa h2 { font-size: 24px; }
+  .lousa ul { font-size: 16px; }
+  .botao-grande { font-size: 24px; padding: 10px 28px; }
+
+  /* Celular em pé: o rival e a carta dele em cima, a cesta no meio, você embaixo.
+     Os controles ficam ao lado da sua carta. */
+  .tela-jogo { --lona-h: 44px; --gomo: 14px; --listra: 40px; --borda-mesa: 8px; }
   .tabuleiro {
-    --carta-w: min(42vw, calc((100dvh - 286px) / 2 * 0.5995));
-    /* pilhas mais estreitas que a coluna lateral, para não encostarem na carta em jogo */
-    --escala-pilha: .38;
-    grid-template-columns: 1fr auto 1fr;
-    grid-template-rows: auto 150px auto auto;
-    grid-template-areas:
-      ".      slot-c  pilha-c"
-      ".      empate  ."
-      ".      slot-j  pilha-j"
-      "controles controles controles";
+    --escala-pilha: .2;
+    --escala-empate: .24;
+    --escala-rival: .5;
+    --cesta-w: 92px;
+    --cesta-h: 52px;
+    --retrato: 64px;
+    /* sua carta + a do rival (metade) + a faixa da cesta precisam caber na altura */
+    --carta-w: min(58vw, calc((100dvh - 262px) / 1.5 * 0.5995));
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
     gap: 8px;
-    padding: 8px;
-    border-radius: 14px;
-    min-height: calc(100dvh - 16px - 20px);
+    padding: 4px 6px 8px;
   }
-  .moldura { --moldura: 10px; --canto: 62px; border-radius: 22px; }
-  .pilha-area { justify-self: center; }
-  .rodada { font-size: .8rem; }
-  .mensagem { font-size: 1.05rem; }
-  .detalhe { font-size: .85rem; }
-  .pilha-rotulo { font-size: .68rem; }
-  /* pop-up compacto, para caber no vão entre as duas cartas */
-  .popup-rodada { padding: 8px 12px 10px; gap: 2px; border-top-width: 5px; border-radius: 14px; }
-  .popup-rodada .rodada { font-size: .72rem; }
-  .popup-rodada .mensagem { font-size: .98rem; }
-  .popup-rodada .detalhe { font-size: .78rem; line-height: 1.3; }
-  .popup-rodada .botao-principal { margin-top: 4px; padding: 7px 22px; font-size: .92rem; box-shadow: 0 3px 0 var(--verde-escuro); }
-  .pilha-qtd { font-size: .85rem; min-width: 26px; right: -6px; bottom: -6px; }
-  .controles { align-self: center; padding-inline: calc(var(--canto) * .45); } /* longe das flores dos cantos */
+  .slot-computador { grid-row: 1; grid-column: 2; }
+  .slot-jogador { grid-row: 3; grid-column: 2; align-self: start; }
+  .adversario { grid-row: 1; grid-column: 1; justify-self: center; align-self: start; margin-top: 6px; }
+  .etiqueta { font-size: 11px; padding: 2px 8px; bottom: -12px; }
+  .etiqueta small { display: none; }
+  .retrato { border-radius: 14px; border-width: 3px; box-shadow: 0 4px 0 var(--tinta); }
+  .balao { top: 2px; left: calc(100% + 12px); width: min(200px, 52vw); padding: 7px 10px; font-size: 13px; border-radius: 14px; box-shadow: 0 4px 0 var(--tinta); }
+  .balao::after { left: -10px; top: 14px; width: 14px; height: 14px; border-width: 0 0 3px 3px; }
+  .pilha-area { gap: 6px; }
+  .pilha-area-computador { grid-row: 1; grid-column: 3; justify-self: center; align-self: center; margin: 0; }
+  .pilha-area-jogador { grid-row: 3; grid-column: 3; justify-self: center; align-self: center; }
+  .empate-area { grid-row: 2; grid-column: 1 / 3; justify-self: start; align-self: end; margin-left: 4px; gap: 2px; }
+  .vs { grid-row: 2; grid-column: 1 / -1; font-size: 34px; -webkit-text-stroke-width: 6px; }
+  .dica { grid-row: 2; grid-column: 2 / -1; justify-self: end; align-self: center; white-space: normal; max-width: 32vw; margin-right: 4px; font-size: 12px; padding: 6px 10px; border-radius: 12px; text-align: center; }
+  .rotulo { font-size: 10px; white-space: normal; line-height: 1.1; }
+  .pilha-qtd { min-width: 28px; height: 28px; font-size: 15px; right: -10px; bottom: -6px; border-width: 2px; }
+  .cesta { border-width: 2px; box-shadow: inset 0 6px 0 #E0B873, 0 5px 0 rgba(0, 0, 0, .25); }
+  .cesta::before { border-width: 5px; border-bottom: 0; }
+  .cesta .pilha-qtd { right: -14px; top: -10px; }
+  .slot-computador::after { border-width: 2px; background-size: auto, auto 12px; }
+
+  .placar { top: 6px; filter: drop-shadow(0 4px 0 rgba(0, 0, 0, .3)); }
+  .placar > * { border-width: 2px; }
+  .placar-time { min-width: 0; padding: 0 8px; font-size: 10px; letter-spacing: .03em; }
+  .placar-time > span { max-width: 64px; }
+  .placar-gols { font-size: 24px; min-width: 38px; padding: 3px 8px; }
+  .placar-rodada { padding: 0 8px; }
+  .placar-rodada b { font-size: 15px; }
+  .placar-rodada small { font-size: 7px; }
+  /* no celular, os controles descem para a mesa, ao lado da sua carta */
+  .controles { position: fixed; top: auto; right: auto; left: 14px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); flex-direction: column; gap: 10px; }
+  .icone { --tam: 36px; border-width: 2px; box-shadow: 0 3px 0 var(--tinta); }
+  .icone-dica { right: auto; left: calc(100% + 10px); top: 50%; transform: translateY(-50%); }
+  .st-letreiro { top: 15%; }
+
+  .revelacao { --painel-w: min(300px, 84vw); gap: 6px; }
+  .letreiro-rodada { font-size: 34px; margin-bottom: 8px; -webkit-text-stroke-width: 7px; text-shadow: 0 4px 0 var(--tinta); }
+  .revelacao.derrota .letreiro-rodada { text-shadow: 0 4px 0 var(--lona-esc); }
+  .comparacao { padding: 18px 12px 10px; border-width: 3px; border-radius: 14px; box-shadow: 0 5px 0 rgba(0, 0, 0, .35); }
+  .comparacao-titulo { font-size: 16px; padding: 2px 12px; border-width: 2px; }
+  .lado { margin-top: 6px; gap: 2px 10px; }
+  .quem { font-size: 9px; }
+  .valor { font-size: 26px; }
+  .valor small { font-size: 11px; }
+  .barra { height: 9px; }
+  .dif { margin-top: 8px; font-size: 11px; padding: 2px 10px; }
+  .revelacao .detalhe { font-size: 12px; }
+  .botao-continuar { font-size: 16px; padding: 5px 18px 7px; border-width: 3px; box-shadow: 0 4px 0 var(--tinta); }
+  .mascote { width: 104px; }
 }
 
-/* Celular deitado: monte, cartas e pilhas à esquerda; pop-up e controles na área livre à direita */
+/* Celular deitado: como no computador (lado a lado), mas bem compacto */
 @media (orientation: landscape) and (max-height: 520px) {
+  .tela-feira { --lona-h: 34px; --gomo: 12px; --listra: 30px; padding: calc(var(--lona-h) + var(--gomo) + 10px) 20px 16px; }
+  .faixa-tv { bottom: 6px; }
+  .faixa-tv-texto { font-size: 16px; padding: 4px 14px 4px 10px; }
+  .faixa-tv-tag { font-size: 10px; padding: 0 9px; }
+  .faixa-fim .faixa-tv-texto { font-size: 14px; }
+  .toast { padding: 5px 10px 5px 6px; font-size: 12px; }
+  .toast img { width: 34px; }
+  .toast b { font-size: 15px; }
+  .tela-inicio { padding-bottom: 16px; }
+  .balcao { display: none; }
+  .inicio { grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 20px; }
+  .vitrine { padding-bottom: 0; justify-content: flex-start; padding-top: 6px; }
+  .letreiro-jogo { font-size: 44px; -webkit-text-stroke-width: 8px; text-shadow: 0 5px 0 var(--lona); }
+  .slogan { font-size: 15px; }
+  .leque { --w: 72px; padding-top: 10px; }
+  .mascote-vitrine { bottom: auto; top: 220px; width: 70px; }
+  .placa { padding: 12px 14px; border-radius: 16px; }
+  .placa legend { margin-bottom: 6px; font-size: 12px; }
+  .inicio-painel { gap: 10px; }
+  .opcoes { gap: 10px; }
+  .opcao-conteudo { padding: 6px 10px 8px; }
+  .opcao-conteudo strong { font-size: 18px; }
+  .opcao-conteudo > span:last-child { font-size: 11.5px; }
+  .opcao .rosto { width: 40px; height: 40px; border-radius: 8px; margin-right: 8px; }
+  .botao-jogar { font-size: 26px; padding: 4px 40px; box-shadow: 0 5px 0 var(--tinta); }
+  .regras summary { font-size: 13px; }
+
+  .cadastro { gap: 24px; }
+  .cadastro-logo { width: 130px; }
+  .cadastro-painel { gap: 8px; }
+  .cadastro-painel h1 { font-size: 24px; }
+
+  .fim { grid-template-columns: minmax(0, 1fr) minmax(0, 320px); gap: 16px 24px; align-items: start; }
+  .fim-podio { gap: 6px; }
+  .letreiro-fim { font-size: 40px; -webkit-text-stroke-width: 8px; text-shadow: 0 5px 0 var(--lona); }
+  .placar-fim { transform: scale(.8); margin: -4px 0; }
+  .fim-texto { font-size: 13px; margin-top: 0; }
+  .palco { --degrau-1: 56px; --degrau-2: 36px; }
+  .degrau { margin-top: 6px; padding-top: 4px; }
+  .degrau-num, .posto.primeiro .degrau-num { font-size: 26px; }
+  .degrau-nome { font-size: 10px; }
+  .carta-podio { width: 96px; }
+  .mascote-podio { width: 76px; right: -56%; bottom: -8px; }
+  .craque-tag { font-size: 9px; padding: 3px 8px; top: -10px; }
+  .rival-podio .retrato { --retrato: 70px; border-width: 3px; border-radius: 14px; }
+  .rival-podio .balao-podio { font-size: 12px; max-width: 160px; padding: 6px 9px; margin-bottom: 12px; }
+  .lousa { padding: 10px 16px 12px; border-width: 7px; }
+  .lousa h2 { font-size: 20px; margin-bottom: 2px; }
+  .lousa ul { font-size: 14px; line-height: 1.65; }
+  .fim-lado { gap: 14px; }
+  .botao-grande { font-size: 22px; padding: 6px 24px; box-shadow: 0 5px 0 var(--tinta); }
+  .botao-sec { font-size: 15px; padding: 5px 14px; box-shadow: 0 4px 0 var(--tinta); }
+  .tela-jogo { --lona-h: 38px; --gomo: 12px; --listra: 36px; --borda-mesa: 8px; }
   .tabuleiro {
-    --carta-w: calc((100dvh - 68px) / 2 * 0.5995);
-    --escala-pilha: .5;
-    grid-template-columns: auto auto auto 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas:
-      "empate slot-c pilha-c ."
-      "empate slot-j pilha-j controles";
-    gap: 8px 16px;
-    min-height: calc(100dvh - 16px - 20px);
-    padding: 8px 12px;
+    --escala-pilha: .34;
+    --cesta-w: 84px;
+    --cesta-h: 46px;
+    --retrato: 58px;
+    --carta-w: min(calc((100dvh - 120px) * 0.5995), calc((100vw - 330px) / 2));
+    gap: 4px 12px;
+    padding: 2px 10px 6px;
   }
-  .moldura { --moldura: 10px; --canto: 60px; border-radius: 22px; }
+  .placar { top: 4px; }
+  .placar > * { border-width: 2px; }
+  .placar-time { min-width: 0; padding: 0 10px; font-size: 11px; }
+  .placar-gols { font-size: 22px; min-width: 38px; padding: 2px 8px; }
+  .placar-rodada b { font-size: 14px; }
+  .placar-rodada small { font-size: 7px; }
+  .controles { top: 4px; right: 12px; gap: 6px; }
+  .icone { --tam: 30px; border-width: 2px; box-shadow: 0 2px 0 var(--tinta); }
+  .vs { font-size: 28px; -webkit-text-stroke-width: 5px; }
+  .etiqueta { font-size: 10px; padding: 2px 6px; bottom: -10px; }
+  .etiqueta small { display: none; }
+  .retrato { border-radius: 12px; border-width: 3px; box-shadow: 0 3px 0 var(--tinta); }
+  .balao { top: calc(100% + 20px); left: auto; right: -6px; width: 160px; padding: 6px 10px; font-size: 12px; border-radius: 12px; box-shadow: 0 3px 0 var(--tinta); }
+  .balao::after { left: auto; right: calc(6px + var(--retrato) / 2 - 8px); top: -9px; width: 14px; height: 14px; }
+  .rotulo { font-size: 11px; }
+  .pilha-qtd { min-width: 28px; height: 28px; font-size: 15px; right: -10px; border-width: 2px; }
+  .cesta { border-width: 2px; }
+  .cesta::before { border-width: 5px; border-bottom: 0; }
+  .dica { font-size: 12px; padding: 4px 12px; }
+  .revelacao { --painel-w: 210px; gap: 6px; }
+  .letreiro-rodada { font-size: 30px; margin-bottom: 6px; -webkit-text-stroke-width: 6px; text-shadow: 0 4px 0 var(--tinta); }
+  .comparacao { padding: 16px 10px 8px; border-width: 3px; }
+  .comparacao-titulo { font-size: 15px; padding: 2px 10px; }
+  .lado { margin-top: 4px; }
+  .quem { font-size: 8px; }
+  .valor { font-size: 24px; }
+  .barra { height: 8px; }
+  .dif { margin-top: 6px; font-size: 10px; }
+  .revelacao .detalhe { font-size: 11px; }
+  .botao-continuar { font-size: 14px; padding: 4px 14px 6px; border-width: 3px; box-shadow: 0 3px 0 var(--tinta); }
+  .mascote { width: 110px; }
   .cadastro { min-height: 0; padding-block: 8px; }
   .cadastro-logo { width: 110px; }
-  .tabuleiro::before { display: none; }
-  .controles { align-self: end; justify-self: center; }
-  /* pop-up na área livre à direita das cartas */
-  .popup-rodada { left: auto; right: 16px; top: 44%; width: min(320px, 48%); transform: translateY(-50%); }
-  @keyframes popup-entrar {
-    from { opacity: 0; transform: translateY(-50%) scale(.88); }
-    to   { opacity: 1; transform: translateY(-50%) scale(1); }
-  }
-  .mensagem { font-size: 1.05rem; }
-  .detalhe { font-size: .82rem; }
   .inicio { min-height: 0; }
   .fim { min-height: 0; padding-block: 8px; gap: 10px; }
 }
 
 /* ---------- Animações ---------- */
 /* Os movimentos das cartas (comprar, revelar, recolher) são feitos em ui.js com a Web Animations API. */
-
-/* Destaque do atributo escolhido */
-@keyframes pulsar {
-  0%, 100% { transform: scale(1); }
-  50%      { transform: scale(1.07); }
-}
-.faixa.escolhida { animation: pulsar .45s ease-in-out 2; }
 
 /* Carta derrotada treme; carta vencedora dá um pulinho (no elemento interno, para não brigar com a posição) */
 @keyframes tremer {
@@ -704,7 +1749,7 @@ h1 {
   100% { transform: scale(1); }
 }
 
-/* Sua vez: a carta dá um salto ao chegar; vez do computador: a carta dele balança, "pensando" */
+/* Sua vez: a carta dá um salto ao chegar; vez do rival: a carta dele balança, "pensando" */
 @keyframes chamar {
   0%, 100% { transform: translateY(0); }
   35%      { transform: translateY(-16px); }
@@ -721,8 +1766,8 @@ h1 {
 
 /* Super Trunfo: brilho rosa na carta vencedora */
 @keyframes brilho-st {
-  0%, 100% { box-shadow: 0 0 0 4px #e83e8c, 0 0 20px rgba(232, 62, 140, .4), var(--sombra); }
-  50%      { box-shadow: 0 0 0 4px #e83e8c, 0 0 44px rgba(232, 62, 140, .85), var(--sombra); }
+  0%, 100% { box-shadow: 0 0 0 5px #e83e8c, 0 0 20px rgba(232, 62, 140, .4); }
+  50%      { box-shadow: 0 0 0 5px #e83e8c, 0 0 44px rgba(232, 62, 140, .85); }
 }
 .carta.super-trunfo .face-frente { animation: brilho-st .8s ease-in-out 3; }
 
@@ -732,6 +1777,8 @@ h1 {
   to   { opacity: 1; transform: none; }
 }
 .tela:not([hidden]) { animation: surgir .35s ease-out; }
+.tela-jogo:not([hidden]) { animation-name: aparecer; }
+@keyframes aparecer { from { opacity: 0; } to { opacity: 1; } }
 .fim h1 { animation: pop .6s ease-out .2s both; }
 
 @media (prefers-reduced-motion: reduce) {

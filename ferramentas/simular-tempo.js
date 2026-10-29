@@ -8,10 +8,10 @@ const PARTIDAS = 20000;
 
 // Tempos (em segundos) da interface — os mesmos de TEMPO em js/ui.js.
 const TEMPO = {
-  inicio: 0,            // a primeira compra já está contada em "recolher"
-  computadorPensa: 1.5,
-  revelar: 0.7,         // carta do computador levantando e virando
-  resultado: 3,         // avanço automático
+  inicio: 6.1,          // apito, abertura do narrador, respiro e comentário do Tião (~2,2 s) antes das cartas
+  computadorPensa: 3.1, // o rival termina a fala "pensando" (~2,4 s) + respiro de 0,7 s
+  revelar: 0.7,         // carta do rival levantando e virando
+  resultado: 9.9,       // narrador (~1,9 s) + respiro + Tião (~2,2 s) + respiro + rival (~2,4 s) + 2 s de avanço automático
   recolher: 1.52,       // cartas indo para a pilha do vencedor + compra da rodada seguinte (2 × (0,65 + 0,11))
 };
 const PERFIS = { 'rápido': 3, 'típico': 6, 'pensativo': 10 }; // segundos para o jogador escolher

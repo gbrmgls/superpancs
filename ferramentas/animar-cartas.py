@@ -7,6 +7,7 @@ Uso:
     python3 ferramentas/animar-cartas.py 9 37     # só as cartas (arquivos) 9 e 37
 
 Saída em img/animacoes/: <arquivo>-<nome>.svg (personagem parado) e <arquivo>-<nome>.gif.
+Para o jogo: img/mascotes/<arquivo>.webp (WebP animado com fundo transparente, para aparecer sobre a mesa).
 Requer: ImageMagick (com librsvg).
 O Pimentão (carta 19) tem script próprio: ferramentas/animar-boxe.py.
 
@@ -36,6 +37,8 @@ BASE = (320, 432)        # quadril do personagem em pé
 N_QUADROS = 60
 ATRASO = 5               # centésimos de segundo por quadro (60 quadros = 3 s)
 LARGURA_GIF = 480
+SAIDA_JOGO = os.path.join(RAIZ, 'img', 'mascotes')
+LARGURA_JOGO = 260
 TAU = 2 * math.pi
 
 CONTORNO = '#1A1A1A'
@@ -1442,26 +1445,33 @@ def gerar(arquivo, ch):
         f.write(desenhar(ch, dict(POSE_BASE), 0, fundo=False))
     tmp = tempfile.mkdtemp()
     try:
-        def render(i):
+        def render(i, fundo=True):
             t = i / N_QUADROS
-            svg, png = os.path.join(tmp, f'q{i:03d}.svg'), os.path.join(tmp, f'q{i:03d}.png')
+            sufixo = '' if fundo else 't'
+            svg, png = os.path.join(tmp, f'q{i:03d}{sufixo}.svg'), os.path.join(tmp, f'q{i:03d}{sufixo}.png')
             with open(svg, 'w') as f:
-                f.write(desenhar(ch, esporte(t, ch), t))
-            subprocess.run(['magick', '-density', '144', svg, '-resize', f'{LARGURA_GIF}x', png], check=True)
+                f.write(desenhar(ch, esporte(t, ch), t, fundo=fundo))
+            largura = LARGURA_GIF if fundo else LARGURA_JOGO
+            subprocess.run(['magick', '-background', 'none', '-density', '144', svg, '-resize', f'{largura}x', png], check=True)
             return png
 
         with ThreadPoolExecutor(os.cpu_count()) as ex:
             pngs = list(ex.map(render, range(N_QUADROS)))
+            transparentes = list(ex.map(lambda i: render(i, fundo=False), range(N_QUADROS)))
         gif = os.path.join(SAIDA, nome + '.gif')
         subprocess.run(['magick', '-delay', str(ATRASO), '-loop', '0', *pngs, '-fuzz', '2%', '+dither', '-colors', '64',
                         '-layers', 'Optimize', gif], check=True)
-        print(f'{nome}: {os.path.getsize(gif) // 1024} KB')
+        webp = os.path.join(SAIDA_JOGO, f'{arquivo}.webp')
+        subprocess.run(['magick', '-delay', str(ATRASO), '-loop', '0', '-dispose', 'Background', *transparentes,
+                        '-define', 'webp:lossless=false', '-quality', '70', '-layers', 'optimize', webp], check=True)
+        print(f'{nome}: {os.path.getsize(gif) // 1024} KB (gif), {os.path.getsize(webp) // 1024} KB (webp do jogo)')
     finally:
         shutil.rmtree(tmp)
 
 
 def main():
     os.makedirs(SAIDA, exist_ok=True)
+    os.makedirs(SAIDA_JOGO, exist_ok=True)
     escolhidas = [int(a) for a in sys.argv[1:]] or sorted(PERSONAGENS)
     for arquivo in escolhidas:
         gerar(arquivo, PERSONAGENS[arquivo])

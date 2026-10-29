@@ -1,4 +1,4 @@
-# Roteiro de gravação: rivais e narrador
+# Roteiro de gravação: rivais, narrador e comentarista
 
 Para a pessoa que vai gravar. Cada linha vira um arquivo de áudio **com o nome indicado**.
 Grave em ambiente silencioso, uma fala por arquivo, sem silêncio sobrando no começo e no fim.
@@ -703,3 +703,223 @@ Arquivos em `audio/narrador/`.
 | `fim_empate-18.mp3` | Placar igualzinho! |
 | `fim_empate-19.mp3` | Acabou no empate! |
 | `fim_empate-20.mp3` | Equilíbrio total! Empate! |
+
+---
+
+## Comentarista: Tião da Xepa
+
+*Comentarista da transmissão: um frequentador da feira, meio bobo, alívio cômico. Fala depois do narrador, reagindo ao mesmo evento. Confunde as coisas, conta causos da feira, mas nunca debocha de quem está perdendo.*
+
+Pode ser um pouco mais longo que o narrador (até ~2,5 s), mas sem arrastar.
+
+Arquivos em `audio/comentarista/`.
+
+### inicio_partida: antes da primeira rodada
+
+| Arquivo | Fala |
+|---|---|
+| `inicio_partida-01.mp3` | Trouxe sacola extra! Hoje eu levo tudo! |
+| `inicio_partida-02.mp3` | Cheguei! Guardaram meu banquinho? |
+| `inicio_partida-03.mp3` | Já comi três pastéis só de nervoso! |
+| `inicio_partida-04.mp3` | Ô moço, é aqui o jogo da salada? |
+| `inicio_partida-05.mp3` | Vim pela feira, fiquei pelo jogo! |
+| `inicio_partida-06.mp3` | Eu torço pra quem me pagar um caldo de cana! |
+| `inicio_partida-07.mp3` | Tô com o apito, mas não sei apitar! |
+| `inicio_partida-08.mp3` | Hoje eu comento e ainda faço a feira! |
+| `inicio_partida-09.mp3` | Fiz até faixa: "Vai, couve!" |
+| `inicio_partida-10.mp3` | Pode começar, que eu já tô com fome! |
+
+### vitoria: o jogador venceu a rodada
+
+| Arquivo | Fala |
+|---|---|
+| `vitoria-01.mp3` | Isso! Eu sabia! Eu não sabia, mas torci! |
+| `vitoria-02.mp3` | Ganhou! Vou comemorar com um caldo de cana! |
+| `vitoria-03.mp3` | Que jogada! Até o chuchu aplaudiu! |
+| `vitoria-04.mp3` | Essa foi bonita igual pé de alface! |
+| `vitoria-05.mp3` | Rodada sua! Me ensina depois? |
+| `vitoria-06.mp3` | Golaço! Ou é cestaço? Sei lá, ganhou! |
+| `vitoria-07.mp3` | Eu tinha certeza! Quer dizer, quase! |
+| `vitoria-08.mp3` | Mais bonito que banca bem arrumada! |
+| `vitoria-09.mp3` | É disso que eu tô falando! Do que eu tô falando? |
+| `vitoria-10.mp3` | Vou contar pra tia do pastel! |
+
+### derrota: o rival venceu a rodada
+
+| Arquivo | Fala |
+|---|---|
+| `derrota-01.mp3` | Calma, que feira tem toda semana! |
+| `derrota-02.mp3` | Ih, essa escorregou na casca de banana! |
+| `derrota-03.mp3` | Não foi dessa vez, mas o pastel continua bom! |
+| `derrota-04.mp3` | Eu teria escolhido igualzinho, viu? |
+| `derrota-05.mp3` | Perdeu a rodada, mas não perdeu a pose! |
+| `derrota-06.mp3` | Respira e toma uma água de coco! |
+| `derrota-07.mp3` | Foi culpa do vento! Tava ventando? |
+| `derrota-08.mp3` | Essa doeu até no meu repolho! |
+| `derrota-09.mp3` | Bola pra frente, que alface pra trás não anda! |
+| `derrota-10.mp3` | Até couve murcha e depois se levanta! |
+
+### empate: os valores empataram; as cartas vão para a cesta
+
+| Arquivo | Fala |
+|---|---|
+| `empate-01.mp3` | Empatou? Então divide o pastel! |
+| `empate-02.mp3` | Igualzinho? Parece eu e meu primo! |
+| `empate-03.mp3` | Ninguém ganhou? Então ganhei eu, que assisti! |
+| `empate-04.mp3` | Empate é igual chuchu: ninguém sabe o gosto! |
+| `empate-05.mp3` | Pra cesta! Cuidado que eu levo pra casa! |
+| `empate-06.mp3` | Empatou! Isso é sinal de chuva? |
+| `empate-07.mp3` | Iguaizinhos! Fiquei até tonto! |
+| `empate-08.mp3` | Essa cesta tá mais cheia que minha sacola! |
+| `empate-09.mp3` | Empate! Vou fingir que eu sabia! |
+| `empate-10.mp3` | Nem a balança da dona Lurdes decide essa! |
+
+### por_pouco: alguém venceu por diferença pequena (vale para os dois lados)
+
+| Arquivo | Fala |
+|---|---|
+| `por_pouco-01.mp3` | Por um fio de cabelo de milho! |
+| `por_pouco-02.mp3` | Foi tão perto que eu nem vi! |
+| `por_pouco-03.mp3` | Quase que eu engasgo com a pamonha! |
+| `por_pouco-04.mp3` | Mais apertado que ônibus de feira! |
+| `por_pouco-05.mp3` | Pesei na mão: deu igual! Ah, não deu? |
+| `por_pouco-06.mp3` | Por uma folhinha! Uma folhinha! |
+| `por_pouco-07.mp3` | Meu coração foi parar na banca do lado! |
+| `por_pouco-08.mp3` | Foi no grão de feijão! |
+| `por_pouco-09.mp3` | Essa foi no cabelinho do quiabo! |
+| `por_pouco-10.mp3` | Ufa! Fiquei sem ar aqui! |
+
+### sequencia_jogador: o jogador venceu 3 ou mais rodadas seguidas
+
+| Arquivo | Fala |
+|---|---|
+| `sequencia_jogador-01.mp3` | Mais uma? Tá comendo espinafre escondido? |
+| `sequencia_jogador-02.mp3` | Ninguém para essa pessoa! Nem o fiscal! |
+| `sequencia_jogador-03.mp3` | Já tô na fila do autógrafo! |
+| `sequencia_jogador-04.mp3` | Tá jogando mais do que eu como pastel! |
+| `sequencia_jogador-05.mp3` | Assim o rival vai fechar a barraca! |
+| `sequencia_jogador-06.mp3` | Vou começar a cobrar ingresso! |
+| `sequencia_jogador-07.mp3` | Chama o bombeiro, que tá pegando fogo! |
+| `sequencia_jogador-08.mp3` | Mais uma pra conta! Eu já perdi a conta! |
+| `sequencia_jogador-09.mp3` | Me vende um pouco dessa sorte? |
+| `sequencia_jogador-10.mp3` | Tá voando! Segura essa sacola! |
+
+### sequencia_rival: o rival venceu 3 ou mais rodadas seguidas
+
+| Arquivo | Fala |
+|---|---|
+| `sequencia_rival-01.mp3` | Ih, o rival tá com o pé quente! |
+| `sequencia_rival-02.mp3` | Calma, que eu vou fazer uma simpatia! |
+| `sequencia_rival-03.mp3` | Vou cruzar os dedos... dos pés também! |
+| `sequencia_rival-04.mp3` | Será que o rival comeu ora-pro-nóbis no café? |
+| `sequencia_rival-05.mp3` | Pera, deixa eu trocar de cadeira pra dar sorte! |
+| `sequencia_rival-06.mp3` | Eu acredito! Eu acredito! Acredito sim! |
+| `sequencia_rival-07.mp3` | Isso é fase! Fase passa, igual banana madura! |
+| `sequencia_rival-08.mp3` | Vou torcer de cabeça pra baixo, se precisar! |
+| `sequencia_rival-09.mp3` | Ô rival, deixa um pouco pros outros! |
+| `sequencia_rival-10.mp3` | Já tirei a camisa da sorte do varal! |
+
+### levou_cesta: alguém venceu a rodada e levou as cartas da cesta do empate (vale para os dois lados)
+
+| Arquivo | Fala |
+|---|---|
+| `levou_cesta-01.mp3` | Leva a cesta, mas me dá uma tangerina! |
+| `levou_cesta-02.mp3` | Que sacolada! Vai precisar de carrinho! |
+| `levou_cesta-03.mp3` | Isso é que é fazer a feira! |
+| `levou_cesta-04.mp3` | Ô, me empresta uma dessas cartas? |
+| `levou_cesta-05.mp3` | Levou o acumulado! Paga o pastel pra todo mundo! |
+| `levou_cesta-06.mp3` | A cesta foi embora e eu fiquei com saudade! |
+| `levou_cesta-07.mp3` | Que fartura! Parece fim de xepa! |
+| `levou_cesta-08.mp3` | Leva com cuidado, que tem tomate aí! |
+| `levou_cesta-09.mp3` | Tudo isso? Dá sopa pra rua inteira! |
+| `levou_cesta-10.mp3` | A cesta tinha dono, e não era eu! |
+
+### super_trunfo_jogador: a Ora-pro-nóbis do jogador venceu uma hortaliça comum
+
+| Arquivo | Fala |
+|---|---|
+| `super_trunfo_jogador-01.mp3` | Ora-pro-nóbis! Eu rezo toda vez que ela aparece! |
+| `super_trunfo_jogador-02.mp3` | Ela é tão forte que eu fiquei com medo! |
+| `super_trunfo_jogador-03.mp3` | Chegou a rainha! Alguém estende o tapete! |
+| `super_trunfo_jogador-04.mp3` | Eu sabia que ela tava escondida aí! |
+| `super_trunfo_jogador-05.mp3` | Essa planta tem espinho e tem moral! |
+| `super_trunfo_jogador-06.mp3` | Ora-pro-nóbis, ora por mim também! |
+| `super_trunfo_jogador-07.mp3` | Eu quero uma dessas no meu quintal! |
+| `super_trunfo_jogador-08.mp3` | Até o repolho bateu continência! |
+| `super_trunfo_jogador-09.mp3` | Super Trunfo é covardia... e eu adoro! |
+| `super_trunfo_jogador-10.mp3` | Me arrepiei todinho! |
+
+### super_trunfo_rival: a Ora-pro-nóbis do rival venceu a hortaliça comum do jogador
+
+| Arquivo | Fala |
+|---|---|
+| `super_trunfo_rival-01.mp3` | Ih! Rezaram a ora-pro-nóbis do lado errado! |
+| `super_trunfo_rival-02.mp3` | Contra ela não tem jeito, nem com simpatia! |
+| `super_trunfo_rival-03.mp3` | Doeu, mas pelo menos foi pra uma rainha! |
+| `super_trunfo_rival-04.mp3` | Eu fechei os olhos! Já acabou? |
+| `super_trunfo_rival-05.mp3` | Ela é linda até quando joga contra! |
+| `super_trunfo_rival-06.mp3` | Calma! Dizem que outra PANC derruba ela! |
+| `super_trunfo_rival-07.mp3` | Quem deixou ela ir pro lado de lá? |
+| `super_trunfo_rival-08.mp3` | Vou pedir pra ela trocar de time! |
+| `super_trunfo_rival-09.mp3` | Perder pra Ora-pro-nóbis não é vergonha, é honra! |
+| `super_trunfo_rival-10.mp3` | Ora-pro-nóbis... ora por nós agora! |
+
+### ultima_rodada: início da última rodada (só no modo Rápido)
+
+| Arquivo | Fala |
+|---|---|
+| `ultima_rodada-01.mp3` | Última? Mas eu nem terminei meu pastel! |
+| `ultima_rodada-02.mp3` | Hora da xepa! Tudo pela metade do preço! |
+| `ultima_rodada-03.mp3` | Ai, meu coração de alface! |
+| `ultima_rodada-04.mp3` | Não vou olhar! Me conta depois! |
+| `ultima_rodada-05.mp3` | Vou roer a unha... de couve! |
+| `ultima_rodada-06.mp3` | Segura que eu vou desmaiar no repolho! |
+| `ultima_rodada-07.mp3` | Última rodada é igual último pastel: disputada! |
+| `ultima_rodada-08.mp3` | Fecha a barraca, mas não fecha o jogo! |
+| `ultima_rodada-09.mp3` | Tô suando mais que tomate no sol! |
+| `ultima_rodada-10.mp3` | É agora, freguesia! Ou depois. Não, agora! |
+
+### fim_vitoria: fim da partida, o jogador venceu
+
+| Arquivo | Fala |
+|---|---|
+| `fim_vitoria-01.mp3` | Campeão! Hoje tem pastel pra todo mundo! |
+| `fim_vitoria-02.mp3` | Eu sempre acreditei! Desde a terceira rodada! |
+| `fim_vitoria-03.mp3` | Vou pendurar sua foto na barraca! |
+| `fim_vitoria-04.mp3` | Que partida! Vou contar pros meus netos! |
+| `fim_vitoria-05.mp3` | Vou estourar pipoca pra comemorar! |
+| `fim_vitoria-06.mp3` | Ganhou a feira! Pode levar até a lona! |
+| `fim_vitoria-07.mp3` | Tô chorando igual quem corta cebola! |
+| `fim_vitoria-08.mp3` | Campeão! Quero foto e autógrafo! |
+| `fim_vitoria-09.mp3` | A feira tem novo dono, e eu sou amigo dele! |
+| `fim_vitoria-10.mp3` | Que craque! O rei da salada! |
+
+### fim_derrota: fim da partida, o rival venceu
+
+| Arquivo | Fala |
+|---|---|
+| `fim_derrota-01.mp3` | Não ganhou, mas eu me diverti à beça! |
+| `fim_derrota-02.mp3` | Semana que vem tem feira de novo! |
+| `fim_derrota-03.mp3` | Perdeu, mas saiu sabendo mais de PANC! |
+| `fim_derrota-04.mp3` | Eu também perdi: perdi meu chinelo! |
+| `fim_derrota-05.mp3` | Bora de revanche, que eu trago o pastel! |
+| `fim_derrota-06.mp3` | Até a couve perde de vez em quando! |
+| `fim_derrota-07.mp3` | Cabeça erguida, igual pé de milho! |
+| `fim_derrota-08.mp3` | O importante é que ninguém ficou sem salada! |
+| `fim_derrota-09.mp3` | Vou treinar com você! Eu treino comendo! |
+| `fim_derrota-10.mp3` | Revanche! Revanche! Eu já tô gritando! |
+
+### fim_empate: fim da partida empatada (modo Rápido)
+
+| Arquivo | Fala |
+|---|---|
+| `fim_empate-01.mp3` | Empatou! Então todo mundo ganha pastel! |
+| `fim_empate-02.mp3` | Ninguém ganhou e ninguém perdeu! Que confusão! |
+| `fim_empate-03.mp3` | Divide o troféu igual divide melancia! |
+| `fim_empate-04.mp3` | Empate no fim? Tô de boca aberta! |
+| `fim_empate-05.mp3` | Iguais até o final! Parecem gêmeos! |
+| `fim_empate-06.mp3` | Agora precisa de outra partida pra desempatar! |
+| `fim_empate-07.mp3` | Empate! Vou pra casa sem entender nada! |
+| `fim_empate-08.mp3` | Cada um leva metade da feira! |
+| `fim_empate-09.mp3` | Que coisa! Ficou tudo no meio do caminho! |
+| `fim_empate-10.mp3` | Empate! Vou comemorar pela metade! |

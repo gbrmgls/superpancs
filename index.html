@@ -5,68 +5,38 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>SuperPANCs</title>
 <meta name="description" content="Jogo de cartas no estilo Super Trunfo sobre PANCs, nutrição e esporte. Projeto +Rio em Movimento.">
-<meta name="theme-color" content="#2e8b3e">
+<meta name="theme-color" content="#D93A2B">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A5%AC%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Permanent+Marker&family=Rubik:wght@400;500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <script>
   // Navegadores sem suporte a WebP: troca a imagem otimizada pelo JPG original.
   document.addEventListener('error', function (e) {
     var img = e.target;
-    if (img.tagName === 'IMG' && /img\/cartas\/.+\.webp$/.test(img.src)) {
+    if (img.tagName !== 'IMG') return;
+    if (/img\/cartas\/.+\.webp$/.test(img.src)) {
       img.src = img.src.replace('img/cartas/', 'imagens-cartas-superpancs/').replace(/\.webp$/, '.jpg');
+    } else if (/img\/cartas-limpas\/.+\.webp$/.test(img.src)) {
+      img.src = img.src.replace('img/cartas-limpas/', 'imagens-cartas-sem-texto/').replace(/\.webp$/, '.png');
     }
   }, true);
 </script>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-  <defs>
-    <!-- Folha em forma de lente, apontando para a direita a partir da origem -->
-    <path id="folha" d="M0 0 C12 -13 38 -14 54 0 C38 14 12 13 0 0 Z"/>
-    <!-- Maço de folhas com folha redonda e flor de capuchinha, saindo do canto inferior esquerdo -->
-    <symbol id="maco-de-folhas" viewBox="0 0 120 120">
-      <g stroke-linecap="round">
-        <use href="#folha" fill="#3f7d32" transform="translate(14 106) rotate(-88) scale(1.25)"/>
-        <use href="#folha" fill="#5a9e3e" transform="translate(14 106) rotate(-62) scale(1.15)"/>
-        <use href="#folha" fill="#2f6b2a" transform="translate(14 106) rotate(-36) scale(1.3)"/>
-        <use href="#folha" fill="#6fb64a" transform="translate(14 106) rotate(-12) scale(1.1)"/>
-        <use href="#folha" fill="#4b8f39" transform="translate(14 106) rotate(-112) scale(.9)"/>
-        <use href="#folha" fill="#4b8f39" transform="translate(14 106) rotate(10) scale(.85)"/>
-        <path d="M14 106 l60 -60 M14 106 l20 -64 M14 106 l66 -26" stroke="#d9f0c4" stroke-width="1.2" opacity=".55" fill="none"/>
-        <!-- folha redonda de capuchinha, com nervuras saindo do centro -->
-        <circle cx="70" cy="70" r="17" fill="#7cc451"/>
-        <path d="M70 70 l0 -16 M70 70 l15 -6 M70 70 l11 12 M70 70 l-6 15 M70 70 l-15 -4" stroke="#b9e39c" stroke-width="1.4" fill="none"/>
-        <!-- flor de capuchinha -->
-        <g transform="translate(38 46)">
-          <circle cx="0" cy="-8" r="7" fill="#f39233"/>
-          <circle cx="7.6" cy="-2.5" r="7" fill="#f7a640"/>
-          <circle cx="4.7" cy="6.5" r="7" fill="#f39233"/>
-          <circle cx="-4.7" cy="6.5" r="7" fill="#f7a640"/>
-          <circle cx="-7.6" cy="-2.5" r="7" fill="#f39233"/>
-          <circle r="4" fill="#ffd34d"/>
-        </g>
-        <!-- botão de flor -->
-        <circle cx="92" cy="40" r="4.5" fill="#ffc93c"/>
-        <path d="M80 52 Q86 46 92 40" stroke="#4b8f39" stroke-width="2" fill="none"/>
-      </g>
-    </symbol>
-  </defs>
-</svg>
-
-<!-- Cadastro (opcional): aparece na primeira visita e quando o jogador pede para trocar -->
-<main id="tela-cadastro" class="tela" hidden>
+<!-- Cadastro (opcional): aparece sempre que o jogo é aberto, já com o nome lembrado neste aparelho -->
+<main id="tela-cadastro" class="tela tela-feira" hidden>
+  <div class="lona" aria-hidden="true"></div>
   <div class="cadastro">
     <img class="cadastro-logo" src="img/cartas/verso.webp" alt="+Rio em Movimento — PANCs, nutrição e esporte">
-    <form id="form-cadastro" class="cadastro-painel" novalidate>
-      <h1>Boas-vindas ao SuperPANCs!</h1>
-      <p class="inicio-sub">Conte para a gente quem está jogando. É opcional.</p>
+    <form id="form-cadastro" class="placa cadastro-painel" novalidate>
+      <h1>Boas-vindas à feira!</h1>
+      <p class="placa-sub">Conte para a gente quem está jogando. É opcional.</p>
 
       <label class="campo">
         <span>Nome</span>
-        <input id="campo-nome" name="nome" type="text" maxlength="30" autocomplete="given-name" placeholder="Como quer aparecer no jogo">
+        <input id="campo-nome" name="nome" type="text" maxlength="30" autocomplete="given-name" placeholder="Como quer aparecer no placar">
       </label>
       <label class="campo">
         <span>E-mail</span>
@@ -81,173 +51,278 @@
       <p id="cadastro-erro" class="cadastro-erro" role="alert" hidden></p>
 
       <div class="cadastro-botoes">
-        <button class="botao botao-principal" type="submit">Continuar</button>
-        <button id="botao-pular" class="botao" type="button">Pular</button>
+        <button class="botao" type="submit">Continuar</button>
+        <button id="botao-pular" class="botao botao-sec" type="button">Pular</button>
       </div>
     </form>
   </div>
 </main>
 
-<!-- Tela inicial -->
-<main id="tela-inicio" class="tela">
+<!-- Tela inicial: letreiro, leque de cartas e mascotes no balcão; à direita, a escolha do rival e do modo -->
+<main id="tela-inicio" class="tela tela-feira tela-inicio">
+  <div class="lona" aria-hidden="true"></div>
   <div class="inicio">
-    <img class="inicio-logo" src="img/cartas/verso.webp" alt="+Rio em Movimento — PANCs, nutrição e esporte">
-    <div class="inicio-painel">
-      <h1>SuperPANCs</h1>
+    <section class="vitrine" aria-label="SuperPANCs">
+      <h1 class="letreiro-jogo">Super<br>PANCs</h1>
+      <p class="slogan">a feira mais disputada do Rio</p>
+      <!-- Leque de cartas (montado em ui.js) -->
+      <div id="leque" class="leque" aria-hidden="true"></div>
+      <img class="mascote-vitrine mascote-esq" src="img/mascotes/19.webp" alt="">
+      <img class="mascote-vitrine mascote-dir" src="img/mascotes/57.webp" alt="">
+    </section>
 
-      <fieldset class="modos">
+    <section class="placa inicio-painel">
+      <fieldset class="opcoes-grupo">
+        <legend>Escolha seu rival</legend>
+        <div class="opcoes">
+          <label class="opcao">
+            <input type="radio" name="dificuldade" value="facil" checked>
+            <span class="opcao-conteudo">
+              <span class="rosto"><img src="img/rivais/seu-ze-neutro.svg" alt=""></span>
+              <span class="nivel">Fácil</span>
+              <strong>Seu Zé</strong>
+              <span>Malandro, joga no improviso.</span>
+            </span>
+          </label>
+          <label class="opcao">
+            <input type="radio" name="dificuldade" value="dificil">
+            <span class="opcao-conteudo">
+              <span class="rosto"><img src="img/rivais/dona-cida-neutro.svg" alt=""></span>
+              <span class="nivel">Difícil</span>
+              <strong>Dona Cida</strong>
+              <span>30 anos de feira. Sempre escolhe o ponto forte da carta.</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="opcoes-grupo">
         <legend>Modo de jogo</legend>
-        <label class="modo">
-          <input type="radio" name="modo" value="rapido" checked>
-          <span class="modo-conteudo">
-            <strong>Rápido</strong>
-            <span>20 rodadas. Vence quem tiver mais cartas no final. Cerca de 2 a 3 minutos.</span>
-          </span>
-        </label>
-        <label class="modo">
-          <input type="radio" name="modo" value="classico">
-          <span class="modo-conteudo">
-            <strong>Clássico</strong>
-            <span>Joga até alguém ficar com todas as cartas. Pode passar de 20 minutos.</span>
-          </span>
-        </label>
+        <div class="opcoes">
+          <label class="opcao">
+            <input type="radio" name="modo" value="rapido" checked>
+            <span class="opcao-conteudo">
+              <strong>Rápido</strong>
+              <span>20 rodadas · cerca de 6 min. Vence quem tiver mais cartas.</span>
+            </span>
+          </label>
+          <label class="opcao">
+            <input type="radio" name="modo" value="classico">
+            <span class="opcao-conteudo">
+              <strong>Clássico</strong>
+              <span>Até alguém levar todas as cartas · pode passar de 20 min.</span>
+            </span>
+          </label>
+        </div>
       </fieldset>
 
-      <fieldset class="modos dificuldades">
-        <legend>Dificuldade</legend>
-        <label class="modo">
-          <input type="radio" name="dificuldade" value="facil" checked>
-          <span class="modo-conteudo">
-            <strong>Fácil</strong>
-            <span>O computador escolhe atributos ao acaso.</span>
-          </span>
-        </label>
-        <label class="modo">
-          <input type="radio" name="dificuldade" value="dificil">
-          <span class="modo-conteudo">
-            <strong>Difícil</strong>
-            <span>O computador sempre escolhe o ponto forte da carta dele.</span>
-          </span>
-        </label>
-      </fieldset>
+      <button id="botao-jogar" class="botao botao-jogar">Jogar!</button>
 
-      <button id="botao-jogar" class="botao botao-principal">Jogar</button>
-
-      <details class="regras">
-        <summary>Como jogar</summary>
-        <ul>
-          <li>As 32 cartas são divididas: 16 para você e 16 para o computador.</li>
-          <li>Quem tem a vez escolhe um atributo da sua carta. Ganha o maior valor, e o vencedor leva as duas cartas e escolhe na próxima rodada.</li>
-          <li><strong>Super Trunfo:</strong> a Ora-pro-nóbis vence qualquer hortaliça comum. Contra outra PANC, vale o atributo.</li>
-          <li><strong>Empate:</strong> as cartas ficam no monte do meio, e quem vencer a próxima rodada leva tudo.</li>
-        </ul>
-      </details>
-    </div>
+      <div class="links">
+        <button id="botao-album" class="link-album" type="button">Álbum · <span id="album-contagem">0/32</span></button>
+        <details class="regras">
+          <summary>Como jogar</summary>
+          <ul>
+            <li>As 32 cartas são divididas: 16 para você e 16 para o rival.</li>
+            <li>Quem tem a vez escolhe um atributo da sua carta. Ganha o maior valor, e o vencedor leva as duas cartas e escolhe na próxima rodada.</li>
+            <li><strong>Super Trunfo:</strong> a Ora-pro-nóbis vence qualquer hortaliça comum. Contra outra PANC, vale o atributo.</li>
+            <li><strong>Empate:</strong> as cartas vão para a cesta do meio, e quem vencer a próxima rodada leva tudo.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
   </div>
+  <div class="balcao" aria-hidden="true"></div>
 </main>
 
-<!-- Mesa de jogo: computador em cima, você embaixo, pilhas de compra à direita, monte de empate no centro -->
-<main id="tela-jogo" class="tela" hidden>
-  <div class="moldura">
+<!-- Mesa de jogo: banca de feira com placar de TV no topo. No computador, você à esquerda e o rival à direita;
+     no celular em pé, o rival em cima e você embaixo. A cesta do empate fica no meio. -->
+<main id="tela-jogo" class="tela tela-jogo" hidden>
+  <div class="lona" aria-hidden="true"></div>
+  <header class="topo">
+    <div class="placar" aria-label="Placar">
+      <span class="placar-time placar-voce"><span id="placar-nome-jogador">Você</span></span>
+      <b class="placar-gols"><span id="placar-jogador">16</span></b>
+      <span class="placar-rodada"><span><b id="placar-rodada">1/20</b><small>Rodada</small></span></span>
+      <b class="placar-gols"><span id="placar-rival">16</span></b>
+      <span class="placar-time placar-rival"><span id="placar-nome-rival">Seu Zé</span></span>
+    </div>
+    <div class="controles">
+      <button id="botao-som" class="icone" type="button" aria-pressed="true" aria-label="Efeitos sonoros" title="Efeitos sonoros">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 9v6h4l5 4V5L8 9z"/><path class="ondas" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/><path class="risco" d="M16 9l6 6M22 9l-6 6"/></svg>
+      </button>
+      <button id="botao-voz" class="icone" type="button" aria-pressed="true" aria-label="Vozes do narrador, do comentarista e do rival" title="Vozes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M4 4h16v11H10l-5 4v-4H4z"/><path class="ondas" d="M8 9.5h8M8 12h5" stroke="#fff"/><path class="risco" d="M3 21L21 3"/></svg>
+      </button>
+      <button id="botao-auto" class="icone" type="button" aria-pressed="true" aria-label="Avançar sozinho" title="Avançar sozinho">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path class="cheio" d="M3 6l8 6-8 6zM12 6l8 6-8 6z"/><path class="risco" d="M3 21L21 3"/></svg>
+      </button>
+      <button id="botao-sair" class="icone botao-sair" type="button" aria-label="Sair da partida" title="Sair da partida">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <span class="icone-dica" aria-hidden="true">Toque de novo para sair</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mesa">
   <div id="tabuleiro" class="tabuleiro">
+    <div class="pilha-area pilha-area-jogador">
+      <div id="pilha-jogador" class="pilha"><span class="pilha-qtd">16</span></div>
+      <span class="rotulo">sua sacola</span>
+    </div>
+    <div id="slot-jogador" class="slot slot-jogador" aria-hidden="true"></div>
+
+    <div class="vs" aria-hidden="true">VS</div>
+    <p id="dica" class="dica oculta" aria-hidden="true"></p>
+
     <div id="slot-computador" class="slot slot-computador" aria-hidden="true"></div>
     <div class="pilha-area pilha-area-computador">
       <div id="pilha-computador" class="pilha"><span class="pilha-qtd">16</span></div>
-      <span class="pilha-rotulo">Computador</span>
+      <span class="rotulo">banca do rival</span>
     </div>
 
+    <div id="adversario" class="adversario">
+      <div class="retrato"><img id="retrato-rival" src="img/rivais/seu-ze-neutro.svg" alt=""></div>
+      <span class="etiqueta"><span id="etiqueta-rival">Seu Zé</span><small id="etiqueta-nivel">Fácil</small></span>
+      <!-- Balão com as falas do rival (textos em falas/falas.json) -->
+      <p id="balao" class="balao" aria-live="polite" hidden></p>
+    </div>
+
+    <!-- Cesta do empate: as cartas do monte ficam dentro dela (a frente da cesta cobre a parte de baixo) -->
     <div class="empate-area">
-      <div id="pilha-empate" class="pilha-empate"><span class="pilha-qtd" hidden>0</span></div>
-      <span class="pilha-rotulo">Monte de empate</span>
+      <div id="pilha-empate" class="pilha-empate"></div>
+      <div class="cesta" aria-hidden="true"><span id="qtd-empate" class="pilha-qtd" hidden>0</span></div>
+      <span class="rotulo">cesta do empate</span>
     </div>
-
-    <div id="slot-jogador" class="slot slot-jogador" aria-hidden="true"></div>
-    <div class="pilha-area pilha-area-jogador">
-      <div id="pilha-jogador" class="pilha"><span class="pilha-qtd">16</span></div>
-      <span id="rotulo-jogador" class="pilha-rotulo">Você</span>
-    </div>
-
-    <footer class="controles">
-      <button id="botao-som" class="controle" type="button" aria-pressed="true">Som: ligado</button>
-      <button id="botao-auto" class="controle" type="button" aria-pressed="true">Avançar sozinho: sim</button>
-      <button id="botao-sair" class="controle botao-sair" type="button">Sair</button>
-    </footer>
 
     <!-- Camada onde as cartas são desenhadas e se movem por cima do tabuleiro -->
     <div id="camada-cartas" class="camada-cartas"></div>
 
-    <!-- Pop-up com o resultado da rodada (aparece sobre o centro do tabuleiro depois da revelação) -->
-    <section id="popup-rodada" class="popup-rodada" role="dialog" aria-labelledby="mensagem" aria-describedby="detalhe" hidden>
-      <span id="texto-rodada" class="rodada">Rodada 1</span>
-      <p id="mensagem" class="mensagem"></p>
+    <!-- Entrada do Super Trunfo: a mesa escurece, raios atrás da carta e o letreiro no alto -->
+    <div id="st-fundo" class="st-fundo" aria-hidden="true" hidden><div class="st-raios"></div></div>
+    <p id="st-letreiro" class="st-letreiro" aria-hidden="true" hidden>Super Trunfo!</p>
+
+    <!-- Mascote da carta vencedora, ao lado dela -->
+    <img id="mascote" class="mascote" alt="" hidden>
+
+    <!-- Revelação: letreiro do resultado e comparação dos valores no centro da mesa -->
+    <section id="revelacao" class="revelacao" aria-labelledby="mensagem" aria-describedby="detalhe" hidden>
+      <p id="mensagem" class="letreiro-rodada"></p>
+      <div class="comparacao">
+        <span id="comparacao-titulo" class="comparacao-titulo"></span>
+        <div id="lado-jogador" class="lado"><span class="quem"></span><span class="valor"></span><span class="barra"><i></i></span></div>
+        <div id="lado-rival" class="lado"><span class="quem"></span><span class="valor"></span><span class="barra"><i></i></span></div>
+        <span id="diferenca" class="dif"></span>
+      </div>
       <p id="detalhe" class="detalhe"></p>
-      <button id="botao-continuar" class="botao botao-principal" hidden>Próxima rodada</button>
+      <button id="botao-continuar" class="botao-continuar" type="button" hidden>Próxima rodada</button>
     </section>
     <!-- Avisos de vez só para leitores de tela (na tela, a vez é indicada pelas próprias cartas) -->
+    <!-- Faixa de TV do narrador e do Tião (comentarista); o resultado para leitores de tela vai em #anuncio -->
+    <div id="narrador" class="faixa-tv" aria-hidden="true" hidden>
+      <span class="faixa-tv-tag"><span id="narrador-quem">Ao vivo</span></span>
+      <span class="faixa-tv-texto"><span id="narrador-texto"></span></span>
+    </div>
     <p id="anuncio" class="so-leitor" aria-live="polite"></p>
   </div>
-
-  <!-- Enfeites da moldura: ramas nas bordas e maços de folhas com capuchinha nos cantos -->
-  <div class="rama rama-topo" aria-hidden="true"></div>
-  <div class="rama rama-base" aria-hidden="true"></div>
-  <div class="rama rama-esquerda" aria-hidden="true"></div>
-  <div class="rama rama-direita" aria-hidden="true"></div>
-  <svg class="canto canto-se" aria-hidden="true"><use href="#maco-de-folhas"/></svg>
-  <svg class="canto canto-sd" aria-hidden="true"><use href="#maco-de-folhas"/></svg>
-  <svg class="canto canto-ie" aria-hidden="true"><use href="#maco-de-folhas"/></svg>
-  <svg class="canto canto-id" aria-hidden="true"><use href="#maco-de-folhas"/></svg>
   </div>
 </main>
 
 <!-- Carta ampliada (celular): um toque numa carta aberta da mesa abre; nela dá para escolher o atributo -->
 <div id="zoom" class="zoom" role="dialog" aria-modal="true" aria-label="Carta ampliada" hidden>
   <div class="zoom-fundo"></div>
-  <div id="zoom-carta" class="zoom-carta">
-    <img alt="">
-    <div class="faixas"></div>
-  </div>
+  <div id="zoom-carta" class="zoom-carta"></div>
   <p id="zoom-dica" class="zoom-dica"></p>
   <button id="zoom-fechar" class="botao zoom-fechar" type="button">Fechar</button>
 </div>
 
-<!-- Fim de partida -->
-<main id="tela-fim" class="tela" hidden>
+<!-- Álbum de figurinhas: uma por carta, colada ao vencer uma rodada com ela -->
+<main id="tela-album" class="tela tela-feira tela-album" hidden>
+  <div class="lona" aria-hidden="true"></div>
+  <div class="album">
+    <header class="album-topo">
+      <h1 class="letreiro-album">Álbum</h1>
+      <p class="album-sub"><b id="album-total">0/32</b> figurinhas coladas. Vença uma rodada com uma carta para colar a figurinha dela.</p>
+      <button id="botao-voltar-album" class="botao botao-sec" type="button">Voltar</button>
+    </header>
+    <ul id="album-lista" class="album-lista"></ul>
+  </div>
+</main>
+
+<!-- Fim de partida: pódio com a carta destaque e o rival, placar final e a súmula -->
+<main id="tela-fim" class="tela tela-feira" hidden>
+  <div class="lona" aria-hidden="true"></div>
   <div id="fim" class="fim">
-    <p id="fim-config" class="fim-config"></p>
-    <h1 id="fim-titulo"></h1>
-    <p id="fim-texto" class="fim-texto"></p>
+    <section class="fim-podio">
+      <h1 id="fim-titulo" class="letreiro-fim"></h1>
+      <div class="placar placar-fim" aria-label="Placar final">
+        <span class="placar-time placar-voce"><span id="fim-nome-jogador">Você</span></span>
+        <b class="placar-gols"><span id="fim-qtd-jogador">0</span></b>
+        <span class="placar-rodada"><span><b>Fim</b><small id="fim-config"></small></span></span>
+        <b class="placar-gols"><span id="fim-qtd-computador">0</span></b>
+        <span class="placar-time placar-rival"><span id="fim-nome-rival">Seu Zé</span></span>
+      </div>
+      <p id="fim-texto" class="fim-texto"></p>
 
-    <div class="fim-placar" aria-label="Placar final">
-      <div><span id="fim-nome-jogador" class="fim-placar-nome">Você</span><b id="fim-qtd-jogador">0</b></div>
-      <span class="fim-placar-x">×</span>
-      <div><span class="fim-placar-nome">Computador</span><b id="fim-qtd-computador">0</b></div>
-    </div>
+      <div id="palco" class="palco">
+        <div class="raios-fim" aria-hidden="true"></div>
+        <div id="posto-jogador" class="posto posto-jogador">
+          <figure id="fim-destaque" class="craque">
+            <span id="fim-destaque-rotulo" class="craque-tag"></span>
+            <div id="fim-destaque-carta" class="carta-podio"></div>
+            <img id="fim-destaque-mascote" class="mascote-podio" alt="">
+            <figcaption id="fim-destaque-texto" class="so-leitor"></figcaption>
+          </figure>
+          <div class="degrau"><span class="degrau-num"></span></div>
+        </div>
+        <div id="posto-rival" class="posto posto-rival">
+          <div class="rival-podio">
+            <p id="fim-balao" class="balao balao-podio"></p>
+            <div class="retrato"><img id="fim-retrato" alt=""></div>
+          </div>
+          <div class="degrau"><span class="degrau-num"></span></div>
+        </div>
+      </div>
+    </section>
 
-    <ul class="fim-estatisticas">
-      <li id="fim-vencidas"></li>
-      <li id="fim-perdidas"></li>
-      <li id="fim-empatadas"></li>
-    </ul>
-
-    <figure id="fim-destaque" class="fim-destaque" hidden>
-      <img id="fim-destaque-img" alt="">
-      <figcaption>
-        <span id="fim-destaque-rotulo" class="fim-destaque-rotulo"></span>
-        <strong id="fim-destaque-nome"></strong>
-        <span id="fim-destaque-texto"></span>
-      </figcaption>
-    </figure>
-
-    <div class="fim-botoes">
-      <button id="botao-de-novo" class="botao botao-principal">Jogar de novo</button>
-      <button id="botao-menu" class="botao">Menu inicial</button>
-    </div>
+    <aside class="fim-lado">
+      <div class="faixa-tv faixa-fim" aria-hidden="true">
+        <span class="faixa-tv-tag"><span>Ao vivo</span></span>
+        <span class="faixa-tv-texto"><span id="fim-narrador-texto"></span></span>
+      </div>
+      <div class="faixa-tv faixa-fim do-comentarista" aria-hidden="true">
+        <span class="faixa-tv-tag"><span>Tião da Xepa</span></span>
+        <span class="faixa-tv-texto"><span id="fim-comentarista-texto"></span></span>
+      </div>
+      <div id="fim-figurinha" class="toast" role="status" hidden>
+        <img id="fim-figurinha-img" alt="">
+        <span><b>Figurinha nova!</b><span id="fim-figurinha-texto"></span></span>
+      </div>
+      <div class="lousa">
+        <h2>Súmula da feira</h2>
+        <ul>
+          <li><span>Rodadas vencidas</span><b id="fim-vencidas">0</b></li>
+          <li><span>Rodadas perdidas</span><b id="fim-perdidas">0</b></li>
+          <li><span>Empates</span><b id="fim-empatadas">0</b></li>
+          <li><span>Super Trunfo</span><b id="fim-super-trunfo">0×</b></li>
+          <li><span>Maior pancada</span><b id="fim-pancada">—</b></li>
+        </ul>
+      </div>
+      <div class="fim-botoes">
+        <button id="botao-de-novo" class="botao botao-grande">Revanche</button>
+        <button id="botao-trocar-rival" class="botao botao-sec">Trocar rival</button>
+        <button id="botao-menu" class="botao botao-sec">Menu</button>
+      </div>
+    </aside>
   </div>
 </main>
 
 <script src="js/cartas.js"></script>
 <script src="js/jogo.js"></script>
 <script src="js/ia.js"></script>
+<script src="js/falas-dados.js"></script>
+<script src="js/falas.js"></script>
+<script src="js/album.js"></script>
 <script src="js/sons.js"></script>
 <script src="js/cadastro.js"></script>
 <script src="js/ui.js"></script>

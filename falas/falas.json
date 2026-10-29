@@ -19,8 +19,7 @@
   },
   "audio": {
     "pasta": "audio/falas",
-    "padrao": "{rival}/{expressao}-{situacao}-{nn}.mp3",
-    "fonte_atual": "sintetica"
+    "padrao": "{rival}/{expressao}-{situacao}-{nn}.mp3"
   },
   "rivais": {
     "seu-ze": {

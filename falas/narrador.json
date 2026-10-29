@@ -15,12 +15,11 @@
     "por_pouco": "diferença entre os valores menor que 10% do maior valor",
     "sequencia": "a 3ª vitória seguida do mesmo lado (ou mais)",
     "levou_cesta": "a cesta do empate tinha cartas e alguém venceu a rodada",
-    "ordem_das_vozes": "o narrador fala primeiro, logo depois da revelação; o rival reage em seguida"
+    "ordem_das_vozes": "o narrador fala primeiro, logo depois da revelação; o comentarista (falas/comentarista.json) comenta o mesmo evento; o rival reage por último"
   },
   "audio": {
     "pasta": "audio/narrador",
-    "padrao": "{evento}-{nn}.mp3 ou {evento}-{atributo}-{nn}.mp3",
-    "fonte_atual": "sintetica"
+    "padrao": "{evento}-{nn}.mp3 ou {evento}-{atributo}-{nn}.mp3"
   },
   "eventos": {
     "inicio_partida": {

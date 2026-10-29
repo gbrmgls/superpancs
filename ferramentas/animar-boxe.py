@@ -3,6 +3,7 @@
 
 Uso: python3 ferramentas/animar-boxe.py
 Saída: img/animacoes/19-pimentao.svg e img/animacoes/19-pimentao.gif
+       e, para o jogo, img/mascotes/19.webp (WebP animado com fundo transparente).
 Requer: ImageMagick (com librsvg).
 """
 import math
@@ -13,6 +14,7 @@ import tempfile
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SAIDA = os.path.join(RAIZ, 'img', 'animacoes')
+SAIDA_JOGO = os.path.join(RAIZ, 'img', 'mascotes')
 
 L, A = 780, 470          # tamanho do quadro
 DX, DY = 160, 30          # deslocamento do desenho original dentro do quadro
@@ -250,18 +252,24 @@ def main():
 
     tmp = tempfile.mkdtemp()
     try:
-        pngs = []
+        pngs, transparentes = [], []
         for i, params in enumerate(roteiro()):
-            svg = os.path.join(tmp, f'q{i:03d}.svg')
-            png = os.path.join(tmp, f'q{i:03d}.png')
-            with open(svg, 'w') as f:
-                f.write(quadro(**params))
-            subprocess.run(['magick', '-density', '144', svg, '-resize', f'{L}x{A}', png], check=True)
-            pngs.append(png)
+            for fundo, lista in ((True, pngs), (False, transparentes)):
+                svg = os.path.join(tmp, f'q{i:03d}{"" if fundo else "t"}.svg')
+                png = os.path.join(tmp, f'q{i:03d}{"" if fundo else "t"}.png')
+                with open(svg, 'w') as f:
+                    f.write(quadro(**params, fundo=fundo))
+                subprocess.run(['magick', '-background', 'none', '-density', '144', svg, '-resize', f'{L}x{A}', png], check=True)
+                lista.append(png)
         gif = os.path.join(SAIDA, '19-pimentao.gif')
         subprocess.run(['magick', '-delay', '5', '-loop', '0', *pngs, '-resize', '520x',
                         '-fuzz', '2%', '+dither', '-colors', '48', '-layers', 'Optimize', gif], check=True)
         print(f'{len(pngs)} quadros → {gif}')
+        os.makedirs(SAIDA_JOGO, exist_ok=True)
+        webp = os.path.join(SAIDA_JOGO, '19.webp')
+        subprocess.run(['magick', '-delay', '5', '-loop', '0', '-dispose', 'Background', *transparentes,
+                        '-resize', '320x', '-define', 'webp:lossless=false', '-quality', '70', '-layers', 'optimize', webp], check=True)
+        print(f'→ {webp} ({os.path.getsize(webp) // 1024} KB)')
     finally:
         shutil.rmtree(tmp)
 
